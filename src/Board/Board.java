@@ -42,7 +42,7 @@ public class Board implements BoardInterface {
 
     public Board(int boardSize) {
         this.boardSize = boardSize;
-        boardState = new BoardCell[15][15];
+        boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
                 boardState[x][y] = BoardCell.Empty;
