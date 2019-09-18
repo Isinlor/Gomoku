@@ -1,3 +1,5 @@
+package Contract;
+
 interface BoardInterface {
 
     /**
