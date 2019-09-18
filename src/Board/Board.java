@@ -31,7 +31,7 @@ public class Board implements BoardInterface {
     }
 
     public void move(int x, int y) throws WrongMoveException {
-        
+
         if(boardState[x][y] != BoardCell.Empty) {
             throw new WrongMoveException();
         }
