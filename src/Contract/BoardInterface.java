@@ -14,7 +14,7 @@ public interface BoardInterface {
      *
      * @return The board state.
      */
-    BoardCell[] getBoardState();
+    BoardCell[][] getBoardState();
 
     /**
      * @return The size of the board.
@@ -24,7 +24,7 @@ public interface BoardInterface {
     /**
      * @return
      */
-    Color getCurrentColor();
+    Color getCurrentTurn();
 
     void move(int x, int y) throws WrongMoveException;
 
