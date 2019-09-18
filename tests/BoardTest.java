@@ -18,7 +18,7 @@ public class BoardTest extends SimpleUnitTest {
             Board board = new Board(3);
             for (int i = 0; i < board.getSize(); i++) {
                 for (int j = 0; j < board.getSize(); j++) {
-                    assertTrue(board.getCells()[i][j] == BoardCell.Empty);
+                    assertTrue(board.getCell(i, j) == BoardCell.Empty);
                 }
             }
         });

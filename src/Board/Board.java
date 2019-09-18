@@ -50,8 +50,8 @@ public class Board implements BoardInterface {
         }
     }
 
-    public BoardCell[][] getCells() {
-        return boardState;
+    public BoardCell getCell(int x, int y) {
+        return boardState[x][y];
     }
 
     public int getSize() {

@@ -3,7 +3,7 @@ package Contract;
 public interface BoardInterface {
 
     /**
-     * An array of BoardCells.
+     * Return the state of a board cell.
      *
      * We start counting at 0 from left down corner.
      *
@@ -12,9 +12,9 @@ public interface BoardInterface {
      * y └────
      *   x 0  1
      *
-     * @return The board cells indexed as [x][y].
+     * @return The board cell state.
      */
-    BoardCell[][] getCells();
+    BoardCell getCell(int x, int y);
 
     /**
      * @return The size of the board.
