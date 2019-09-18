@@ -9,12 +9,12 @@ public interface BoardInterface {
      *
      * 1 │
      * 0 │
-     *   └────
-     *    0  1
+     * y └────
+     *   x 0  1
      *
-     * @return The board state.
+     * @return The board cells indexed as [x][y].
      */
-    BoardCell[][] getBoardState();
+    BoardCell[][] getCells();
 
     /**
      * @return The size of the board.

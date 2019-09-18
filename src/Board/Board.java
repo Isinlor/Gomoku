@@ -18,7 +18,7 @@ public class Board implements BoardInterface {
         }
     }
 
-    public BoardCell[][] getBoardState() {
+    public BoardCell[][] getCells() {
         return boardState;
     }
 
