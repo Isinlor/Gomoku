@@ -19,7 +19,7 @@ public interface BoardInterface {
     /**
      * @return The size of the board.
      */
-    int getBoardSize();
+    int getSize();
 
     /**
      * @return

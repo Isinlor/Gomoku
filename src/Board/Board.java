@@ -22,7 +22,7 @@ public class Board implements BoardInterface {
         return boardState;
     }
 
-    public int getBoardSize() {
+    public int getSize() {
         return boardSize;
     }
 
