@@ -1,6 +1,6 @@
 package Contract;
 
-interface BoardInterface {
+public interface BoardInterface {
 
     /**
      * An array of BoardCells.
