@@ -22,8 +22,10 @@ public class Board implements BoardInterface {
                 switch (boardState[x][y]) {
                     case Black:
                         black++;
+                        break;
                     case White:
                         white++;
+                        break;
                 }
             }
         }
@@ -58,7 +60,7 @@ public class Board implements BoardInterface {
         return boardSize;
     }
 
-    public Color getCurrentTurn() {
+    public Color getCurrentColor() {
         return currentTurn;
     }
 
@@ -71,13 +73,15 @@ public class Board implements BoardInterface {
             throw new WrongMoveException();
         }
 
-        switch (getCurrentTurn()) {
+        switch (getCurrentColor()) {
             case Black:
                 boardState[x][y] = BoardCell.Black;
                 currentTurn = Color.White;
+                break;
             case White:
                 boardState[x][y] = BoardCell.White;
                 currentTurn = Color.Black;
+                break;
         }
 
     }
