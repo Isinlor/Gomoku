@@ -18,7 +18,7 @@ import javafx.application.Application;
 public class BoardUI extends Application{
 
     private int[][] boardMatrix;
-    private int board_size = 15;
+    final int BOARD_SIZE = 15;
     private int win_length ;
 
     public void start(Stage primaryStage)
@@ -41,16 +41,14 @@ public class BoardUI extends Application{
         GridPane gameBoard = new GridPane();
         gameBoard.setPrefSize(755, 755);
 
-        for (int i = 0; i < board_size; i++) {
-            for (int j = 0; j < board_size; j++) {
+        for (int i = 0; i <BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
 
                 Rectangle tile = new Rectangle(50, 50);
                 tile.setFill(Color.BURLYWOOD);
                 tile.setStroke(Color.BLACK);
 
-                Text text = new Text();
-                text.setFont(Font.font(40));
-                gameBoard.add(new StackPane(tile, text), j, i);
+                gameBoard.add(new StackPane(tile), j, i);
 
                 //GridPane.setRowIndex(tile, i);
                 //GridPane.setColumnIndex(tile, j);
