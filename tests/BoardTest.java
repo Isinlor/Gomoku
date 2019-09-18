@@ -1,5 +1,6 @@
 import Board.*;
 import Contract.BoardCell;
+import Contract.Color;
 
 public class BoardTest extends SimpleUnitTest {
     public static void main(String[] args) {
@@ -21,6 +22,17 @@ public class BoardTest extends SimpleUnitTest {
                     assertTrue(board.getCell(i, j) == BoardCell.Empty);
                 }
             }
+        });
+
+        it("allows to make a move", () -> {
+
+            Board board = new Board(3);
+            assertTrue(board.getCurrentColor() == Color.Black);
+
+            board.move(0, 0);
+            assertTrue(board.getCell(0, 0) == BoardCell.Black);
+            assertTrue(board.getCurrentColor() == Color.White);
+
         });
 
     }

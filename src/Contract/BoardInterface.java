@@ -24,7 +24,7 @@ public interface BoardInterface {
     /**
      * @return
      */
-    Color getCurrentTurn();
+    Color getCurrentColor();
 
     void move(int x, int y) throws WrongMoveException;
 
