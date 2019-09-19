@@ -35,6 +35,7 @@ public interface BoardInterface {
     void move(int x, int y) throws WrongMoveException;
 
     boolean hasWinner();
+    boolean hasWinner(int steps);
 
     Color getWinner() throws NoWinnerException;
 
