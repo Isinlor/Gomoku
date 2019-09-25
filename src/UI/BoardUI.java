@@ -3,6 +3,8 @@ package UI;
 import Board.Board;
 import Contract.BoardCell;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -10,6 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -75,23 +80,31 @@ public class BoardUI extends Application{
                     }
                 });
 
-                switch (board.getCell(x, y)) {
-                    case Empty:
-                        gameBoard.add(new StackPane(tile), y, x);
-                        break;
-                    case Black:
-                        gameBoard.add(new Text("⬤"), y, x);
-                        break;
-                    case White:
-                        gameBoard.add(new Text("◯"), y, x);
-                        break;
-                }
+                gameBoard.add(new StackPane(tile), y, x);
 
+                BoardCell color = board.getCell(x, y);
+                if(color!=BoardCell.Empty) {
+
+                    Circle circle = new Circle(0, 0, 10);
+                    switch (board.getCell(x, y)) {
+                        case Black:
+                            circle.setFill(Color.BLACK);
+                            break;
+                        case White:
+                            circle.setFill(Color.TRANSPARENT);
+                            circle.setStroke(Color.BLACK);
+                            break;
+                    }
+                    gameBoard.add(circle, y, x);
+                    gameBoard.setHalignment(circle, HPos.CENTER); // To align horizontally in the cell
+                    gameBoard.setValignment(circle, VPos.CENTER); // To align vertically in the cell
+
+
+                }
             }
         }
 
-        root.getChildren().removeAll();
-        root.getChildren().add(gameBoard);
+        root.getChildren().setAll(gameBoard);
     }
     // Black circle unicode = U+25CF
     // White circle: U+25CB
