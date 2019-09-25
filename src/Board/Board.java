@@ -1,6 +1,7 @@
 package Board;
 
 import Contract.*;
+import javafx.scene.control.Cell;
 
 public class Board implements BoardInterface {
 
@@ -53,7 +54,16 @@ public class Board implements BoardInterface {
     }
 
     public BoardCell getCell(int x, int y) {
-        return boardState[x][y];
+        try {
+            return boardState[x][y];
+        } catch (Exception e) {
+            String message = "" +
+                "Cell x " + x + " y " + y + " requested. " +
+                "Board size " + getSize() + ".";
+            throw new RuntimeException(
+                message, e
+            );
+        }
     }
 
     public int getSize() {
@@ -66,11 +76,15 @@ public class Board implements BoardInterface {
 
     public void move(int x, int y) throws WrongMoveException {
 
-        if(boardState[x][y] != BoardCell.Empty) {
-            throw new WrongMoveException();
+        if(x < 0 || y < 0 || x >= boardSize || y >= boardSize) {
+            throw new WrongMoveException(
+                "Move x " + x + " y " + y + " is outside the board!\n" +
+                "Board size: " + getSize() + "; Board indexing starts at 0."
+            );
         }
-        if(x >= boardSize || y >= boardSize) {
-            throw new WrongMoveException();
+
+        if(boardState[x][y] != BoardCell.Empty) {
+            throw new WrongMoveException("The cell x " + x + " y " + y + " is not empty!");
         }
 
         switch (getCurrentColor()) {
@@ -217,4 +231,27 @@ public class Board implements BoardInterface {
         return null;
     }
 
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Board (" + getSize() + "x" + getSize() + "):\n");
+        stringBuilder.append("Current color: " + getCurrentColor() + "\n");
+        for (int x = 0; x < getSize(); x++) {
+            for (int y = 0; y < getSize(); y++) {
+                switch (getCell(x, y)) {
+                    case Black:
+                        stringBuilder.append("B");
+                        break;
+                    case White:
+                        stringBuilder.append("W");
+                        break;
+                    case Empty:
+                        stringBuilder.append(" ");
+                        break;
+                }
+                stringBuilder.append(" ");
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }

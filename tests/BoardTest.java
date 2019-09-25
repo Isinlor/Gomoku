@@ -3,11 +3,12 @@ import Contract.BoardCell;
 import Contract.Color;
 
 public class BoardTest extends SimpleUnitTest {
-    public static void main(String[] args) {
 
-        final BoardCell B = BoardCell.Black;
-        final BoardCell W = BoardCell.White;
-        final BoardCell E = BoardCell.Empty;
+    final static BoardCell B = BoardCell.Black;
+    final static BoardCell W = BoardCell.White;
+    final static BoardCell E = BoardCell.Empty;
+
+    public static void main(String[] args) {
 
         it("creates simple board", () -> {
             new Board(15);
@@ -39,6 +40,23 @@ public class BoardTest extends SimpleUnitTest {
 
         });
 
+        it("allows to display a board", () -> {
+            BoardCell[][] boardState = {
+                {B, E, W},
+                {W, E, B},
+                {E, E, W},
+            };
+            Board board = new Board(boardState);
+            // it just check that something is displayed
+            assertTrue(!board.toString().isEmpty());
+        });
+
+        testBoardCell();
+        testWinningConditions();
+
+    }
+
+    private static void testBoardCell() {
         it("gives back color from board cell", () -> {
             BoardCell cell = BoardCell.Black;
             Color color = cell.getColor();
@@ -50,6 +68,9 @@ public class BoardTest extends SimpleUnitTest {
             Color color = cell.getColor();
             assertTrue(color==null);
         });
+    }
+
+    private static void testWinningConditions() {
 
         it("can check if there are 3 in a row from a certain position.", () -> {
             BoardCell[][] boardState = {
@@ -114,7 +135,7 @@ public class BoardTest extends SimpleUnitTest {
                     {E, E, E, W, E},
             };
             Board board = new Board(boardState);
-            assertTrue(board.getWinner(4)==Color.White);
+            assertTrue(board.getWinner(4)== Color.White);
         });
 
         it("knows when a there are 4 diagonal tokens in a row with the same color", () -> {
@@ -141,5 +162,5 @@ public class BoardTest extends SimpleUnitTest {
             assertTrue(board.getWinner(4)==Color.Black);
         });
 
-        }
+    }
 }
