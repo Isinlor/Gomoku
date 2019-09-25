@@ -42,7 +42,7 @@ public class GameOver {
 
         gameover.setScene(scene);
 
-        //gameover.initStyle(StageStyle.UNDECORATED);
+        gameover.initStyle(StageStyle.UNDECORATED);
 
         gameover.show();
 
