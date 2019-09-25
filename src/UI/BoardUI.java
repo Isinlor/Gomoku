@@ -65,6 +65,7 @@ public class BoardUI extends Application{
         updateBoard();
         primaryStage.show();
 
+
     }
 
   
@@ -116,6 +117,12 @@ public class BoardUI extends Application{
                 }
             }
         }
+        if(board.hasWinner()){
+            System.out.println(board.getWinner() + " won!");
+            GameOver.display(board, this);
+
+        }
+
         infoPanel.getChildren().setAll(justPlayer, currentPlayer);
         root.getChildren().setAll(gameBoard, infoPanel);
     }

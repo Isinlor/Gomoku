@@ -53,6 +53,14 @@ public class Board implements BoardInterface {
         }
     }
 
+    public void resetBoard(){
+        for (int x = 0; x <boardSize; x++) {
+            for (int y = 0; y < boardSize; y++) {
+                boardState[x][y]=BoardCell.Empty;
+            }
+        }
+    }
+
     public BoardCell getCell(int x, int y) {
         try {
             return boardState[x][y];
