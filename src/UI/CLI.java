@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class CLI {
     public static void main(String[] args) {
 
-        PlayerInterface cliPlayer = (BoardInterface currentBoard) -> {
+        PlayerInterface cliPlayer = (ReadableBoard currentBoard) -> {
 
             System.out.println(currentBoard.toString());
 

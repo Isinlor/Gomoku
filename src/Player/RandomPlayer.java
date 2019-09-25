@@ -1,15 +1,12 @@
 package Player;
 
-import Contract.BoardCell;
-import Contract.BoardInterface;
-import Contract.Move;
-import Contract.PlayerInterface;
+import Contract.*;
 
 import java.util.Random;
 
 public class RandomPlayer implements PlayerInterface {
 
-    public Move getMove(BoardInterface board) {
+    public Move getMove(ReadableBoard board) {
 
         Move move;
         Random random = new Random();
