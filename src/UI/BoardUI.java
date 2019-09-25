@@ -37,13 +37,15 @@ public class BoardUI extends Application{
     public void start(Stage primaryStage)
     {
         root = new HBox();
+        root.setStyle("-fx-border-color: black;");
         infoPanel = new VBox();
         justPlayer = new Label();
         justPlayer.setStyle("-fx-font:18 arial;");
         justPlayer.setText("Player: ");
         currentPlayer = new Label();
         currentPlayer.setStyle("-fx-font:14 arial;");
-        root.setStyle("-fx-border-color: black;");
+        infoPanel.setPrefSize(BOARD_PANEL_SIZE/4,BOARD_PANEL_SIZE);
+        infoPanel.setStyle("-fx-background-color: #808080;");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         board = new Board(15);
@@ -71,15 +73,8 @@ public class BoardUI extends Application{
         boardSize = board.getSize();
         GridPane gameBoard = new GridPane();
         gameBoard.setPrefSize(BOARD_PANEL_SIZE,BOARD_PANEL_SIZE);
-        infoPanel.setPrefSize(BOARD_PANEL_SIZE/4,BOARD_PANEL_SIZE);
-        infoPanel.setStyle("-fx-background-color: #808080;");
-        if(move%2==0){
-            currentPlayer.setText("Black");
-            currentPlayer.setTextFill(BLACK);
-        }else{
-            currentPlayer.setText("White");
-            currentPlayer.setTextFill(WHITE);
-        }
+        currentPlayer.setText(board.getCurrentColor().name());
+        currentPlayer.setTextFill(Color.web(board.getCurrentColor().name().toLowerCase()));
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
 
@@ -105,14 +100,13 @@ public class BoardUI extends Application{
                 BoardCell color = board.getCell(x, y);
                 if(color!=BoardCell.Empty) {
 
-                    Circle circle = new Circle(0, 0, 10);
+                    Circle circle = new Circle(0, 0, 15);
                     switch (board.getCell(x, y)) {
                         case Black:
                             circle.setFill(BLACK);
                             break;
                         case White:
-                            circle.setFill(Color.TRANSPARENT);
-                            circle.setStroke(BLACK);
+                            circle.setFill(WHITE);
                             break;
                     }
                     gameBoard.add(circle, y, x);
@@ -123,7 +117,7 @@ public class BoardUI extends Application{
                 }
             }
         }
-        infoPanel.getChildren().addAll(justPlayer, currentPlayer);
+        infoPanel.getChildren().setAll(justPlayer, currentPlayer);
         root.getChildren().setAll(gameBoard, infoPanel);
     }
     // Black circle unicode = U+25CF
