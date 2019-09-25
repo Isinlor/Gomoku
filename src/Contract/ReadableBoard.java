@@ -5,12 +5,12 @@ public interface ReadableBoard {
     /**
      * Return the state of a board cell.
      *
-     * We start counting at 0 from left down corner.
-     *
-     * 1 │
+     * We start counting at 0 from left top corner.
+     * 
+     *   x 0 1
+     * y ┌────
      * 0 │
-     * y └────
-     *   x 0  1
+     * 1 │
      *
      * @return The board cell state.
      */
