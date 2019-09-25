@@ -2,8 +2,10 @@ package UI;
 
 import Board.Board;
 import Contract.BoardCell;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -32,10 +34,28 @@ public class BoardUI extends Application{
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        Board board = new Board(3);
+        Board board = new Board(15);
+        root.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println(event.getSceneX());
+                System.out.println(event.getSceneY());
+                int x =(int) event.getSceneX()/50;
+                int y =(int) event.getSceneY()/50;
+                System.out.println(x);
+                System.out.println(y);
+                board.move(y,x);
+                root.getChildren().add(updateBoard(board));
+            }
+        });
         root.getChildren().add(updateBoard(board));
 
+
+
+
         primaryStage.show();
+
+
     }
 
   
@@ -43,7 +63,7 @@ public class BoardUI extends Application{
     public Parent updateBoard(Board board){
         boardSize = board.getSize();
         GridPane gameBoard = new GridPane();
-        gameBoard.setPrefSize(755, 755);
+        gameBoard.setPrefSize(750, 750);
 
 
 
@@ -71,6 +91,7 @@ public class BoardUI extends Application{
 
             }
         }
+     
 
         return gameBoard;
     }
