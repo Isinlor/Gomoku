@@ -6,7 +6,7 @@ public interface ReadableBoard {
      * Return the state of a board cell.
      *
      * We start counting at 0 from left top corner.
-     * 
+     *
      *   x 0 1
      * y ┌────
      * 0 │
@@ -27,7 +27,6 @@ public interface ReadableBoard {
     Color getCurrentColor();
 
     boolean hasWinner();
-    boolean hasWinner(int steps);
 
     Color getWinner() throws NoWinnerException;
 
