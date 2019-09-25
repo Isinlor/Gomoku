@@ -86,9 +86,12 @@ public class Board implements BoardInterface {
         return true;
     }
 
-    public void move(int x, int y) throws WrongMoveException {
+    public void move(Move move) throws WrongMoveException {
 
-        if(!isValidMove(new Move(x, y))) {
+        int x = move.x;
+        int y = move.y;
+        
+        if(!isValidMove(move)) {
             if(x < 0 || y < 0 || x >= boardSize || y >= boardSize) {
                 throw new WrongMoveException(
                     "Move x " + x + " y " + y + " is outside the board!\n" +
@@ -112,10 +115,6 @@ public class Board implements BoardInterface {
                 break;
         }
 
-    }
-
-    public void move(Move move) throws WrongMoveException {
-        move(move.x, move.y);
     }
 
     public boolean hasWinner() {
