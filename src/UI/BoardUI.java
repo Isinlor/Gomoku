@@ -7,10 +7,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -20,19 +19,30 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.application.Application;
 
-
+import static javafx.scene.paint.Color.*;
 
 
 public class BoardUI extends Application{
 
     private BoardCell[][] boardState;
     private int boardSize = 15;
-    private Pane root;
+    private HBox root;
+    private VBox infoPanel;
     private Board board;
+    private final int BOARD_PANEL_SIZE = 750;
+    private Label currentPlayer;
+    private Label justPlayer;
+    private int move = 1; //player moves odd is white, even is black
 
     public void start(Stage primaryStage)
     {
-        root = new Pane();
+        root = new HBox();
+        infoPanel = new VBox();
+        justPlayer = new Label();
+        justPlayer.setStyle("-fx-font:18 arial;");
+        justPlayer.setText("Player: ");
+        currentPlayer = new Label();
+        currentPlayer.setStyle("-fx-font:14 arial;");
         root.setStyle("-fx-border-color: black;");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -60,13 +70,22 @@ public class BoardUI extends Application{
     public void updateBoard(){
         boardSize = board.getSize();
         GridPane gameBoard = new GridPane();
-        gameBoard.setPrefSize(750, 750);
+        gameBoard.setPrefSize(BOARD_PANEL_SIZE,BOARD_PANEL_SIZE);
+        infoPanel.setPrefSize(BOARD_PANEL_SIZE/4,BOARD_PANEL_SIZE);
+        infoPanel.setStyle("-fx-background-color: #808080;");
+        if(move%2==0){
+            currentPlayer.setText("Black");
+            currentPlayer.setTextFill(BLACK);
+        }else{
+            currentPlayer.setText("White");
+            currentPlayer.setTextFill(WHITE);
+        }
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
 
                 Rectangle tile = new Rectangle(50, 50);
                 tile.setFill(Color.BURLYWOOD);
-                tile.setStroke(Color.BLACK);
+                tile.setStroke(BLACK);
 
                 final int cell_x = x;
                 final int cell_y = y;
@@ -74,8 +93,9 @@ public class BoardUI extends Application{
                 tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        System.out.printf("Mouse enetered cell [%d, %d]%n", cell_x, cell_y);
+                        System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
                         board.move(cell_x,cell_y);
+                        move++;
                         updateBoard();
                     }
                 });
@@ -88,11 +108,11 @@ public class BoardUI extends Application{
                     Circle circle = new Circle(0, 0, 10);
                     switch (board.getCell(x, y)) {
                         case Black:
-                            circle.setFill(Color.BLACK);
+                            circle.setFill(BLACK);
                             break;
                         case White:
                             circle.setFill(Color.TRANSPARENT);
-                            circle.setStroke(Color.BLACK);
+                            circle.setStroke(BLACK);
                             break;
                     }
                     gameBoard.add(circle, y, x);
@@ -103,8 +123,8 @@ public class BoardUI extends Application{
                 }
             }
         }
-
-        root.getChildren().setAll(gameBoard);
+        infoPanel.getChildren().addAll(justPlayer, currentPlayer);
+        root.getChildren().setAll(gameBoard, infoPanel);
     }
     // Black circle unicode = U+25CF
     // White circle: U+25CB
