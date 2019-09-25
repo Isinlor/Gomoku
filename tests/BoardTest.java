@@ -1,6 +1,7 @@
 import Board.*;
 import Contract.BoardCell;
 import Contract.Color;
+import Contract.Move;
 
 public class BoardTest extends SimpleUnitTest {
 
@@ -34,7 +35,7 @@ public class BoardTest extends SimpleUnitTest {
             Board board = new Board(3);
             assertTrue(board.getCurrentColor() == Color.Black);
 
-            board.move(0, 0);
+            board.move(new Move(0, 0));
             assertTrue(board.getCell(0, 0) == BoardCell.Black);
             assertTrue(board.getCurrentColor() == Color.White);
 

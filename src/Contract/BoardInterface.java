@@ -1,6 +1,6 @@
 package Contract;
 
-public interface BoardInterface {
+public interface BoardInterface extends MutableBoard {
 
     /**
      * Return the state of a board cell.
@@ -25,14 +25,6 @@ public interface BoardInterface {
      * @return Indicate whose turn it is.
      */
     Color getCurrentColor();
-
-    /**
-     * Allows to make a move. The move will be made by the current color.
-     *
-     * The move must be inside board.
-     * The move must not be made on already taken cell.
-     */
-    void move(int x, int y) throws WrongMoveException;
 
     boolean hasWinner();
     boolean hasWinner(int steps);

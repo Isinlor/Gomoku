@@ -1,8 +1,8 @@
 package UI;
 
-import Board.Board;
-import Contract.BoardCell;
-import Contract.Color;
+import Board.*;
+import Contract.*;
+import Player.RandomPlayer;
 
 import java.util.Scanner;
 
@@ -12,30 +12,31 @@ import java.util.Scanner;
 public class CLI {
     public static void main(String[] args) {
 
-        Board board = new Board(5);
+        PlayerInterface cliPlayer = (BoardInterface currentBoard) -> {
 
-        while(!board.hasWinner()) {
+            System.out.println(currentBoard.toString());
 
-            System.out.println(board.toString());
-            System.out.println("Please, type your move (x y):\n");
+            Move move = null;
+            while(move == null || !currentBoard.isValidMove(move)) {
+                System.out.println("Please, type your move (x y):\n");
 
-            Color currentColor = board.getCurrentColor();
-            while (currentColor == board.getCurrentColor()) {
-                try {
+                Scanner sc = new Scanner(System.in);
+                int x = sc.nextInt();
+                int y = sc.nextInt();
 
-                    Scanner sc = new Scanner(System.in);
-                    int x = sc.nextInt();
-                    int y = sc.nextInt();
-
-                    board.move(x, y);
-
-                } catch (Exception e) {
-                    System.out.println(e.getClass().getCanonicalName() + "\n" + e.getMessage());
-                    System.out.println("\nTry again:\n");
-                }
+                move = new Move(x, y);
             }
 
-        }
+            return move;
+
+        };
+
+        PlayerInterface randomPlayer = new RandomPlayer();
+
+        Game game = new Game(randomPlayer, cliPlayer);
+        Board board = new Board(5);
+
+        game.play(board);
 
         System.out.println("Game won by: " + board.getWinner());
 
