@@ -33,7 +33,6 @@ public class BoardUI extends Application{
     private final int BOARD_PANEL_SIZE = 750;
     private Label currentPlayer;
     private Label justPlayer;
-    private int move = 1; //player moves odd is white, even is black
 
     public void start(Stage primaryStage)
     {
@@ -91,7 +90,6 @@ public class BoardUI extends Application{
                     public void handle(MouseEvent event) {
                         System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
                         board.move(new Move(cell_x,cell_y));
-                        move++;
                         updateBoard();
                     }
                 });
