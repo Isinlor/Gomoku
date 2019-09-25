@@ -74,17 +74,31 @@ public class Board implements BoardInterface {
         return currentTurn;
     }
 
-    public void move(int x, int y) throws WrongMoveException {
-
-        if(x < 0 || y < 0 || x >= boardSize || y >= boardSize) {
-            throw new WrongMoveException(
-                "Move x " + x + " y " + y + " is outside the board!\n" +
-                "Board size: " + getSize() + "; Board indexing starts at 0."
-            );
+    public boolean isValidMove(Move move) {
+        if(move.x < 0 || move.y < 0 || move.x >= boardSize || move.y >= boardSize) {
+            return false;
         }
 
-        if(boardState[x][y] != BoardCell.Empty) {
-            throw new WrongMoveException("The cell x " + x + " y " + y + " is not empty!");
+        if(boardState[move.x][move.y] != BoardCell.Empty) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void move(int x, int y) throws WrongMoveException {
+
+        if(!isValidMove(new Move(x, y))) {
+            if(x < 0 || y < 0 || x >= boardSize || y >= boardSize) {
+                throw new WrongMoveException(
+                    "Move x " + x + " y " + y + " is outside the board!\n" +
+                        "Board size: " + getSize() + "; Board indexing starts at 0."
+                );
+            }
+
+            if(boardState[x][y] != BoardCell.Empty) {
+                throw new WrongMoveException("The cell x " + x + " y " + y + " is not empty!");
+            }
         }
 
         switch (getCurrentColor()) {
@@ -98,6 +112,10 @@ public class Board implements BoardInterface {
                 break;
         }
 
+    }
+
+    public void move(Move move) throws WrongMoveException {
+        move(move.x, move.y);
     }
 
     public boolean hasWinner() {

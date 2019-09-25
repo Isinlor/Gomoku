@@ -2,6 +2,7 @@ package UI;
 
 import Board.Board;
 import Contract.BoardCell;
+import Contract.Move;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -94,7 +95,7 @@ public class BoardUI extends Application{
                     @Override
                     public void handle(MouseEvent event) {
                         System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
-                        board.move(cell_x,cell_y);
+                        board.move(new Move(cell_x,cell_y));
                         move++;
                         updateBoard();
                     }
