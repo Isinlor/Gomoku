@@ -10,6 +10,4 @@ public interface MutableBoard {
      */
     void move(Move move) throws WrongMoveException;
 
-    boolean isValidMove(Move move);
-
 }
