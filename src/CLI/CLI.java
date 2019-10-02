@@ -1,4 +1,4 @@
-package UI;
+package CLI;
 
 import Board.*;
 import Contract.*;
@@ -11,14 +11,11 @@ import java.util.Scanner;
  * Very simple CLI interface for prototyping and debugging.
  */
 public class CLI {
+
     public static void main(String[] args) {
 
-        System.out.println("Available players: " + Players.getPlayerNames());
+        Game game = setupGame();
 
-        Player blackPlayer = selectPlayer(Color.Black);
-        Player whitePlayer = selectPlayer(Color.White);
-
-        Game game = new SimpleGame(blackPlayer, whitePlayer);
         SimpleBoard board = new SimpleBoard(5);
 
         game.play(board);
@@ -27,7 +24,16 @@ public class CLI {
 
     }
 
-    private static Player selectPlayer(Color color) {
+    public static Game setupGame() {
+        System.out.println("Available players: " + Players.getPlayerNames());
+
+        Player blackPlayer = selectPlayer(Color.Black);
+        Player whitePlayer = selectPlayer(Color.White);
+
+        return new SimpleGame(blackPlayer, whitePlayer);
+    }
+
+    public static Player selectPlayer(Color color) {
         String playerName = null;
         while(!Players.getPlayerNames().contains(playerName)) {
             System.out.println("Select " + color.name() + " player:\n");
