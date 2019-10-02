@@ -36,5 +36,5 @@ public class CLI {
         }
         return Players.getPlayer(playerName);
     }
-    
+
 }
