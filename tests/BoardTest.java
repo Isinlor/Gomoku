@@ -2,12 +2,9 @@ import Board.*;
 import Contract.BoardCell;
 import Contract.Color;
 import Contract.Move;
+import Contract.ReadableBoard;
 
 public class BoardTest extends SimpleUnitTest {
-
-    final static BoardCell B = BoardCell.Black;
-    final static BoardCell W = BoardCell.White;
-    final static BoardCell E = BoardCell.Empty;
 
     public static void main(String[] args) {
 
@@ -40,6 +37,21 @@ public class BoardTest extends SimpleUnitTest {
             board.move(new Move(0, 0));
             assertTrue(board.getCell(0, 0) == BoardCell.Black);
             assertTrue(board.getCurrentColor() == Color.White);
+
+        });
+
+        it("allows to create a new board with a move", () -> {
+
+            SimpleBoard board = new SimpleBoard(3);
+            assertTrue(board.getCurrentColor() == Color.Black);
+
+            ReadableBoard newBoard = board.getWithMove(new Move(0, 0));
+
+            assertTrue(board.getCell(0, 0) == BoardCell.Empty);
+            assertTrue(board.getCurrentColor() == Color.Black);
+
+            assertTrue(newBoard.getCell(0, 0) == BoardCell.Black);
+            assertTrue(newBoard.getCurrentColor() == Color.White);
 
         });
 
