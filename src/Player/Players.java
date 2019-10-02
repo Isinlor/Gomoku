@@ -11,6 +11,7 @@ public class Players {
     final static private Map<String, Player> players = new HashMap<>();
 
     static {
+        players.put("human", new CliPlayer());
         players.put("random", new RandomPlayer());
     }
 
