@@ -5,10 +5,6 @@ import Evaluation.WinLossEvaluation;
 
 public class EvaluationTest extends SimpleUnitTest {
 
-    final static BoardCell B = BoardCell.Black;
-    final static BoardCell W = BoardCell.White;
-    final static BoardCell E = BoardCell.Empty;
-
     public static void main(String[] args) {
 
         System.out.println("\n\nEvaluation Test\n");
@@ -38,7 +34,7 @@ public class EvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.Black);
             assertTrue(
-                new WinLossEvaluation().evaluate(board) == Double.MIN_VALUE
+                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
             );
         });
 

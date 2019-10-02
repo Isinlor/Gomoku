@@ -1,3 +1,5 @@
+import Contract.BoardCell;
+
 /**
  * Simple unit test framework.
  *
@@ -147,5 +149,9 @@ abstract class SimpleUnitTest {
             super(s);
         }
     }
+
+    final static BoardCell B = BoardCell.Black;
+    final static BoardCell W = BoardCell.White;
+    final static BoardCell E = BoardCell.Empty;
 
 }
