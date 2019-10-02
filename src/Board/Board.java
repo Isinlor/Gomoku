@@ -125,6 +125,12 @@ public class Board implements BoardInterface {
 
     }
 
+    public Board getWithMove(Move move) throws WrongMoveException {
+        Board newBoard = new Board(boardState);
+        newBoard.move(move);
+        return newBoard;
+    }
+
     public boolean isGameFinished() {
         return hasWinner() || isFull();
     }

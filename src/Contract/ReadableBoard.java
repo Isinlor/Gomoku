@@ -1,5 +1,7 @@
 package Contract;
 
+import Board.Board;
+
 public interface ReadableBoard {
 
     /**
@@ -33,5 +35,12 @@ public interface ReadableBoard {
     Color getWinner() throws NoWinnerException;
 
     boolean isValidMove(Move move);
+
+    /**
+     * Returns *new board* with the given move.
+     *
+     * The changes to the new board will not affect the old board.
+     */
+    Board getWithMove(Move move) throws WrongMoveException;
 
 }
