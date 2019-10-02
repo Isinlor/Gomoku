@@ -1,6 +1,7 @@
 package Player;
 
 import Contract.Player;
+import Evaluation.WinLossEvaluation;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class Players {
     static {
         players.put("human", new CliPlayer());
         players.put("random", new RandomPlayer());
+        players.put("simpleton", new EvaluatePlayer(new WinLossEvaluation()));
     }
 
     public static Player getPlayer(String name) {
@@ -22,6 +24,7 @@ public class Players {
     public static Collection<Player> getPlayers() {
         return players.values();
     }
+
     public static Collection<String> getPlayerNames() {
         return players.keySet();
     }
