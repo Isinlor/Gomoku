@@ -1,16 +1,15 @@
 package Board;
 
 import Contract.*;
-import javafx.scene.control.Cell;
 
-public class Board implements BoardInterface {
+public class SimpleBoard implements Board {
 
     private int boardSize;
     private Color currentTurn = Color.Black;
     private BoardCell[][] boardState;
 
     // TODO: Add unit tests
-    public Board(BoardCell[][] boardState) {
+    public SimpleBoard(BoardCell[][] boardState) {
 
         int white = 0;
         int black = 0;
@@ -43,7 +42,7 @@ public class Board implements BoardInterface {
 
     }
 
-    public Board(int boardSize) {
+    public SimpleBoard(int boardSize) {
         this.boardSize = boardSize;
         boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
@@ -125,8 +124,8 @@ public class Board implements BoardInterface {
 
     }
 
-    public Board getWithMove(Move move) throws WrongMoveException {
-        Board newBoard = new Board(boardState);
+    public SimpleBoard getWithMove(Move move) throws WrongMoveException {
+        SimpleBoard newBoard = new SimpleBoard(boardState);
         newBoard.move(move);
         return newBoard;
     }

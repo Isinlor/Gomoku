@@ -4,7 +4,7 @@ import Contract.*;
 
 import java.util.Random;
 
-public class RandomPlayer implements PlayerInterface {
+public class RandomPlayer implements Player {
 
     public Move getMove(ReadableBoard board) {
 

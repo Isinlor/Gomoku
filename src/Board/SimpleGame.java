@@ -1,20 +1,19 @@
 package Board;
 
-import Contract.BoardInterface;
-import Contract.GameInterface;
-import Contract.PlayerInterface;
+import Contract.Board;
+import Contract.Player;
 
-public class Game implements GameInterface {
+public class SimpleGame implements Contract.Game {
 
-    private PlayerInterface black;
-    private PlayerInterface white;
+    private Player black;
+    private Player white;
 
-    public Game(PlayerInterface black, PlayerInterface white) {
+    public SimpleGame(Player black, Player white) {
         this.black = black;
         this.white = white;
     }
 
-    public void play(BoardInterface board) {
+    public void play(Board board) {
 
         while(!board.isGameFinished()) {
             switch (board.getCurrentColor()) {

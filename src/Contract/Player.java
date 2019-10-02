@@ -3,7 +3,7 @@ package Contract;
 /**
  * Interface representing a player.
  */
-public interface PlayerInterface {
+public interface Player {
     /**
      * Allows the player to indicate the move to make.
      */

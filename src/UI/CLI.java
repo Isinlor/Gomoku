@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class CLI {
     public static void main(String[] args) {
 
-        PlayerInterface cliPlayer = (ReadableBoard currentBoard) -> {
+        Player cliPlayer = (ReadableBoard currentBoard) -> {
 
             System.out.println(currentBoard.toString());
 
@@ -31,10 +31,10 @@ public class CLI {
 
         };
 
-        PlayerInterface randomPlayer = new RandomPlayer();
+        Player randomPlayer = new RandomPlayer();
 
-        Game game = new Game(randomPlayer, cliPlayer);
-        Board board = new Board(5);
+        Game game = new SimpleGame(randomPlayer, cliPlayer);
+        SimpleBoard board = new SimpleBoard(5);
 
         game.play(board);
 

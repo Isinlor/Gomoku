@@ -1,7 +1,5 @@
 package Contract;
 
-import Board.Board;
-
 public interface ReadableBoard {
 
     /**
@@ -41,6 +39,6 @@ public interface ReadableBoard {
      *
      * The changes to the new board will not affect the old board.
      */
-    Board getWithMove(Move move) throws WrongMoveException;
+    ReadableBoard getWithMove(Move move) throws WrongMoveException;
 
 }

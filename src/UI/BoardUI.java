@@ -1,22 +1,18 @@
 package UI;
 
-import Board.Board;
+import Board.SimpleBoard;
 import Contract.BoardCell;
 import Contract.Move;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.application.Application;
 
@@ -29,7 +25,7 @@ public class BoardUI extends Application{
     private int boardSize = 15;
     private HBox root;
     private VBox infoPanel;
-    private Board board;
+    private SimpleBoard board;
     private final int BOARD_PANEL_SIZE = 750;
     private Label currentPlayer;
     private Label justPlayer;
@@ -48,7 +44,7 @@ public class BoardUI extends Application{
         infoPanel.setStyle("-fx-background-color: #808080;");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        board = new Board(15);
+        board = new SimpleBoard(15);
 //        root.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent event) {

@@ -2,7 +2,7 @@ package Player;
 
 import Contract.*;
 
-public class EvaluatePlayer implements PlayerInterface {
+public class EvaluatePlayer implements Player {
 
     private Evaluation evaluation;
 

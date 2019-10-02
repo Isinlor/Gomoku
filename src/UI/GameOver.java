@@ -6,11 +6,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 //import Contract.*;
-import Board.Board;
+import Board.SimpleBoard;
 
 public class GameOver {
 
-    public static void display(Board board, BoardUI boardUI)
+    public static void display(SimpleBoard board, BoardUI boardUI)
     {
         Stage gameover=new Stage();
 

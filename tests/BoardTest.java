@@ -12,17 +12,17 @@ public class BoardTest extends SimpleUnitTest {
     public static void main(String[] args) {
 
         it("creates simple board", () -> {
-            new Board(15);
+            new SimpleBoard(15);
         });
 
         it("allows to retrieve board size", () -> {
-            assertTrue(3 == new Board(3).getSize());
-            assertTrue(10 == new Board(10).getSize());
-            assertTrue(15 == new Board(15).getSize());
+            assertTrue(3 == new SimpleBoard(3).getSize());
+            assertTrue(10 == new SimpleBoard(10).getSize());
+            assertTrue(15 == new SimpleBoard(15).getSize());
         });
 
         it("initializes board with empty cells", () -> {
-            Board board = new Board(3);
+            SimpleBoard board = new SimpleBoard(3);
             for (int i = 0; i < board.getSize(); i++) {
                 for (int j = 0; j < board.getSize(); j++) {
                     assertTrue(board.getCell(i, j) == BoardCell.Empty);
@@ -32,7 +32,7 @@ public class BoardTest extends SimpleUnitTest {
 
         it("allows to make a move", () -> {
 
-            Board board = new Board(3);
+            SimpleBoard board = new SimpleBoard(3);
             assertTrue(board.getCurrentColor() == Color.Black);
 
             board.move(new Move(0, 0));
@@ -47,7 +47,7 @@ public class BoardTest extends SimpleUnitTest {
                 {W, E, B},
                 {E, E, W},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             // it just check that something is displayed
             assertTrue(!board.toString().isEmpty());
         });
@@ -79,7 +79,7 @@ public class BoardTest extends SimpleUnitTest {
                     {B, B, B}, // check from center position
                     {W, E, W},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.checkRows(1, 1, 3));
         });
 
@@ -89,7 +89,7 @@ public class BoardTest extends SimpleUnitTest {
                     {B, B, B},
                     {W, E, W}, // check from left bottom
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(!board.checkRows(0, 0, 3));
         });
 
@@ -99,7 +99,7 @@ public class BoardTest extends SimpleUnitTest {
                     {E, B, B},
                     {W, W, W},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.hasWinner(3));
         });
 
@@ -111,7 +111,7 @@ public class BoardTest extends SimpleUnitTest {
                     {E, E, E, E, E},
                     {E, E, E, E, E},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.hasWinner());
         });
 
@@ -123,7 +123,7 @@ public class BoardTest extends SimpleUnitTest {
                     {E, E, E, E, E},
                     {E, E, E, E, E},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(!board.hasWinner());
         });
 
@@ -135,7 +135,7 @@ public class BoardTest extends SimpleUnitTest {
                     {E, B, E, W, E},
                     {E, E, E, W, E},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getWinner(4)== Color.White);
         });
 
@@ -147,7 +147,7 @@ public class BoardTest extends SimpleUnitTest {
                     {W, W, B, E, E},
                     {E, B, E, E, E},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getWinner(4)==Color.Black);
         });
 
@@ -159,7 +159,7 @@ public class BoardTest extends SimpleUnitTest {
                     {W, W, E, B, W},
                     {E, E, E, E, W},
             };
-            Board board = new Board(boardState);
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getWinner(4)==Color.Black);
         });
 
