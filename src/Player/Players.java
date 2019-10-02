@@ -18,8 +18,11 @@ public class Players {
         return players.get(name);
     }
 
-    public static Collection<Player> getODESolvers() {
+    public static Collection<Player> getPlayers() {
         return players.values();
+    }
+    public static Collection<String> getPlayerNames() {
+        return players.keySet();
     }
 
 }
