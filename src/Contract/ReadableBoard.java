@@ -26,6 +26,8 @@ public interface ReadableBoard {
      */
     Color getCurrentColor();
 
+    boolean isGameFinished();
+
     boolean hasWinner();
 
     Color getWinner() throws NoWinnerException;

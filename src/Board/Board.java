@@ -125,6 +125,21 @@ public class Board implements BoardInterface {
 
     }
 
+    public boolean isGameFinished() {
+        return hasWinner() || isFull();
+    }
+
+    public boolean isFull() {
+        for (int x = 0; x < getSize(); x++) {
+            for (int y = 0; y < getSize(); y++) {
+                if(getCell(x, y) == BoardCell.Empty) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean hasWinner() {
         return hasWinner(5);
     }

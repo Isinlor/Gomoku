@@ -16,7 +16,7 @@ public class Game implements GameInterface {
 
     public void play(BoardInterface board) {
 
-        while(!board.hasWinner()) {
+        while(!board.isGameFinished()) {
             switch (board.getCurrentColor()) {
                 case Black:
                     board.move(black.getMove(board));
