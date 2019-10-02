@@ -14,6 +14,7 @@ public class SimpleBoard implements Board {
         int white = 0;
         int black = 0;
         boardSize = boardState.length;
+        this.boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             if(boardState[x].length != boardSize) {
                 throw new RuntimeException("Board is not square!");
@@ -27,6 +28,7 @@ public class SimpleBoard implements Board {
                         white++;
                         break;
                 }
+                this.boardState[x][y] = boardState[x][y];
             }
         }
 
@@ -37,8 +39,6 @@ public class SimpleBoard implements Board {
         if(black > white) {
             currentTurn = Color.White;
         }
-
-        this.boardState = boardState;
 
     }
 
