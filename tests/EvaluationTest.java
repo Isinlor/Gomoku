@@ -11,6 +11,8 @@ public class EvaluationTest extends SimpleUnitTest {
 
     public static void main(String[] args) {
 
+        System.out.println("\n\nEvaluation Test\n");
+
         it("gives 0 score to board with no winner and loser", () -> {
             BoardCell[][] boardState = {
                 {E, E, E, E, E},

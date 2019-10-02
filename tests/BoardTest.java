@@ -11,6 +11,8 @@ public class BoardTest extends SimpleUnitTest {
 
     public static void main(String[] args) {
 
+        System.out.println("\n\nBoard Test\n");
+
         it("creates simple board", () -> {
             new SimpleBoard(15);
         });
