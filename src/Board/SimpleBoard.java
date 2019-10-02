@@ -28,6 +28,7 @@ public class SimpleBoard implements Board {
                         white++;
                         break;
                 }
+                // make sure that board state is not mutable outside the class
                 this.boardState[x][y] = boardState[x][y];
             }
         }
