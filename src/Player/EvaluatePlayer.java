@@ -12,7 +12,7 @@ public class EvaluatePlayer implements Player {
 
     public Move getMove(ReadableBoard board) {
         Move bestMove = null;
-        double worstEvaluation = Double.NaN;
+        double bestEvaluation = Double.NaN;
 
         for (int x = 0; x < board.getSize(); x++) {
             for (int y = 0; y < board.getSize(); y++) {
@@ -22,10 +22,10 @@ public class EvaluatePlayer implements Player {
 
                     // because the evaluation is from perspective of the other color
                     // the best move is the one with the worst evaluation
-                    double moveEvaluation = evaluation.evaluate(board.getWithMove(new Move(x, y)));
-                    if(bestMove == null || moveEvaluation < worstEvaluation) {
+                    double moveEvaluation = evaluation.evaluate(board, new Move(x, y));
+                    if(bestMove == null || moveEvaluation > bestEvaluation) {
                         bestMove = move;
-                        worstEvaluation = moveEvaluation;
+                        bestEvaluation = moveEvaluation;
                     }
 
                 }
