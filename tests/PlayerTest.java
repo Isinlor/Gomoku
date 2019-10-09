@@ -3,7 +3,7 @@ import Contract.BoardCell;
 import Contract.Color;
 import Contract.Move;
 import Evaluation.WinLossEvaluation;
-import Player.EvaluatePlayer;
+import Player.EvaluationPlayer;
 
 public class PlayerTest extends SimpleUnitTest {
     public static void main(String[] args) {
@@ -24,7 +24,7 @@ public class PlayerTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.Black);
 
             assertTrue(
-                new EvaluatePlayer(new WinLossEvaluation())
+                new EvaluationPlayer(new WinLossEvaluation())
                     .getMove(board)
                     .isEqual(
                         new Move(0, 4)
@@ -47,7 +47,7 @@ public class PlayerTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.White);
 
             assertTrue(
-                new EvaluatePlayer(new WinLossEvaluation())
+                new EvaluationPlayer(new WinLossEvaluation())
                     .getMove(board)
                     .isEqual(
                         new Move(1, 4)

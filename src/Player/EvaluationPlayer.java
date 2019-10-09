@@ -2,11 +2,11 @@ package Player;
 
 import Contract.*;
 
-public class EvaluatePlayer implements Player {
+public class EvaluationPlayer implements Player {
 
     private Evaluation evaluation;
 
-    public EvaluatePlayer(Evaluation evaluation) {
+    public EvaluationPlayer(Evaluation evaluation) {
         this.evaluation = evaluation;
     }
 

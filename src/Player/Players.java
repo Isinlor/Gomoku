@@ -14,7 +14,7 @@ public class Players {
     static {
         players.put("human", new CliPlayer());
         players.put("random", new RandomPlayer());
-        players.put("simpleton", new EvaluatePlayer(new WinLossEvaluation()));
+        players.put("simpleton", new EvaluationPlayer(new WinLossEvaluation()));
     }
 
     public static Player getPlayer(String name) {
