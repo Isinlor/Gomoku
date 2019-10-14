@@ -147,9 +147,6 @@ public class MenuUI extends Application{
                 nameSelectBox.getChildren().clear();
                 nameSelectBox.getChildren().addAll(newGameTitle,chooseMode,modeSelect,nameSelectExplaination,p1NameText,
                         p1TextField,p2NameText,p2TextField,buttons);
-                if(buttons.getChildren().contains(continueToGame)==false) {
-                    buttons.getChildren().addAll(continueToGame);
-                }
             });
             Button ai = new Button("AI Opponent");
             ai.setOnAction(actionEvent4 -> {
@@ -157,14 +154,11 @@ public class MenuUI extends Application{
                 nameSelectBox.getChildren().clear();
                 nameSelectBox.getChildren().addAll(newGameTitle,chooseMode,modeSelect,aiChooseText,aiOptions,nameSelectExplaination,p1NameText,
                         p1TextField,buttons);
-                if(buttons.getChildren().contains(continueToGame)==false) {
-                    buttons.getChildren().addAll(continueToGame);
-                }
             });
             modeSelect.getChildren().addAll(pvp,ai);
             buttons.setSpacing(10);
             buttons.setPadding(new Insets(0, 20, 10, 20));
-            buttons.getChildren().addAll(backToMenu);
+            buttons.getChildren().addAll(backToMenu,continueToGame);
             nameSelectBox.getChildren().addAll(newGameTitle,chooseMode,modeSelect,nameSelectExplaination,p1NameText,
                     p1TextField,p2NameText,p2TextField,buttons);
             nameSelect.setCenter(nameSelectBox);
