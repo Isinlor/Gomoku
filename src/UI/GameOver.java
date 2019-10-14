@@ -10,6 +10,45 @@ import Board.SimpleBoard;
 
 public class GameOver {
 
+    public static void display(SimpleBoard board, MenuUI boardUI)
+    {
+        Stage gameover=new Stage();
+
+        gameover.initModality(Modality.APPLICATION_MODAL);
+        gameover.setTitle("Game Over!");
+        Label label;
+        if(board.getWinner().toString().equals("White")) {
+            label = new Label(boardUI.getP1Name() + " has won!");
+        }else if(board.getWinner().toString().equals("Black")) {
+            label = new Label(boardUI.getP2Name() + " has won!");
+        }else{label = null;}
+        Button button = new Button("New Game");
+
+        button.setOnAction(e -> {
+            board.resetBoard();
+            gameover.close();
+            boardUI.updateBoard();
+        });
+
+
+        VBox layout= new VBox(15);
+
+
+        layout.getChildren().addAll(label, button);
+
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout, 300, 250);
+
+
+        gameover.setScene(scene);
+
+        gameover.initStyle(StageStyle.UNDECORATED);
+
+        gameover.show();
+
+    }
+
     public static void display(SimpleBoard board, BoardUI boardUI)
     {
         Stage gameover=new Stage();
