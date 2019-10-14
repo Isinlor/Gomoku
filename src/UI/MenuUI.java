@@ -2,7 +2,10 @@ package UI;
 
 import Board.*;
 import Contract.BoardCell;
+import Contract.Game;
 import Contract.Move;
+import Contract.Player;
+import Player.Players;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -36,13 +39,19 @@ public class MenuUI extends Application{
     private String p1Name,p2Name;
     private HBox root;
     private VBox infoPanel;
-    private SimpleBoard board;
     private final int BOARD_PANEL_SIZE = 750;
     private Label currentPlayer;
     private Label justPlayer;
     private Scene menuScene;
     private boolean pvpMode = true;
     private String aiMode = null;
+
+    private Player aiPlayer = null;
+
+
+    private Game game = null;
+    private SimpleBoard board;
+
 
     public void start(Stage primaryStage)
     {
@@ -83,7 +92,7 @@ public class MenuUI extends Application{
             Text aiChooseText = new Text("Select the ai you want to use below:");
             aiChooseText.setFont(new Font("Helvetica",16));
             ComboBox aiOptions = new ComboBox();
-            aiOptions.getItems().addAll("Random","Evaluation");
+            aiOptions.getItems().addAll("Random","Simpleton");
             EventHandler<ActionEvent> aiOptionsEvent = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent e)
                 {
@@ -91,7 +100,7 @@ public class MenuUI extends Application{
                 }};
             aiOptions.setOnAction(aiOptionsEvent);
 
-                    HBox buttons = new HBox();
+            HBox buttons = new HBox();
             buttons.setAlignment(Pos.CENTER);
             Button backToMenu = new Button("Back");
             backToMenu.setOnAction(actionEvent2 -> {
@@ -117,9 +126,14 @@ public class MenuUI extends Application{
                     infoPanel.setStyle("-fx-background-color: #808080;");
                     Scene scene = new Scene(root, 950, 767);
                     primaryStage.setScene(scene);
+
+                    if(aiMode!=null) {
+                        aiPlayer = Players.getPlayer(aiMode.toLowerCase());
+                    }
+
                     board = new SimpleBoard(15);
                     updateBoard();
-                    primaryStage.show();
+
                 }
             });
             //Back and continue buttons
@@ -221,6 +235,9 @@ public class MenuUI extends Application{
                     public void handle(MouseEvent event) {
                         System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
                         board.move(new Move(cell_x,cell_y));
+                        if(aiPlayer!=null){
+                            board.move(aiPlayer.getMove(board));
+                        }
                         updateBoard();
                     }
                 });
