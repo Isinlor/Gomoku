@@ -7,9 +7,11 @@ public class MinMaxPlayer implements Player {
 
     private SimpleBoard board;
     private Evaluation evaluation;
+    private MoveSelector moveSelector;
 
-    public MinMaxPlayer(Evaluation evaluation) {
+    public MinMaxPlayer(Evaluation evaluation, MoveSelector moveSelector) {
         this.evaluation = evaluation;
+        this.moveSelector = moveSelector;
     }
 
     public Move getMove(ReadableBoard board) {
@@ -19,7 +21,7 @@ public class MinMaxPlayer implements Player {
         Move bestMove = null;
         double bestEvaluation = Double.NaN;
 
-        for (Move move: board.getValidMoves()) {
+        for (Move move: moveSelector.getMoves(board)) {
 
             double moveEvaluation = min(move, 3);
             if(bestMove == null || moveEvaluation > bestEvaluation) {
@@ -46,7 +48,7 @@ public class MinMaxPlayer implements Player {
         Move bestNextMove = null;
         double bestEvaluation = Double.NaN;
 
-        for (Move nextMove: board.getValidMoves()) {
+        for (Move nextMove: moveSelector.getMoves(board)) {
 
             double nextMoveEvaluation = min(nextMove, depth - 1);
             if(bestNextMove == null || nextMoveEvaluation > bestEvaluation) {
@@ -75,7 +77,7 @@ public class MinMaxPlayer implements Player {
         Move bestNextMove = null;
         double bestEvaluation = Double.NaN;
 
-        for (Move nextMove: board.getValidMoves()) {
+        for (Move nextMove: moveSelector.getMoves(board)) {
 
             double nextMoveEvaluation = max(nextMove, depth - 1);
             if(bestNextMove == null || nextMoveEvaluation < bestEvaluation) {
