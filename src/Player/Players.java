@@ -1,5 +1,6 @@
 package Player;
 
+import Board.Helpers.AllMovesSelector;
 import Board.Helpers.ApproximateMoveSelector;
 import Contract.Player;
 import Evaluation.WinLossEvaluation;
@@ -17,6 +18,7 @@ public class Players {
         players.put("random", new RandomPlayer());
         players.put("simpleton", new EvaluationPlayer(new WinLossEvaluation()));
         players.put("minmax", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()));
+        players.put("mcts",new MCTSPlayer(new ApproximateMoveSelector()));
     }
 
     public static Player getPlayer(String name) {
