@@ -15,6 +15,7 @@ public class Players {
         players.put("human", new CliPlayer());
         players.put("random", new RandomPlayer());
         players.put("simpleton", new EvaluationPlayer(new WinLossEvaluation()));
+        players.put("minmax", new MinMaxPlayer(new WinLossEvaluation()));
     }
 
     public static Player getPlayer(String name) {
