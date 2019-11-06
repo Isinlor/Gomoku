@@ -20,22 +20,52 @@ public class EvaluationTest extends SimpleUnitTest {
             };
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(
-                new WinLossEvaluation().evaluate(board, new Move(0,0)) == 0.0
+                new WinLossEvaluation().evaluate(board) == 0.0
             );
         });
 
-        it("gives max score to the winner", () -> {
+        it("gives min score to the white loser; horizontal", () -> {
             BoardCell[][] boardState = {
-                {B, B, B, B, E},
+                {B, B, B, B, B},
                 {W, W, W, W, E},
                 {E, E, E, E, E},
                 {E, E, E, E, E},
                 {E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(board.getCurrentColor() == Color.White);
+            assertTrue(
+                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
+            );
+        });
+
+        it("gives min score to the white loser; vertical", () -> {
+            BoardCell[][] boardState = {
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {B, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(board.getCurrentColor() == Color.White);
+            assertTrue(
+                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
+            );
+        });
+
+        it("gives min score to the black loser; horizontal", () -> {
+            BoardCell[][] boardState = {
+                {B, W, B, E, E},
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {E, W, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.Black);
             assertTrue(
-                new WinLossEvaluation().evaluate(board, new Move(0, 4)) == Double.MAX_VALUE
+                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
             );
         });
 

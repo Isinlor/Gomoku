@@ -10,7 +10,7 @@ public class PlayerTest extends SimpleUnitTest {
 
         System.out.println("\n\nPlayer Test\n");
 
-        it("picks the best move for black", () -> {
+        it("picks the best move for black - horizontal", () -> {
 
             BoardCell[][] boardState = {
                 {B, B, B, B, E},
@@ -28,6 +28,29 @@ public class PlayerTest extends SimpleUnitTest {
                     .getMove(board)
                     .isEqual(
                         new Move(0, 4)
+                    )
+            );
+
+        });
+
+        it("picks the best move for black - vertical", () -> {
+
+            BoardCell[][] boardState = {
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {B, W, E, E, E},
+                {E, E, E, E, E},
+            };
+
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(board.getCurrentColor() == Color.Black);
+
+            assertTrue(
+                new EvaluationPlayer(new WinLossEvaluation())
+                    .getMove(board)
+                    .isEqual(
+                        new Move(4, 0)
                     )
             );
 

@@ -2,11 +2,25 @@ package Board;
 
 import Contract.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class SimpleBoard implements Board {
 
     private int boardSize;
     private Color currentTurn = Color.Black;
     private BoardCell[][] boardState;
+
+    public SimpleBoard(ReadableBoard board) {
+        boardSize = board.getSize();
+        currentTurn = board.getCurrentColor();
+        this.boardState = new BoardCell[boardSize][boardSize];
+        for (int x = 0; x < boardSize; x++) {
+            for (int y = 0; y < boardSize; y++) {
+                this.boardState[x][y] = board.getCell(x, y);
+            }
+        }
+    }
 
     // TODO: Add unit tests
     public SimpleBoard(BoardCell[][] boardState) {
@@ -82,6 +96,18 @@ public class SimpleBoard implements Board {
         return currentTurn;
     }
 
+    public ArrayList<Move> getValidMoves() {
+        ArrayList<Move> moves = new ArrayList<Move>();
+        for (int x = 0; x < getSize(); x++) {
+            for (int y = 0; y < getSize(); y++) {
+                if(boardState[x][y] == BoardCell.Empty) {
+                    moves.add(new Move(x, y));
+                }
+            }
+        }
+        return moves;
+    }
+
     public boolean isValidMove(Move move) {
         if(move.x < 0 || move.y < 0 || move.x >= boardSize || move.y >= boardSize) {
             return false;
@@ -119,6 +145,35 @@ public class SimpleBoard implements Board {
                 break;
             case White:
                 boardState[x][y] = BoardCell.White;
+                currentTurn = Color.Black;
+                break;
+        }
+
+    }
+
+    public void revertMove(Move move) throws WrongMoveException {
+
+        int x = move.x;
+        int y = move.y;
+
+        if(x < 0 || y < 0 || x >= boardSize || y >= boardSize) {
+            throw new WrongMoveException(
+                "Move x " + x + " y " + y + " is outside the board!\n" +
+                    "Board size: " + getSize() + "; Board indexing starts at 0."
+            );
+        }
+
+        if(boardState[x][y] == BoardCell.Empty) {
+            throw new WrongMoveException("The cell x " + x + " y " + y + " is empty!");
+        }
+
+        switch (getCurrentColor()) {
+            case Black:
+                boardState[x][y] = BoardCell.Empty;
+                currentTurn = Color.White;
+                break;
+            case White:
+                boardState[x][y] = BoardCell.Empty;
                 currentTurn = Color.Black;
                 break;
         }

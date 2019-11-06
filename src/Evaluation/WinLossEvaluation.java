@@ -9,10 +9,9 @@ import Contract.ReadableBoard;
  * -> Win is good, loose is bad.
  */
 public class WinLossEvaluation implements Evaluation {
-    public double evaluate(ReadableBoard board, Move move) {
-        board = board.getWithMove(move);
+    public double evaluate(ReadableBoard board) {
         if(board.hasWinner()) {
-            return board.getWinner() != board.getCurrentColor() ? Double.MAX_VALUE : -Double.MAX_VALUE;
+            return board.getWinner() == board.getCurrentColor() ? Double.MAX_VALUE : -Double.MAX_VALUE;
         }
         return 0;
     }

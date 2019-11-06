@@ -1,5 +1,7 @@
 package Contract;
 
+import java.util.ArrayList;
+
 public interface ReadableBoard {
 
     /**
@@ -31,6 +33,8 @@ public interface ReadableBoard {
     boolean hasWinner();
 
     Color getWinner() throws NoWinnerException;
+
+    ArrayList<Move> getValidMoves();
 
     boolean isValidMove(Move move);
 
