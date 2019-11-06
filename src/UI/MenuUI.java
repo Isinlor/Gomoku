@@ -28,6 +28,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.application.Application;
+
+import java.util.Collection;
+
 import static javafx.application.Application.launch;
 import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.WHITE;
@@ -78,6 +81,11 @@ public class MenuUI extends Application{
 
             Text newGameTitle = new Text("New Game");
             newGameTitle.setFont(new Font("Helvetica",30));
+
+            Text boardSizeText = new Text("Board size: ");
+            boardSizeText.setFont(new Font("Helvetica",16));
+            TextField boardSizeTextField = new TextField("15");
+
             Text chooseMode = new Text("Choose how you want to play:");
             chooseMode.setFont(new Font("Helvetica",16));
             Text nameSelectExplaination = new Text("Please fill in the name(s) and click continue:");
@@ -92,7 +100,9 @@ public class MenuUI extends Application{
             Text aiChooseText = new Text("Select the ai you want to use below:");
             aiChooseText.setFont(new Font("Helvetica",16));
             ComboBox aiOptions = new ComboBox();
-            aiOptions.getItems().addAll("Random","Simpleton");
+            Collection<String> ais = Players.getPlayerNames();
+            ais.remove("human");
+            aiOptions.getItems().addAll(ais);
             EventHandler<ActionEvent> aiOptionsEvent = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent e)
                 {
@@ -131,7 +141,9 @@ public class MenuUI extends Application{
                         aiPlayer = Players.getPlayer(aiMode.toLowerCase());
                     }
 
-                    board = new SimpleBoard(15);
+                    int boardSize = Integer.parseInt(boardSizeTextField.getCharacters().toString());
+
+                    board = new SimpleBoard(boardSize);
                     updateBoard();
 
                 }
@@ -145,21 +157,21 @@ public class MenuUI extends Application{
             pvp.setOnAction(actionEvent3 -> {
                 pvpMode = true;
                 nameSelectBox.getChildren().clear();
-                nameSelectBox.getChildren().addAll(newGameTitle,chooseMode,modeSelect,nameSelectExplaination,p1NameText,
+                nameSelectBox.getChildren().addAll(newGameTitle,boardSizeText,boardSizeTextField,chooseMode,modeSelect,nameSelectExplaination,p1NameText,
                         p1TextField,p2NameText,p2TextField,buttons);
             });
             Button ai = new Button("AI Opponent");
             ai.setOnAction(actionEvent4 -> {
                 pvpMode = false;
                 nameSelectBox.getChildren().clear();
-                nameSelectBox.getChildren().addAll(newGameTitle,chooseMode,modeSelect,aiChooseText,aiOptions,nameSelectExplaination,p1NameText,
+                nameSelectBox.getChildren().addAll(newGameTitle,boardSizeText,boardSizeTextField,chooseMode,modeSelect,aiChooseText,aiOptions,nameSelectExplaination,p1NameText,
                         p1TextField,buttons);
             });
             modeSelect.getChildren().addAll(pvp,ai);
             buttons.setSpacing(10);
             buttons.setPadding(new Insets(0, 20, 10, 20));
             buttons.getChildren().addAll(backToMenu,continueToGame);
-            nameSelectBox.getChildren().addAll(newGameTitle,chooseMode,modeSelect,nameSelectExplaination,p1NameText,
+            nameSelectBox.getChildren().addAll(newGameTitle,boardSizeText,boardSizeTextField,chooseMode,modeSelect,nameSelectExplaination,p1NameText,
                     p1TextField,p2NameText,p2TextField,buttons);
             nameSelect.setCenter(nameSelectBox);
             Scene nameSelectScene = new Scene(nameSelect,1000, 600);
@@ -227,12 +239,19 @@ public class MenuUI extends Application{
                 tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+
                         System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
-                        board.move(new Move(cell_x,cell_y));
-                        if(aiPlayer!=null){
-                            board.move(aiPlayer.getMove(board));
+                        try {
+                            board.move(new Move(cell_x,cell_y));
+                            if(aiPlayer!=null){
+                                board.move(aiPlayer.getMove(board));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
                         }
+
                         updateBoard();
+
                     }
                 });
 
