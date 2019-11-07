@@ -16,6 +16,7 @@ public class ComparePlayers {
         int whiteWin = 0;
         int draw = 0;
 
+        double startTime = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
 
             SimpleBoard board = new SimpleBoard(5);
@@ -34,12 +35,16 @@ public class ComparePlayers {
                     whiteWin++;
                     break;
             }
+
+            System.out.println("B:" + blackWin + ", W:" + whiteWin + ", D:" + draw);
             
         }
 
+        System.out.println();
         System.out.println("Black win: " + blackWin);
         System.out.println("White win: " + whiteWin);
         System.out.println("Draw: " + draw);
+        System.out.println("Time: " + (System.currentTimeMillis() - startTime));
 
     }
 
