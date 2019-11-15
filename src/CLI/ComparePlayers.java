@@ -34,7 +34,12 @@ public class ComparePlayers {
                     whiteWin++;
                     break;
             }
-            
+
+            //Updates on the programme, change 10 to interval of update
+            if(blackWin+whiteWin%10==0){
+                System.out.println(blackWin+" Black Wins so far");
+                System.out.println(whiteWin+" White Wins so far");
+            }
         }
 
         System.out.println("Black win: " + blackWin);
