@@ -15,7 +15,7 @@ public class Players {
 
     static {
         players.put("human", new CliPlayer());
-        players.put("random", new RandomPlayer());
+        players.put("random", new RandomPlayer(new ApproximateMoveSelector()));
         players.put("simpleton", new EvaluationPlayer(new WinLossEvaluation()));
         players.put("minmax", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()));
         players.put("mctsapprox",new MCTSPlayer(new ApproximateMoveSelector()));

@@ -8,9 +8,10 @@ import Contract.ReadableBoard;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 public class ApproximateMoveSelector implements MoveSelector {
-    public Collection<Move> getMoves(ReadableBoard board) {
+    public List<Move> getMoves(ReadableBoard board) {
 
         HashSet<Move> moves = new HashSet<>();
         for (int x = 0; x < board.getSize(); x++) {
@@ -36,7 +37,7 @@ public class ApproximateMoveSelector implements MoveSelector {
             return board.getValidMoves();
         }
 
-        return moves;
+        return new ArrayList<>(moves);
 
     }
 }
