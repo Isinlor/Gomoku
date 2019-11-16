@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Scanner;
 
 public class MCTSPlayer implements Player {
-    MCTSNode root = null;
+
     MoveSelector moveSelector;
 
     public MCTSPlayer(MoveSelector moveSelector){
@@ -21,15 +21,18 @@ public class MCTSPlayer implements Player {
     @Override
     public Move getMove(ReadableBoard board) {
 
+        System.out.println(board.toString());
+
         //Initializes the tree with the current turn as root node
         //Root has a child for each possible turn
-        root = new MCTSNode(board,null);
+        MCTSNode root = new MCTSNode(board,null);
         Color MCTSColor = root.getState().getCurrentColor();
 
         //
         double startTime = System.currentTimeMillis();
+        int maxDepth = 100;
         double timeSinceStart = 0;
-        double allowedTime = 1000*5; //10 seconds
+        double allowedTime = 1000*20; //10 seconds
         double c = Math.sqrt(2); //EXPLORATION PARAMETER
 
         while(timeSinceStart<allowedTime){
@@ -37,19 +40,24 @@ public class MCTSPlayer implements Player {
             //if leaf played = 0 -> rollout
             //if leaf played > 0 -> expand and rollout from random child
             MCTSNode leaf = root.traverse(c);
-            if(leaf.getGamesPlayed()==0){
+            if(leaf.getGamesPlayed()==0&&leaf.getDepth()<maxDepth){
                 leaf.expandTree(moveSelector);
-                leaf = leaf.getChildren().get(0);
+                if(!leaf.getChildren().isEmpty())
+                    leaf = leaf.getChildren().get(0);
             }
             rollout(leaf,MCTSColor);
             timeSinceStart = System.currentTimeMillis()-startTime;
         }
-//         TESTING THE CHILDNODES!!!!!!!!!
-//        for(MCTSNode child:root.getChildren()) {
-//            System.out.println(child.toString());
-//            System.out.println(child.getGamesWon()+" Games won");
-//            System.out.println(child.getGamesPlayed()+" Games played");
-//        }
+
+        //System.out.println(root.getGamesPlayed()+" Simulations run");
+
+        //If there's a next move that wins, pick that
+        for(int i=0;i<root.getChildren().size();i++){
+            if(root.getChildren().get(i).getState().getWinner()==MCTSColor) {
+                return root.getChildren().get(i).getLastMove();
+            }
+        }
+
         return root.getBestChild().getLastMove();
     }
 
