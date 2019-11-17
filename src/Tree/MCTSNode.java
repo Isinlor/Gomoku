@@ -1,28 +1,28 @@
 package Tree;
 
-import Contract.Board;
 import Contract.Move;
 import Contract.MoveSelector;
 import Contract.ReadableBoard;
-import Player.MCTSPlayer;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class MCTSNode {
     int depth = 0;
     ReadableBoard state = null;
     ArrayList<MCTSNode> children = new ArrayList<>();
+    ArrayList<Move> untriedMoves = new ArrayList<>();
     MCTSNode parent = null;
     double gamesWon = 0;
     double gamesPlayed = 0;
     double score = 0;
     Move lastMove;
 
-    public MCTSNode(ReadableBoard board,Move move){
+    public MCTSNode(ReadableBoard board,Move move,MoveSelector moveSelector){
         state = board;
         lastMove = move;
+        untriedMoves = new ArrayList<>(moveSelector.getMoves(board));
     }
 
     public void addChild(MCTSNode child){
@@ -37,6 +37,7 @@ public class MCTSNode {
     public int getDepth(){return depth;}
 
     public void update(boolean win){
+        gamesPlayed++;
         gamesPlayed++;
         if(win){
             gamesWon++;
@@ -60,18 +61,17 @@ public class MCTSNode {
         }
     }
 
-    public void expandTree(MoveSelector moveSelector){
-        Collection<Move> validMoves = moveSelector.getMoves(state);
-        for(Move move:validMoves){
-            ReadableBoard childBoard = state.getWithMove(move);
-            MCTSNode child = new MCTSNode(childBoard,move);
-            addChild(child);
-            child.addParent(this);
-        }
+    public MCTSNode expandTree(MoveSelector moveSelector){
+        Move childMove = untriedMoves.remove((int) Math.random()*untriedMoves.size());
+        ReadableBoard childBoard = state.getWithMove(childMove);
+        MCTSNode child = new MCTSNode(childBoard, childMove,moveSelector);
+        addChild(child);
+        child.addParent(this);
+        return child;
     }
 
     public MCTSNode traverse(double c){
-        if(hasChild()){
+        if(!hasUntriedMoves()){
             MCTSNode bestChild = children.get(0);
             double highscore = 0;
             for(int i=0;i<children.size();i++){
@@ -90,6 +90,15 @@ public class MCTSNode {
             return this;
         }
     }
+
+    public boolean hasUntriedMoves(){
+        if(!untriedMoves.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public MCTSNode getBestChild(){
         MCTSNode bestChild = children.get(0);
         for(MCTSNode child:children){
@@ -99,6 +108,8 @@ public class MCTSNode {
         }
         return bestChild;
     }
+
+    public MCTSNode getParent(){return parent;}
     public ReadableBoard getState(){return state;}
 
     public Move getLastMove(){return lastMove;}
