@@ -114,7 +114,13 @@ public class SimpleBoard implements Board {
     }
 
     public ArrayList<Move> getValidMoves() {
+
         ArrayList<Move> moves = new ArrayList<Move>();
+
+        if(winner != null) {
+            return moves; // there are no valid moves if there is a winner
+        }
+
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 if(boardState[x][y] == BoardCell.Empty) {
@@ -122,10 +128,16 @@ public class SimpleBoard implements Board {
                 }
             }
         }
+
         return moves;
+
     }
 
     public boolean isValidMove(Move move) {
+        if(winner != null) {
+            return false;
+        }
+
         if(move.x < 0 || move.y < 0 || move.x >= boardSize || move.y >= boardSize) {
             return false;
         }
