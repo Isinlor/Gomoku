@@ -1,4 +1,5 @@
 package Contract;
 
-public interface Distribution {
+public interface Distribution<T> {
+    T sample();
 }
