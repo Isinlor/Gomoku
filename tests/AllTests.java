@@ -4,5 +4,6 @@ public class AllTests {
         MoveSelectorTest.main(args);
         EvaluationTest.main(args);
         PlayerTest.main(args);
+        SamplingTest.main(args);
     }
 }

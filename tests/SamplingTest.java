@@ -6,6 +6,13 @@ public class SamplingTest extends SimpleUnitTest {
 
     public static void main(String[] args) {
 
+        System.out.println("\n\nDistribution Test\n");
+
+        distributionTableMethodTest();
+
+    }
+
+    private static void distributionTableMethodTest() {
         it("allows sampling from discrete distribution over finite set of size 2", () -> {
 
             // sample from distribution where "true" has 0.33 chances, "false" has 0.67 chances
@@ -29,9 +36,7 @@ public class SamplingTest extends SimpleUnitTest {
         });
 
         it("allows sampling from discrete distribution over finite set of size 3", () -> {
-
-            // sample from distribution where "true" has 0.33 chances, "false" has 0.67 chances
-
+            
             Map<Character, Double> map = new HashMap<>();
             map.put('a', 1.);
             map.put('b', 2.);
@@ -62,7 +67,6 @@ public class SamplingTest extends SimpleUnitTest {
             assertEqual((double) cSelected / samples, 3./6., 0.1, "The proportion of c must be around 3/6.");
 
         });
-
     }
 
 }

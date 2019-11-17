@@ -13,7 +13,7 @@ import java.util.Random;
 public class DistributionTableMethod<T> implements Distribution {
 
     private Random rand = new Random();
-    
+
     private double weightSum;
     private List<T> events = new ArrayList<>();
     private List<Double> weights = new ArrayList<>();
