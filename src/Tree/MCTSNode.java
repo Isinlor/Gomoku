@@ -90,7 +90,7 @@ public class MCTSNode {
                 if (child.getGamesPlayed() == 0) {
                     return child;
                 }
-                double score = (child.getGamesWon() / child.getGamesPlayed()) + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
+                double score = ((double)child.getGamesWon() / child.getGamesPlayed()) + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
                 if (score > highscore) {
                     highscore = score;
                     bestChild = child;
