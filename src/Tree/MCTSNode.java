@@ -9,15 +9,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class MCTSNode {
-    int depth = 0;
-    ReadableBoard state = null;
-    ArrayList<MCTSNode> children = new ArrayList<>();
-    ArrayList<Move> untriedMoves = new ArrayList<>();
-    MCTSNode parent = null;
-    double gamesWon = 0;
-    double gamesPlayed = 0;
-    double score = 0;
-    Move lastMove;
+    
+    private int depth = 0;
+    private ReadableBoard state = null;
+    private ArrayList<MCTSNode> children = new ArrayList<>();
+    private ArrayList<Move> untriedMoves = new ArrayList<>();
+    private MCTSNode parent = null;
+    private double gamesWon = 0;
+    private double gamesPlayed = 0;
+    private double score = 0;
+    private Move lastMove;
 
     public MCTSNode(ReadableBoard board,Move move,MoveSelector moveSelector){
         state = board;
@@ -25,31 +26,39 @@ public class MCTSNode {
         untriedMoves = new ArrayList<>(moveSelector.getMoves(board));
     }
 
-    public void addChild(MCTSNode child){
+    private void addChild(MCTSNode child){
         children.add(child);
     }
 
-    public void addParent(MCTSNode parent){
+    private void addParent(MCTSNode parent){
         depth = parent.getDepth()+1;
         this.parent = parent;
     }
 
-    public int getDepth(){return depth;}
+    private int getDepth(){
+        return depth;
+    }
 
-    public void update(boolean win){
+    private void update(boolean win){
         gamesPlayed++;
         if(win){
             gamesWon++;
         }
     }
 
-    public double getGamesWon(){return gamesWon;}
-    public double getGamesPlayed(){return gamesPlayed;}
-    public ArrayList<MCTSNode> getChildren(){return children;}
-    public boolean hasChild(){
-        return !children.isEmpty();
+    public double getGamesWon(){
+        return gamesWon;
     }
-    public boolean hasParent(){
+
+    public double getGamesPlayed(){
+        return gamesPlayed;
+    }
+
+    public ArrayList<MCTSNode> getChildren() {
+        return children;
+    }
+
+    private boolean hasParent() {
         return parent != null;
     }
 
@@ -73,15 +82,14 @@ public class MCTSNode {
         if(!hasUntriedMoves()){
             MCTSNode bestChild = children.get(0);
             double highscore = 0;
-            for(int i=0;i<children.size();i++){
-                MCTSNode child = children.get(i);
-                if(child.getGamesPlayed()==0){
+            for (MCTSNode child: children) {
+                if (child.getGamesPlayed() == 0) {
                     return child;
                 }
-                double score = (child.getGamesWon()/child.getGamesPlayed())+c * Math.sqrt(Math.log(gamesPlayed)/child.getGamesPlayed());
-                if(score>highscore){
-                    highscore=score;
-                    bestChild=child;
+                double score = (child.getGamesWon() / child.getGamesPlayed()) + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
+                if (score > highscore) {
+                    highscore = score;
+                    bestChild = child;
                 }
             }
             return bestChild.traverse(c);
@@ -90,12 +98,8 @@ public class MCTSNode {
         }
     }
 
-    public boolean hasUntriedMoves(){
-        if(!untriedMoves.isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+    private boolean hasUntriedMoves(){
+        return !untriedMoves.isEmpty();
     }
 
     public MCTSNode getBestChild(){
@@ -108,7 +112,6 @@ public class MCTSNode {
         return bestChild;
     }
 
-    public MCTSNode getParent(){return parent;}
     public ReadableBoard getState(){return state;}
 
     public Move getLastMove(){return lastMove;}
