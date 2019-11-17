@@ -54,6 +54,10 @@ public class MCTSNode {
         return gamesPlayed;
     }
 
+    public double getWinRatio() {
+        return (double)gamesWon / (double)gamesPlayed;
+    }
+
     public ArrayList<MCTSNode> getChildren() {
         return children;
     }

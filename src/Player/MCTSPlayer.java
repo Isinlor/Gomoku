@@ -58,19 +58,24 @@ public class MCTSPlayer implements Player {
         System.out.println(root.getGamesPlayed()+" Simulations run");
 
         //If there's a next move that wins, pick that
-        for(int i=0;i<root.getChildren().size();i++){
+        for(MCTSNode node: root.getChildren()) {
             //Print Scores for each child node of Root for testing
-            System.out.println(root.getChildren().get(i).getGamesWon()+" Win");
-            System.out.println(root.getChildren().get(i).getGamesPlayed()+" Played");
-            System.out.println(root.getChildren().get(i).getGamesWon()/root.getChildren().get(i).getGamesPlayed()+" Score");
-            System.out.println(root.getChildren().get(i).getLastMove());
+            System.out.println(node.getGamesWon()+" Win");
+            System.out.println(node.getGamesPlayed()+" Played");
+            System.out.println(node.getWinRatio()+" Win ratio");
+            System.out.println(node.getLastMove());
             System.out.println("---------");
-            if(root.getChildren().get(i).getState().getWinner()==MCTSColor) {
-                return root.getChildren().get(i).getLastMove();
+            if(node.getState().getWinner() == MCTSColor) {
+                System.out.println("MCTS win move: " + node.getLastMove());
+                return node.getLastMove();
             }
         }
 
-        return root.getBestChild().getLastMove();
+        Move selectedMove = root.getBestChild().getLastMove();
+
+        System.out.println("MCTS selected move: " + selectedMove);
+
+        return selectedMove;
     }
 
     public static Game setupGame() {
