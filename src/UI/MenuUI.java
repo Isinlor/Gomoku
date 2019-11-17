@@ -229,7 +229,7 @@ public class MenuUI extends Application{
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
 
-                Rectangle tile = new Rectangle(50, 50);
+                Rectangle tile = new Rectangle(750/boardSize, 750/boardSize);
                 tile.setFill(Color.BURLYWOOD);
                 tile.setStroke(BLACK);
 
