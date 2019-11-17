@@ -18,8 +18,8 @@ public class Players {
         players.put("random", new RandomPlayer(new ApproximateMoveSelector()));
         players.put("simpleton", new EvaluationPlayer(new WinLossEvaluation()));
         players.put("minmax", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()));
-        players.put("mctsapprox",new MCTSPlayer(new ApproximateMoveSelector()));
-        players.put("mctsrandom",new MCTSPlayer(new AllMovesSelector()));
+        players.put("mctsA",new MCTSPlayer(new ApproximateMoveSelector(),3)); //B
+        players.put("mctsB",new MCTSPlayer(new ApproximateMoveSelector(),10)); //W
     }
 
     public static Player getPlayer(String name) {
