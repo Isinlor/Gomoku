@@ -51,12 +51,17 @@ public class MCTSPlayer implements Player {
 //                    leaf = leaf.getChildren().get(0);
 //            }
             if(leaf.getState().hasWinner()){
-                leaf.backpropagate(true);
+                if(leaf.getState().getWinner()==MCTSColor) {
+                    leaf.backpropagate(true);
+                }else{
+                    leaf.backpropagate(false);
+                }
             }else if(!leaf.getUntriedMoves().isEmpty()){
                 leaf = leaf.expandTree(moveSelector);
+                rollout(leaf, MCTSColor);
             }
 
-            rollout(leaf, MCTSColor);
+
 
             timeSinceStart = System.currentTimeMillis()-startTime;
         }
