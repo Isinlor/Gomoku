@@ -15,6 +15,11 @@ public class SimpleBoard implements Board {
     private Color lastColor;
 
     public SimpleBoard(ReadableBoard board) {
+        if(board instanceof SimpleBoard) {
+            SimpleBoard simpleBoard = (SimpleBoard)board;
+            lastMove = simpleBoard.lastMove;
+            lastColor = simpleBoard.lastColor;
+        }
         boardSize = board.getSize();
         currentTurn = board.getCurrentColor();
         this.boardState = new BoardCell[boardSize][boardSize];
@@ -192,7 +197,7 @@ public class SimpleBoard implements Board {
     }
 
     public SimpleBoard getWithMove(Move move) throws WrongMoveException {
-        SimpleBoard newBoard = new SimpleBoard(boardState);
+        SimpleBoard newBoard = new SimpleBoard(this);
         newBoard.move(move);
         return newBoard;
     }
