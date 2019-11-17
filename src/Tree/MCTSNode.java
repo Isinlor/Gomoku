@@ -3,11 +3,9 @@ package Tree;
 import Contract.Move;
 import Contract.MoveSelector;
 import Contract.ReadableBoard;
+import Distribution.DistributionTableMethod;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
 
 public class MCTSNode {
     
@@ -98,24 +96,15 @@ public class MCTSNode {
 //                }
 //            }
 //            return bestChild.traverse(c);
-            double total = 0.0;
-            for(MCTSNode child : children){
-                double temp = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
-                total += temp;
-            }
-            Random random = new Random();
-            double randomNum = random.nextDouble()*total;
-            total = 0;
-            MCTSNode targetChild = children.get(0);
-            for (MCTSNode child : children) {
-                double temp = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
-                total += temp;
-                if (total >= randomNum) {
-                    targetChild = child;
-                    break;
-                }
-            }
-            return targetChild.traverse(c);
+//         double total = 0.0;
+            HashMap<MCTSNode,Double> weightedChildren = new HashMap<MCTSNode, Double>();
+           for(MCTSNode child : children){
+                double weight = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
+                weightedChildren.put(child,weight);
+           }
+           DistributionTableMethod<MCTSNode> distributor = new DistributionTableMethod<>(weightedChildren);
+           MCTSNode selectedChild = distributor.sample();
+            return selectedChild.traverse(c);
         }else{
             return this;
         }

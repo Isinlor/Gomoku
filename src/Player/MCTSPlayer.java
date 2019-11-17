@@ -78,7 +78,6 @@ public class MCTSPlayer implements Player {
             System.out.println("---------");
             if(node.getState().getWinner() == MCTSColor) {
                 System.out.println("MCTS win move: " + node.getLastMove());
-                return node.getLastMove();
             }
         }
 
