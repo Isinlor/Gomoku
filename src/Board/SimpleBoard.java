@@ -14,11 +14,14 @@ public class SimpleBoard implements Board {
     private Move lastMove;
     private Color lastColor;
 
+    private Color winner = null;
+
     public SimpleBoard(ReadableBoard board) {
         if(board instanceof SimpleBoard) {
             SimpleBoard simpleBoard = (SimpleBoard)board;
             lastMove = simpleBoard.lastMove;
             lastColor = simpleBoard.lastColor;
+            winner = simpleBoard.winner;
         }
         boardSize = board.getSize();
         currentTurn = board.getCurrentColor();
@@ -28,6 +31,9 @@ public class SimpleBoard implements Board {
                 this.boardState[x][y] = board.getCell(x, y);
             }
         }
+
+        winner = getWinner();
+
     }
 
     // TODO: Add unit tests
@@ -63,6 +69,8 @@ public class SimpleBoard implements Board {
             currentTurn = Color.White;
         }
 
+        winner = getWinner();
+
     }
 
     public SimpleBoard(int boardSize) {
@@ -81,6 +89,7 @@ public class SimpleBoard implements Board {
                 boardState[x][y]=BoardCell.Empty;
             }
         }
+        winner = null;
     }
 
     public BoardCell getCell(int x, int y) {
@@ -130,6 +139,10 @@ public class SimpleBoard implements Board {
 
     public void move(Move move) throws WrongMoveException {
 
+        if(winner != null) {
+            throw new WrongMoveException("This board is finished! The game was won by: " + winner.name());
+        }
+
         int x = move.x;
         int y = move.y;
         
@@ -160,6 +173,8 @@ public class SimpleBoard implements Board {
                 currentTurn = Color.Black;
                 break;
         }
+
+        winner = getWinner();
 
     }
 
@@ -193,6 +208,8 @@ public class SimpleBoard implements Board {
                 lastMove = null;
                 break;
         }
+
+        winner = null;
 
     }
 
