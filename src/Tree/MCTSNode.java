@@ -15,8 +15,8 @@ public class MCTSNode {
     private ArrayList<MCTSNode> children = new ArrayList<>();
     private ArrayList<Move> untriedMoves = new ArrayList<>();
     private MCTSNode parent = null;
-    private double gamesWon = 0;
-    private double gamesPlayed = 0;
+    private long gamesWon = 0;
+    private long gamesPlayed = 0;
     private double score = 0;
     private Move lastMove;
 
@@ -46,11 +46,11 @@ public class MCTSNode {
         }
     }
 
-    public double getGamesWon(){
+    public long getGamesWon(){
         return gamesWon;
     }
 
-    public double getGamesPlayed(){
+    public long getGamesPlayed(){
         return gamesPlayed;
     }
 
