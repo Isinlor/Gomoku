@@ -15,8 +15,8 @@ public class MCTSNode {
     private ArrayList<MCTSNode> children = new ArrayList<>();
     private ArrayList<Move> untriedMoves = new ArrayList<>();
     private MCTSNode parent = null;
-    private long gamesWon = 0;
-    private long gamesPlayed = 0;
+    private double gamesWon = 0;
+    private double gamesPlayed = 0;
     private double score = 0;
     private Move lastMove;
 
@@ -46,16 +46,16 @@ public class MCTSNode {
         }
     }
 
-    public long getGamesWon(){
+    public double getGamesWon(){
         return gamesWon;
     }
 
-    public long getGamesPlayed(){
+    public double getGamesPlayed(){
         return gamesPlayed;
     }
 
     public double getWinRatio() {
-        return (double)gamesWon / (double)gamesPlayed;
+        return gamesWon / gamesPlayed;
     }
 
     public ArrayList<MCTSNode> getChildren() {
@@ -109,7 +109,7 @@ public class MCTSNode {
     public MCTSNode getBestChild(){
         MCTSNode bestChild = children.get(0);
         for(MCTSNode child:children){
-            if((child.getGamesWon()/child.getGamesPlayed()) > (bestChild.getGamesWon()/bestChild.getGamesPlayed())){
+            if((child.getWinRatio()) > (bestChild.getWinRatio())){
                 bestChild = child;
             }
         }
