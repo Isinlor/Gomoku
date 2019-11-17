@@ -107,6 +107,23 @@ abstract class SimpleUnitTest {
     }
 
     /**
+     * This methods allows to assert that two longs or ints are equal.
+     *
+     * @param actual The actual value.
+     * @param expected The expected value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertEqual(long actual, long expected) throws RuntimeException {
+        assertTrue(
+            actual == expected,
+            "Two numbers are not equal!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + expected + "\n"
+        );
+    }
+
+    /**
      * This methods allows to assert that two doubles are equal with certain tolerance.
      *
      * @param actual The actual value.
