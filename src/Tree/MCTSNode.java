@@ -7,6 +7,7 @@ import Contract.ReadableBoard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Random;
 
 public class MCTSNode {
     
@@ -84,19 +85,37 @@ public class MCTSNode {
 
     public MCTSNode traverse(double c){
         if(!hasUntriedMoves() && !state.hasWinner()){
-            MCTSNode bestChild = children.get(0);
-            double highscore = 0;
-            for (MCTSNode child: children) {
-                if (child.getGamesPlayed() == 0) {
-                    return child;
-                }
-                double score = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
-                if (score > highscore) {
-                    highscore = score;
-                    bestChild = child;
+//            MCTSNode bestChild = children.get(0);
+//            double highscore = 0;
+//            for (MCTSNode child: children) {
+//                if (child.getGamesPlayed() == 0) {
+//                    return child;
+//                }
+//                double score = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
+//                if (score > highscore) {
+//                    highscore = score;
+//                    bestChild = child;
+//                }
+//            }
+//            return bestChild.traverse(c);
+            double total = 0.0;
+            for(MCTSNode child : children){
+                double temp = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
+                total += temp;
+            }
+            Random random = new Random();
+            double randomNum = random.nextDouble()*total;
+            total = 0;
+            MCTSNode targetChild = children.get(0);
+            for (MCTSNode child : children) {
+                double temp = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
+                total += temp;
+                if (total >= randomNum) {
+                    targetChild = child;
+                    break;
                 }
             }
-            return bestChild.traverse(c);
+            return targetChild.traverse(c);
         }else{
             return this;
         }
