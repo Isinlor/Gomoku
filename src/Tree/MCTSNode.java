@@ -62,7 +62,7 @@ public class MCTSNode {
     }
 
     public MCTSNode expandTree(MoveSelector moveSelector){
-        Move childMove = untriedMoves.remove((int) Math.random()*untriedMoves.size());
+        Move childMove = untriedMoves.remove((int)(Math.random()*untriedMoves.size()));
         ReadableBoard childBoard = state.getWithMove(childMove);
         MCTSNode child = new MCTSNode(childBoard, childMove,moveSelector);
         addChild(child);
