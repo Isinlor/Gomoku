@@ -83,7 +83,7 @@ public class MCTSNode {
     }
 
     public MCTSNode traverse(double c){
-        if(!hasUntriedMoves()){
+        if(!hasUntriedMoves() && !state.hasWinner()){
             MCTSNode bestChild = children.get(0);
             double highscore = 0;
             for (MCTSNode child: children) {
@@ -116,9 +116,12 @@ public class MCTSNode {
         return bestChild;
     }
 
+    public MCTSNode getParent(){return parent;}
     public ReadableBoard getState(){return state;}
 
     public Move getLastMove(){return lastMove;}
+
+    public ArrayList<Move> getUntriedMoves(){return untriedMoves;}
 
     public String toString(){
         return this.state.toString();
