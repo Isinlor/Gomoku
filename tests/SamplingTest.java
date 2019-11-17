@@ -36,9 +36,7 @@ public class SamplingTest extends SimpleUnitTest {
         });
 
         it("allows sampling from discrete distribution over finite set of size 3", () -> {
-
-            // sample from distribution where "true" has 0.33 chances, "false" has 0.67 chances
-
+            
             Map<Character, Double> map = new HashMap<>();
             map.put('a', 1.);
             map.put('b', 2.);
