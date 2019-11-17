@@ -38,7 +38,6 @@ public class MCTSNode {
 
     public void update(boolean win){
         gamesPlayed++;
-        gamesPlayed++;
         if(win){
             gamesWon++;
         }
