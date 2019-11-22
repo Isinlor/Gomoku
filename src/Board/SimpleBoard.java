@@ -16,6 +16,8 @@ public class SimpleBoard implements Board {
 
     private Color winner = null;
 
+    private int moveCounter = 0;
+
     public SimpleBoard(ReadableBoard board) {
         if(board instanceof SimpleBoard) {
             SimpleBoard simpleBoard = (SimpleBoard)board;
@@ -28,7 +30,11 @@ public class SimpleBoard implements Board {
         this.boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
-                this.boardState[x][y] = board.getCell(x, y);
+                BoardCell cell = board.getCell(x, y);
+                this.boardState[x][y] = cell;
+                if(cell != BoardCell.Empty) {
+                    moveCounter++;
+                }
             }
         }
 
@@ -69,6 +75,8 @@ public class SimpleBoard implements Board {
             currentTurn = Color.White;
         }
 
+        moveCounter = black + white;
+
         winner = getWinner();
 
     }
@@ -90,6 +98,7 @@ public class SimpleBoard implements Board {
             }
         }
         winner = null;
+        moveCounter = 0;
     }
 
     public BoardCell getCell(int x, int y) {
@@ -187,6 +196,7 @@ public class SimpleBoard implements Board {
         }
 
         winner = getWinner();
+        moveCounter++;
 
     }
 
@@ -222,6 +232,7 @@ public class SimpleBoard implements Board {
         }
 
         winner = null;
+        moveCounter--;
 
     }
 
@@ -236,14 +247,7 @@ public class SimpleBoard implements Board {
     }
 
     public boolean isFull() {
-        for (int x = 0; x < getSize(); x++) {
-            for (int y = 0; y < getSize(); y++) {
-                if(getCell(x, y) == BoardCell.Empty) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return moveCounter >= getSize() * getSize();
     }
 
     public boolean hasWinner() {
