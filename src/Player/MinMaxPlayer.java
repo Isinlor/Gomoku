@@ -21,12 +21,19 @@ public class MinMaxPlayer implements Player {
         Move bestMove = null;
         double bestEvaluation = Double.NaN;
 
+        double alpha = Double.NEGATIVE_INFINITY;
+        double beta = Double.POSITIVE_INFINITY;
+
         for (Move move: moveSelector.getMoves(board)) {
 
-            double moveEvaluation = min(move, 3);
+            double moveEvaluation = min(move, 4, alpha, beta);
             if(bestMove == null || moveEvaluation > bestEvaluation) {
                 bestMove = move;
                 bestEvaluation = moveEvaluation;
+                alpha = moveEvaluation;
+                if(alpha >= beta) {
+                    break;
+                }
             }
 
         }
@@ -35,7 +42,7 @@ public class MinMaxPlayer implements Player {
 
     }
 
-    public double max(Move move, int depth) {
+    public double max(Move move, int depth, double alpha, double beta) {
 
         board.move(move);
 
@@ -50,10 +57,14 @@ public class MinMaxPlayer implements Player {
 
         for (Move nextMove: moveSelector.getMoves(board)) {
 
-            double nextMoveEvaluation = min(nextMove, depth - 1);
+            double nextMoveEvaluation = min(nextMove, depth - 1, alpha, beta);
             if(bestNextMove == null || nextMoveEvaluation > bestEvaluation) {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
+                alpha = bestEvaluation;
+                if(alpha >= beta) {
+                    break;
+                }
             }
 
         }
@@ -64,7 +75,7 @@ public class MinMaxPlayer implements Player {
 
     }
 
-    private double min(Move move, int depth) {
+    private double min(Move move, int depth, double alpha, double beta) {
 
         board.move(move);
 
@@ -79,10 +90,14 @@ public class MinMaxPlayer implements Player {
 
         for (Move nextMove: moveSelector.getMoves(board)) {
 
-            double nextMoveEvaluation = max(nextMove, depth - 1);
+            double nextMoveEvaluation = max(nextMove, depth - 1, alpha, beta);
             if(bestNextMove == null || nextMoveEvaluation < bestEvaluation) {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
+                beta = bestEvaluation;
+                if(alpha >= beta) {
+                    break;
+                }
             }
 
         }
