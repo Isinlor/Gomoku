@@ -83,29 +83,15 @@ public class MCTSNode {
 
     public MCTSNode traverse(double c){
         if(!hasUntriedMoves() && !state.hasWinner() && !children.isEmpty()) {
-//            MCTSNode bestChild = children.get(0);
-//            double highscore = 0;
-//            for (MCTSNode child: children) {
-//                if (child.getGamesPlayed() == 0) {
-//                    return child;
-//                }
-//                double score = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
-//                if (score > highscore) {
-//                    highscore = score;
-//                    bestChild = child;
-//                }
-//            }
-//            return bestChild.traverse(c);
-//         double total = 0.0;
             HashMap<MCTSNode,Double> weightedChildren = new HashMap<MCTSNode, Double>();
-           for(MCTSNode child : children){
+            for(MCTSNode child: children){
                 double weight = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
                 weightedChildren.put(child,weight);
-           }
-           DistributionTableMethod<MCTSNode> distributor = new DistributionTableMethod<>(weightedChildren);
-           MCTSNode selectedChild = distributor.sample();
+            }
+            DistributionTableMethod<MCTSNode> distributor = new DistributionTableMethod<>(weightedChildren);
+            MCTSNode selectedChild = distributor.sample();
             return selectedChild.traverse(c);
-        }else{
+        } else {
             return this;
         }
     }
