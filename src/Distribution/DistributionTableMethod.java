@@ -19,6 +19,9 @@ public class DistributionTableMethod<T> implements Distribution {
     private List<Double> weights = new ArrayList<>();
 
     public DistributionTableMethod(Map<T, Double> eventsWeights) {
+        if(eventsWeights.isEmpty()) {
+            throw new RuntimeException("Given empty map of events! Nothing to sample from.");
+        }
         for(T event: eventsWeights.keySet()) {
             weightSum += eventsWeights.get(event);
             weights.add(eventsWeights.get(event));

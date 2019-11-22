@@ -13,6 +13,26 @@ public class SamplingTest extends SimpleUnitTest {
     }
 
     private static void distributionTableMethodTest() {
+
+        it("allows sampling from discrete distribution over finite set of size 1", () -> {
+            
+            Map<Boolean, Double> map = new HashMap<>();
+            map.put(true, 0.5);
+
+            DistributionTableMethod<Boolean> distribution = new DistributionTableMethod<>(map);
+
+            int trueSelected = 0;
+            int samples = 100;
+            for (int i = 0; i < samples; i++) {
+                if(distribution.sample()) {
+                    trueSelected++;
+                }
+            }
+
+            assertEqual((double) trueSelected / samples, 1.0, 0.1, "The proportion of X must be 100%.");
+
+        });
+
         it("allows sampling from discrete distribution over finite set of size 2", () -> {
 
             // sample from distribution where "true" has 0.33 chances, "false" has 0.67 chances
