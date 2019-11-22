@@ -82,7 +82,7 @@ public class MCTSNode {
     }
 
     public MCTSNode traverse(double c){
-        if(!hasUntriedMoves() && !state.hasWinner()){
+        if(!hasUntriedMoves() && !state.hasWinner() && !children.isEmpty()) {
 //            MCTSNode bestChild = children.get(0);
 //            double highscore = 0;
 //            for (MCTSNode child: children) {
