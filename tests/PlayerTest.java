@@ -1,15 +1,21 @@
-import Board.SimpleBoard;
-import Contract.BoardCell;
-import Contract.Color;
-import Contract.Move;
+import Board.Helpers.AllMovesSelector;
+import Board.*;
+import Contract.*;
 import Evaluation.WinLossEvaluation;
-import Player.EvaluationPlayer;
+import Player.*;
 
 public class PlayerTest extends SimpleUnitTest {
     public static void main(String[] args) {
 
-        System.out.println("\n\nPlayer Test\n");
+        System.out.println("\n\nEvaluation Player Test\n");
+        evaluationPlayerTest();
 
+        System.out.println("\n\nMinMax Player Test\n");
+        minMaxPlayerTest();
+
+    }
+
+    private static void evaluationPlayerTest() {
         it("picks the best move for black - horizontal", () -> {
 
             BoardCell[][] boardState = {
@@ -78,6 +84,26 @@ public class PlayerTest extends SimpleUnitTest {
             );
 
         });
+    }
+
+    private static void minMaxPlayerTest() {
+
+        it("allows to play out a whole game", () -> {
+
+            MinMaxPlayer minMaxPlayer = new MinMaxPlayer(
+                new WinLossEvaluation(), new AllMovesSelector(), 3
+            );
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(minMaxPlayer, minMaxPlayer);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+
+        });
 
     }
+
 }
