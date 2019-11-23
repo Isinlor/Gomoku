@@ -15,8 +15,6 @@ public class SimpleBoard implements Board {
 
     private Color winner = null;
 
-    private int moveCounter = 0;
-
     private HashSet<Move> validMoves = new HashSet<>();
 
     public SimpleBoard(ReadableBoard board) {
@@ -33,9 +31,7 @@ public class SimpleBoard implements Board {
             for (int y = 0; y < boardSize; y++) {
                 BoardCell cell = board.getCell(x, y);
                 this.boardState[x][y] = cell;
-                if(cell != BoardCell.Empty) {
-                    moveCounter++;
-                } else {
+                if(cell == BoardCell.Empty) {
                     validMoves.add(new Move(x, y));
                 }
             }
@@ -81,8 +77,6 @@ public class SimpleBoard implements Board {
             currentTurn = Color.White;
         }
 
-        moveCounter = black + white;
-
         winner = getWinner();
 
     }
@@ -107,7 +101,6 @@ public class SimpleBoard implements Board {
             }
         }
         winner = null;
-        moveCounter = 0;
     }
 
     public BoardCell getCell(int x, int y) {
@@ -195,7 +188,6 @@ public class SimpleBoard implements Board {
         }
 
         winner = getWinner();
-        moveCounter++;
         validMoves.remove(new Move(x, y));
 
     }
@@ -232,7 +224,6 @@ public class SimpleBoard implements Board {
         }
 
         winner = null;
-        moveCounter--;
         validMoves.add(new Move(x, y));
 
     }
@@ -248,7 +239,7 @@ public class SimpleBoard implements Board {
     }
 
     public boolean isFull() {
-        return moveCounter >= getSize() * getSize();
+        return validMoves.isEmpty();
     }
 
     public boolean hasWinner() {
