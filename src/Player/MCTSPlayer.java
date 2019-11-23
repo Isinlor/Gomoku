@@ -51,10 +51,12 @@ public class MCTSPlayer implements Player {
 //                    leaf = leaf.getChildren().get(0);
 //            }
             if(leaf.getState().hasWinner()){
-                if(leaf.getState().getWinner()==MCTSColor) {
-                    leaf.backpropagate(true);
-                }else{
-                    leaf.backpropagate(false);
+                if(leaf.getState().getWinner() == MCTSColor) {
+                    leaf.backpropagate(Result.Win);
+                } else if(leaf.getState().getWinner() == null) {
+                    leaf.backpropagate(Result.Draw);
+                } else {
+                    leaf.backpropagate(Result.Lose);
                 }
             }else if(!leaf.getUntriedMoves().isEmpty()){
                 leaf = leaf.expandTree(moveSelector);
@@ -101,10 +103,12 @@ public class MCTSPlayer implements Player {
         SimpleBoard tempBoard = new SimpleBoard(currentNode.getState());
         game.play(tempBoard);
         Color winner = tempBoard.getWinner();
-        if(winner == MCTSColor){
-            currentNode.backpropagate(true);
-        }else{
-            currentNode.backpropagate(false);
+        if(winner == MCTSColor) {
+            currentNode.backpropagate(Result.Win);
+        } else if(winner == null) {
+            currentNode.backpropagate(Result.Draw);
+        } else {
+            currentNode.backpropagate(Result.Lose);
         }
     }
 

@@ -3,18 +3,20 @@ package Tree;
 import Contract.Move;
 import Contract.MoveSelector;
 import Contract.ReadableBoard;
+import Contract.Result;
 import Distribution.DistributionTableMethod;
 
 import java.util.*;
 
 public class MCTSNode {
-    
+
     private int depth = 0;
     private ReadableBoard state = null;
     private ArrayList<MCTSNode> children = new ArrayList<>();
     private ArrayList<Move> untriedMoves = new ArrayList<>();
     private MCTSNode parent = null;
     private double gamesWon = 0;
+    private double gamesDraw = 0;
     private double gamesPlayed = 0;
     private double score = 0;
     private Move lastMove;
@@ -38,10 +40,14 @@ public class MCTSNode {
         return depth;
     }
 
-    private void update(boolean win){
+    private void update(Result result) {
         gamesPlayed++;
-        if(win){
-            gamesWon++;
+        switch (result) {
+            case Win:
+                gamesWon++;
+                break;
+            case Draw:
+                gamesDraw++;
         }
     }
 
@@ -54,7 +60,7 @@ public class MCTSNode {
     }
 
     public double getWinRatio() {
-        return gamesWon / gamesPlayed;
+        return (gamesWon + (gamesDraw / 10)) / gamesPlayed;
     }
 
     public ArrayList<MCTSNode> getChildren() {
@@ -65,10 +71,10 @@ public class MCTSNode {
         return parent != null;
     }
 
-    public void backpropagate(boolean win){
-        update(win);
+    public void backpropagate(Result result){
+        update(result);
         if(this.hasParent()){
-            parent.backpropagate(win);
+            parent.backpropagate(result);
         }
     }
 
