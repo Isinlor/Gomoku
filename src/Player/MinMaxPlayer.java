@@ -5,18 +5,18 @@ import Board.SimpleBoard;
 
 public class MinMaxPlayer implements Player {
 
-    private SimpleBoard board;
     private Evaluation evaluation;
     private MoveSelector moveSelector;
+    private int depth;
 
-    public MinMaxPlayer(Evaluation evaluation, MoveSelector moveSelector) {
+    public MinMaxPlayer(Evaluation evaluation, MoveSelector moveSelector, int depth) {
         this.evaluation = evaluation;
         this.moveSelector = moveSelector;
     }
 
-    public Move getMove(ReadableBoard board) {
+    public Move getMove(ReadableBoard givenBoard) {
 
-        this.board = new SimpleBoard(board);
+        SimpleBoard board = new SimpleBoard(givenBoard);
 
         Move bestMove = null;
         double bestEvaluation = Double.NaN;
@@ -26,7 +26,7 @@ public class MinMaxPlayer implements Player {
 
         for (Move move: moveSelector.getMoves(board)) {
 
-            double moveEvaluation = min(move, 4, alpha, beta);
+            double moveEvaluation = min(board, move, depth, alpha, beta);
             if(bestMove == null || moveEvaluation > bestEvaluation) {
                 bestMove = move;
                 bestEvaluation = moveEvaluation;
@@ -42,7 +42,7 @@ public class MinMaxPlayer implements Player {
 
     }
 
-    public double max(Move move, int depth, double alpha, double beta) {
+    private double max(SimpleBoard board, Move move, int depth, double alpha, double beta) {
 
         board.move(move);
 
@@ -57,7 +57,7 @@ public class MinMaxPlayer implements Player {
 
         for (Move nextMove: moveSelector.getMoves(board)) {
 
-            double nextMoveEvaluation = min(nextMove, depth - 1, alpha, beta);
+            double nextMoveEvaluation = min(board, nextMove, depth - 1, alpha, beta);
             if(bestNextMove == null || nextMoveEvaluation > bestEvaluation) {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
@@ -75,7 +75,7 @@ public class MinMaxPlayer implements Player {
 
     }
 
-    private double min(Move move, int depth, double alpha, double beta) {
+    private double min(SimpleBoard board, Move move, int depth, double alpha, double beta) {
 
         board.move(move);
 
@@ -90,7 +90,7 @@ public class MinMaxPlayer implements Player {
 
         for (Move nextMove: moveSelector.getMoves(board)) {
 
-            double nextMoveEvaluation = max(nextMove, depth - 1, alpha, beta);
+            double nextMoveEvaluation = max(board, nextMove, depth - 1, alpha, beta);
             if(bestNextMove == null || nextMoveEvaluation < bestEvaluation) {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
