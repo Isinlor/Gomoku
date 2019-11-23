@@ -2,8 +2,7 @@ package Board;
 
 import Contract.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class SimpleBoard implements Board {
 
@@ -17,6 +16,8 @@ public class SimpleBoard implements Board {
     private Color winner = null;
 
     private int moveCounter = 0;
+
+    private HashSet<Move> validMoves = new HashSet<>();
 
     public SimpleBoard(ReadableBoard board) {
         if(board instanceof SimpleBoard) {
@@ -34,6 +35,8 @@ public class SimpleBoard implements Board {
                 this.boardState[x][y] = cell;
                 if(cell != BoardCell.Empty) {
                     moveCounter++;
+                } else {
+                    validMoves.add(new Move(x, y));
                 }
             }
         }
@@ -61,6 +64,9 @@ public class SimpleBoard implements Board {
                     case White:
                         white++;
                         break;
+                    case Empty:
+                        validMoves.add(new Move(x, y));
+                        break;
                 }
                 // make sure that board state is not mutable outside the class
                 this.boardState[x][y] = boardState[x][y];
@@ -87,14 +93,17 @@ public class SimpleBoard implements Board {
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
                 boardState[x][y] = BoardCell.Empty;
+                validMoves.add(new Move(x, y));
             }
         }
     }
 
     public void resetBoard(){
+        validMoves = new HashSet<>();
         for (int x = 0; x <boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
                 boardState[x][y]=BoardCell.Empty;
+                validMoves.add(new Move(x, y));
             }
         }
         winner = null;
@@ -122,23 +131,13 @@ public class SimpleBoard implements Board {
         return currentTurn;
     }
 
-    public ArrayList<Move> getValidMoves() {
-
-        ArrayList<Move> moves = new ArrayList<Move>();
+    public HashSet<Move> getValidMoves() {
 
         if(winner != null) {
-            return moves; // there are no valid moves if there is a winner
+            return new HashSet<>(); // there are no valid moves if there is a winner
         }
 
-        for (int x = 0; x < getSize(); x++) {
-            for (int y = 0; y < getSize(); y++) {
-                if(boardState[x][y] == BoardCell.Empty) {
-                    moves.add(new Move(x, y));
-                }
-            }
-        }
-
-        return moves;
+        return (HashSet<Move>)validMoves.clone();
 
     }
 
@@ -197,6 +196,7 @@ public class SimpleBoard implements Board {
 
         winner = getWinner();
         moveCounter++;
+        validMoves.remove(new Move(x, y));
 
     }
 
@@ -233,6 +233,7 @@ public class SimpleBoard implements Board {
 
         winner = null;
         moveCounter--;
+        validMoves.add(new Move(x, y));
 
     }
 

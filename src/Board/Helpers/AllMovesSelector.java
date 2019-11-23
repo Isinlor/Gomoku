@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AllMovesSelector implements MoveSelector {
-    public List<Move> getMoves(ReadableBoard board) {
+    public Set<Move> getMoves(ReadableBoard board) {
         return board.getValidMoves();
     }
 }

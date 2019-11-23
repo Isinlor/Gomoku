@@ -9,5 +9,5 @@ public interface MoveSelector {
     /**
      * Returns selection of valid moves.
      */
-    List<Move> getMoves(ReadableBoard board);
+    Set<Move> getMoves(ReadableBoard board);
 }

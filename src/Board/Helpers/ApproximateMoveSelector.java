@@ -5,31 +5,32 @@ import Contract.Move;
 import Contract.MoveSelector;
 import Contract.ReadableBoard;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ApproximateMoveSelector implements MoveSelector {
-    public List<Move> getMoves(ReadableBoard board) {
 
+    private final int[][] modifiers = {
+        {-1, -1}, {-1, 0}, {-1,  1},
+        { 0, -1},          { 0,  1},
+        { 1, -1}, { 1, 0}, { 1,  1},
+    };
+
+    public Set<Move> getMoves(ReadableBoard board) {
+
+        int boardSize = board.getSize();
         HashSet<Move> moves = new HashSet<>();
-        for (int x = 0; x < board.getSize(); x++) {
-            for (int y = 0; y < board.getSize(); y++) {
-
-                // select moves around non empty fields
-                if(board.getCell(x, y) != BoardCell.Empty) {
-                    int[] modifiers = {-1, 0, 1};
-                    for (int i: modifiers) {
-                        for (int j: modifiers) {
-                            Move move = new Move(x+i, y+j);
-                            if(board.isValidMove(move)) {
-                                moves.add(move);
-                            }
-                        }
-                    }
+        for (Move move: board.getValidMoves()) {
+            for (int[] modifier: modifiers) {
+                int i = modifier[0];
+                int j = modifier[1];
+                if(
+                    move.x + i >= 0 && move.y + j >= 0 &&
+                    move.x + i < boardSize && move.y + j < boardSize &&
+                    board.getCell(move.x + i, move.y + j) != BoardCell.Empty
+                ) {
+                    moves.add(move);
+                    break;
                 }
-
             }
         }
 
@@ -37,7 +38,7 @@ public class ApproximateMoveSelector implements MoveSelector {
             return board.getValidMoves();
         }
 
-        return new ArrayList<>(moves);
+        return moves;
 
     }
 }

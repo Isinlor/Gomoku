@@ -36,7 +36,7 @@ public interface ReadableBoard {
 
     Color getWinner() throws NoWinnerException;
 
-    List<Move> getValidMoves();
+    Set<Move> getValidMoves();
 
     boolean isValidMove(Move move);
 

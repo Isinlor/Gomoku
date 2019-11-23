@@ -2,10 +2,7 @@ package Player;
 
 import Contract.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class RandomPlayer implements Player {
 
@@ -20,7 +17,7 @@ public class RandomPlayer implements Player {
         Move move;
         Random random = new Random();
 
-        List<Move> moves = moveSelector.getMoves(board);
+        List<Move> moves = new ArrayList<>(moveSelector.getMoves(board));
 
         return moves.get(random.nextInt(moves.size()));
 
