@@ -1,9 +1,6 @@
 package Tree;
 
-import Contract.Move;
-import Contract.MoveSelector;
-import Contract.ReadableBoard;
-import Contract.Result;
+import Contract.*;
 import Distribution.DistributionTableMethod;
 
 import java.util.*;
@@ -11,6 +8,7 @@ import java.util.*;
 public class MCTSNode {
 
     private int depth = 0;
+    private Color stateWinner;
     private ReadableBoard state = null;
     private ArrayList<MCTSNode> children = new ArrayList<>();
     private ArrayList<Move> untriedMoves = new ArrayList<>();
@@ -23,6 +21,7 @@ public class MCTSNode {
 
     public MCTSNode(ReadableBoard board,Move move,MoveSelector moveSelector){
         state = board;
+        stateWinner = board.getWinner();
         lastMove = move;
         untriedMoves = new ArrayList<>(moveSelector.getMoves(board));
     }
@@ -84,11 +83,18 @@ public class MCTSNode {
         MCTSNode child = new MCTSNode(childBoard, childMove,moveSelector);
         addChild(child);
         child.addParent(this);
+        if(untriedMoves.isEmpty()) {
+            state = null;
+        }
         return child;
     }
 
+    public Color getStateWinner() {
+        return stateWinner;
+    }
+
     public MCTSNode traverse(double c){
-        if(!hasUntriedMoves() && !state.hasWinner() && !children.isEmpty()) {
+        if(!hasUntriedMoves() && stateWinner == null && !children.isEmpty()) {
             HashMap<MCTSNode,Double> weightedChildren = new HashMap<MCTSNode, Double>();
             for(MCTSNode child: children){
                 double weight = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());

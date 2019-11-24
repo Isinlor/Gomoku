@@ -78,7 +78,7 @@ public class MCTSPlayer implements Player {
             System.out.println(node.getWinRatio()+" Win ratio");
             System.out.println(node.getLastMove());
             System.out.println("---------");
-            if(node.getState().getWinner() == MCTSColor) {
+            if(node.getStateWinner() == MCTSColor) {
                 System.out.println("MCTS win move: " + node.getLastMove());
             }
         }
