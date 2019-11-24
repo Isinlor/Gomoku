@@ -12,6 +12,7 @@ public class MinMaxPlayer implements Player {
     public MinMaxPlayer(Evaluation evaluation, MoveSelector moveSelector, int depth) {
         this.evaluation = evaluation;
         this.moveSelector = moveSelector;
+        this.depth = depth;
     }
 
     public Move getMove(ReadableBoard givenBoard) {
