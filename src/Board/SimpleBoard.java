@@ -425,12 +425,23 @@ public class SimpleBoard implements Board {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Board (" + getSize() + "x" + getSize() + "):\n");
-        stringBuilder.append("Current color: " + getCurrentColor() + "\n");
-        stringBuilder.append("\tY 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 \n");
-        stringBuilder.append("X\t  ----------------------------- \n");
+        stringBuilder.append("Next Move: " + getCurrentColor() + "\n");
+        stringBuilder.append("Last " + lastMove + "\n");
+        stringBuilder.append("\tY ");
+        for (int i = 0; i < getSize(); i++) {
+            stringBuilder.append(i % 10 + " ");
+        }
+        stringBuilder.append("\nX\t  ");
+        for (int i = 0; i < getSize(); i++) {
+            stringBuilder.append("--");
+        }
+        stringBuilder.append("\n");
         for (int x = 0; x < getSize(); x++) {
-            stringBuilder.append(x%10+"\t| ");
+            stringBuilder.append(x+"\t| ");
             for (int y = 0; y < getSize(); y++) {
+                if(lastMove != null && lastMove.x == x && lastMove.y == y) {
+                    stringBuilder.append("\u001b[1m\u001b[32m");
+                }
                 switch (getCell(x, y)) {
                     case Black:
                         stringBuilder.append("B");
@@ -441,6 +452,9 @@ public class SimpleBoard implements Board {
                     case Empty:
                         stringBuilder.append(" ");
                         break;
+                }
+                if(lastMove != null && lastMove.x == x && lastMove.y == y) {
+                    stringBuilder.append("\u001b[0m");
                 }
                 stringBuilder.append(" ");
             }
