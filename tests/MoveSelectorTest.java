@@ -1,5 +1,6 @@
 import Board.Helpers.ApproximateMoveSelector;
 import Board.Helpers.ForcedMoveSelector;
+import Board.Helpers.MoveSelectors;
 import Board.SimpleBoard;
 import Contract.BoardCell;
 import Contract.Color;
@@ -84,10 +85,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         System.out.println("\n\nForced Move Selector Test\n");
 
-        MoveSelector selector = new ForcedMoveSelector(
-            new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 3),
-            new ApproximateMoveSelector()
-        );
+        MoveSelector selector = MoveSelectors.get("forced3");
 
         it("returns all moves when there is no threat", () -> {
 
@@ -212,6 +210,28 @@ public class MoveSelectorTest extends SimpleUnitTest {
             assertEqual(selector.getMoves(board).size(), 10);
 
         });
+
+        MoveSelector forced7 = MoveSelectors.get("forced7");
+
+        it("prevents lost in more than 3 moves", () -> {
+
+            BoardCell[][] boardState = {
+                {W, E, E, E, E, E, W},
+                {E, E, E, E, E, E, E},
+                {E, E, E, B, E, E, E},
+                {E, E, B, E, B, E, E},
+                {E, E, E, B, E, E, E},
+                {E, E, E, E, E, E, E},
+                {W, E, E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            assertEqual(forced7.getMoves(board).size(), 1);
+            assertTrue(board.getCurrentColor() == Color.White);
+            assertTrue(selector.getMoves(board).contains(new Move(4, 4)));
+
+        });
+
 
     }
 

@@ -22,6 +22,10 @@ public class MoveSelectors {
             Evaluations.get("negamax5"),
             get("forced3")
         ));
+        moveSelectors.put("forced7", new ForcedMoveSelector(
+            Evaluations.get("negamax7"),
+            get("forced3")
+        ));
     }
 
     public static MoveSelector get(String name) {

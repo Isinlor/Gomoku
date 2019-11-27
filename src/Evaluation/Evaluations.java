@@ -19,6 +19,9 @@ public class Evaluations {
         evaluations.put("negamax5", new NegamaxEvaluation(
             get("winLoss"), new ApproximateMoveSelector(), 5)
         );
+        evaluations.put("negamax7", new NegamaxEvaluation(
+            get("winLoss"), new ApproximateMoveSelector(), 7)
+        );
     }
 
     public static Evaluation get(String name) {
