@@ -100,7 +100,7 @@ public class MenuUI extends Application{
             Text aiChooseText = new Text("Select the ai you want to use below:");
             aiChooseText.setFont(new Font("Helvetica",16));
             ComboBox aiOptions = new ComboBox();
-            Collection<String> ais = Players.getPlayerNames();
+            Collection<String> ais = Players.getNames();
             ais.remove("human");
             aiOptions.getItems().addAll(ais);
             EventHandler<ActionEvent> aiOptionsEvent = new EventHandler<ActionEvent>() {
@@ -138,7 +138,7 @@ public class MenuUI extends Application{
                     primaryStage.setScene(scene);
 
                     if(aiMode!=null) {
-                        aiPlayer = Players.getPlayer(aiMode.toLowerCase());
+                        aiPlayer = Players.get(aiMode.toLowerCase());
                     }
 
                     int boardSize = Integer.parseInt(boardSizeTextField.getCharacters().toString());

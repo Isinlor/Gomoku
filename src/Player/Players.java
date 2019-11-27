@@ -2,11 +2,13 @@ package Player;
 
 import Board.Helpers.ApproximateMoveSelector;
 import Board.Helpers.ForcedMoveSelector;
+import Board.Helpers.MoveSelectors;
+import Contract.Evaluation;
 import Contract.Player;
+import Evaluation.Evaluations;
 import Evaluation.NegamaxEvaluation;
 import Evaluation.WinLossEvaluation;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,42 +19,39 @@ public class Players {
 
     static {
         players.put("human", new CliPlayer());
-        players.put("random", new RandomPlayer(new ApproximateMoveSelector()));
-        players.put("simpleton", new EvaluationPlayer(new WinLossEvaluation()));
-        players.put("minmax1", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector(), 1));
-        players.put("minmax3", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector(), 3));
-        players.put("minmax5", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector(), 5));
-        players.put("minmax6", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector(), 6));
-        players.put("minmax7", new MinMaxPlayer(new WinLossEvaluation(), new ApproximateMoveSelector(), 7));
-        players.put("negamax3", new EvaluationPlayer(new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 3)));
-        players.put("mcts1s",new MCTSPlayer(new ApproximateMoveSelector(),1));
-        players.put("mcts3s",new MCTSPlayer(new ApproximateMoveSelector(),3));
-        players.put("mcts10s",new MCTSPlayer(new ApproximateMoveSelector(),10));
-        players.put("mcts10s+",new MCTSPlayer(new ForcedMoveSelector(
-            new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 3),
-            new ApproximateMoveSelector()
-        ), new ApproximateMoveSelector(), 10));
-        players.put("mcts30s",new MCTSPlayer(new ApproximateMoveSelector(),30));
-        players.put("mcts30s+",new MCTSPlayer(new ForcedMoveSelector(
-            new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 5),
-            new ApproximateMoveSelector()
-        ), new ApproximateMoveSelector(), 30));
-        players.put("mcts60s",new MCTSPlayer(new ApproximateMoveSelector(),60));
-        players.put("mcts60s+",new MCTSPlayer(new ForcedMoveSelector(
-            new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 5),
-            new ApproximateMoveSelector()
-        ), new ApproximateMoveSelector(), 60));
+        players.put("random", new RandomPlayer(MoveSelectors.get("approximate")));
+        players.put("simpleton", new EvaluationPlayer(Evaluations.get("winLoss")));
+        players.put("minmax1", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 1));
+        players.put("minmax3", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 3));
+        players.put("minmax5", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 5));
+        players.put("minmax6", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 6));
+        players.put("minmax7", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 7));
+        players.put("negamax3", new EvaluationPlayer(Evaluations.get("negamax3")));
+        players.put("mcts1s",new MCTSPlayer(MoveSelectors.get("approximate"),1));
+        players.put("mcts3s",new MCTSPlayer(MoveSelectors.get("approximate"),3));
+        players.put("mcts10s",new MCTSPlayer(MoveSelectors.get("approximate"),10));
+        players.put("mcts10s+",new MCTSPlayer(
+            MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 10
+        ));
+        players.put("mcts30s",new MCTSPlayer(MoveSelectors.get("approximate"),30));
+        players.put("mcts30s+",new MCTSPlayer(
+            MoveSelectors.get("forced5"), MoveSelectors.get("approximate"), 30
+        ));
+        players.put("mcts60s",new MCTSPlayer(MoveSelectors.get("approximate"),60));
+        players.put("mcts60s+",new MCTSPlayer(
+            MoveSelectors.get("forced5"), MoveSelectors.get("approximate"), 60
+        ));
     }
 
-    public static Player getPlayer(String name) {
+    public static Player get(String name) {
         return players.get(name);
     }
 
-    public static Collection<Player> getPlayers() {
+    public static Collection<Player> getAll() {
         return players.values();
     }
 
-    public static Collection<String> getPlayerNames() {
+    public static Collection<String> getNames() {
         return players.keySet();
     }
 

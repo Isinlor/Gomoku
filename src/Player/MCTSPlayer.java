@@ -99,8 +99,8 @@ public class MCTSPlayer implements Player {
 
     public static Game setupGame() {
 
-        Player blackPlayer = Players.getPlayer("random");
-        Player whitePlayer = Players.getPlayer("random");
+        Player blackPlayer = Players.get("random");
+        Player whitePlayer = Players.get("random");
 
         return new SimpleGame(blackPlayer, whitePlayer);
     }
