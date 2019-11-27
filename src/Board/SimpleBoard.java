@@ -458,7 +458,11 @@ public class SimpleBoard implements Board {
                 }
                 stringBuilder.append(" ");
             }
-            stringBuilder.append("\n");
+            stringBuilder.append("|\n");
+        }
+        stringBuilder.append(" \t  ");
+        for (int i = 0; i < getSize(); i++) {
+            stringBuilder.append("--");
         }
         return stringBuilder.toString();
     }
