@@ -1,22 +1,24 @@
 package Player;
 
-import Board.Helpers.ApproximateMoveSelector;
 import Contract.*;
 import Tree.MCTSNode;
 import Board.SimpleBoard;
 import Board.SimpleGame;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Scanner;
-
 public class MCTSPlayer implements Player {
 
-    MoveSelector moveSelector;
-    double parameter;
+    private MoveSelector smartMoveSelector;
+    private MoveSelector quickMoveSelector;
+    private double parameter;
 
-    public MCTSPlayer(MoveSelector moveSelector, double parameter){
-        this.moveSelector = moveSelector;
+    public MCTSPlayer(MoveSelector smartMoveSelector, double parameter){
+        this.smartMoveSelector = smartMoveSelector;
+        this.parameter = parameter;
+    }
+
+    public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, double parameter){
+        this.smartMoveSelector = smartMoveSelector;
+        this.quickMoveSelector = quickMoveSelector;
         this.parameter = parameter;
     }
 
@@ -27,7 +29,7 @@ public class MCTSPlayer implements Player {
 
         //Initializes the tree with the current turn as root node
         //Root has a child for each possible turn
-        MCTSNode root = new MCTSNode(board,null,moveSelector);
+        MCTSNode root = new MCTSNode(board,null, smartMoveSelector);
         Color MCTSColor = root.getState().getCurrentColor();
 
         //
@@ -36,6 +38,11 @@ public class MCTSPlayer implements Player {
         double timeSinceStart = 0;
         double allowedTime = 1000*parameter; //20 seconds
         double c = Math.sqrt(2); //EXPLORATION PARAMETER sqrt(2)
+
+        MoveSelector quickMoveSelector = this.quickMoveSelector;
+        if(quickMoveSelector == null) {
+            quickMoveSelector = smartMoveSelector;
+        }
 
         while(timeSinceStart<allowedTime){
             /*
@@ -59,7 +66,7 @@ public class MCTSPlayer implements Player {
                     leaf.backpropagate(Result.Lose);
                 }
             }else if(!leaf.getUntriedMoves().isEmpty()){
-                leaf = leaf.expandTree(moveSelector);
+                leaf = leaf.expandTree(quickMoveSelector);
                 rollout(leaf, MCTSColor);
             }
 
