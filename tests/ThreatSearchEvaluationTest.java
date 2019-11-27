@@ -12,9 +12,9 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
 
         it("gives 0 score to board with no winner and loser", () -> {
             BoardCell[][] boardState = {
-                    {E, E, E, E, E},
-                    {E, E, E, E, E},
-                    {E, E, E, E, E},
+                    {W, E, E, E, E},
+                    {W, B, B, B, E},
+                    {W, E, E, E, E},
                     {E, E, E, E, E},
                     {E, E, E, E, E},
             };
