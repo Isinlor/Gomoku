@@ -30,12 +30,16 @@ public class DistributionTableMethod<T> implements Distribution {
     }
 
     public T sample() {
+
         double prob = rand.nextDouble() * weightSum;
+        if(prob == 0) return events.get(0);
+
         int i;
-        for(i=0; prob > 0; i++){
+        for(i = 0; prob > 0; i++) {
             prob -= weights.get(i);
         }
         return events.get(i-1);
+
     }
 
 }

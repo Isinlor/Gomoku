@@ -33,6 +33,27 @@ public class SamplingTest extends SimpleUnitTest {
 
         });
 
+        it("allows sampling from discrete distribution over finite set of size 1 with probability 0", () -> {
+
+            // In MCTS there may be sometimes 1 move with weight 0
+
+            Map<Boolean, Double> map = new HashMap<>();
+            map.put(true, 0.0);
+
+            DistributionTableMethod<Boolean> distribution = new DistributionTableMethod<>(map);
+
+            int trueSelected = 0;
+            int samples = 100;
+            for (int i = 0; i < samples; i++) {
+                if(distribution.sample()) {
+                    trueSelected++;
+                }
+            }
+
+            assertEqual((double) trueSelected / samples, 1.0, 0.01, "The proportion of X must be 100%.");
+
+        });
+
         it("allows sampling from discrete distribution over finite set of size 2", () -> {
 
             // sample from distribution where "true" has 0.33 chances, "false" has 0.67 chances
@@ -52,6 +73,26 @@ public class SamplingTest extends SimpleUnitTest {
             }
 
             assertEqual((double) trueSelected / samples, 0.33, 0.1, "The proportion of X must be around 33%.");
+
+        });
+
+        it("allows sampling from discrete distribution over finite set of size 2 with one probability 0", () -> {
+
+            Map<Boolean, Double> map = new HashMap<>();
+            map.put(true, 1.0);
+            map.put(false, 0.0);
+
+            DistributionTableMethod<Boolean> distribution = new DistributionTableMethod<>(map);
+
+            int trueSelected = 0;
+            int samples = 100000;
+            for (int i = 0; i < samples; i++) {
+                if(distribution.sample()) {
+                    trueSelected++;
+                }
+            }
+
+            assertEqual((double) trueSelected / samples, 1.0, 0.1, "The proportion of X must be 100%.");
 
         });
 
