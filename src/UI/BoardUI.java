@@ -3,6 +3,7 @@ package UI;
 import Board.SimpleBoard;
 import Contract.BoardCell;
 import Contract.Move;
+import Evaluation.WinLossEvaluation;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -118,8 +119,8 @@ public class BoardUI extends Application{
             GameOver.display(board, this);
 
         }
-
         infoPanel.getChildren().setAll(justPlayer, currentPlayer);
+
         root.getChildren().setAll(gameBoard, infoPanel);
     }
     // Black circle unicode = U+25CF

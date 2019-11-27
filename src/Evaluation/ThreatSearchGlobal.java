@@ -20,11 +20,13 @@ public class ThreatSearchGlobal {
             int steps = 1;
             boolean openLeft = false;
             boolean openRight;
+            BoardCell color = BoardCell.Empty;
             for(int j = 0; j<board.getSize(); j++) {
                 if (j + 1 < board.getSize()) {
                     {
                         if (board.getCell(i, j).equals(board.getCell(i, j + 1)) && !board.getCell(i, j).equals(BoardCell.Empty)) {
                             steps++;
+                            color = board.getCell(i,j);
                         }
                         else if (board.getCell(i, j).equals(BoardCell.Empty)) {
                             openRight = true;
@@ -49,20 +51,20 @@ public class ThreatSearchGlobal {
         for(int i = 0; i<board.getSize(); i++){
             int steps = 1;
             boolean openTop = false;
-            BoardCell color = null;
+            BoardCell color = BoardCell.Empty;
             boolean openBottom;
             for(int j = 0; j<board.getSize(); j++) {
                 if (j + 1 < board.getSize()) {
                     {
-                        System.out.println("");
-                        System.out.println(board.getCell(j, i));
-                        System.out.println(board.getCell(j+1, i));
+                       // System.out.println("");
+                       // System.out.println(board.getCell(j, i));
+                       // System.out.println(board.getCell(j+1, i));
 
                         if (board.getCell(j, i).equals(board.getCell(j+1, i)) && !board.getCell(j, i).equals(BoardCell.Empty)) {
                             steps++;
                             color = board.getCell(j, i);
-                            System.out.println("steps");
-                            System.out.println(steps);
+                         //   System.out.println("steps");
+                         //   System.out.println(steps);
 
                         }
                         else if (board.getCell(j, i).equals(BoardCell.Empty)) {
@@ -90,20 +92,22 @@ public class ThreatSearchGlobal {
            int steps = 1;
            boolean openTop = false;
            boolean openBottom;
+           BoardCell color = BoardCell.Empty;
            int k = i;
            while (i > 0) {
                if (k < board.getSize() - 1) {
                    for (int j = 0; j < board.getSize() - 1; j++) {
-                       if (board.getCell(k, j).getColor().equals(board.getCell(k + 1, j + 1)) && !board.getCell(k, j).equals(null)) {
+                       if (board.getCell(k, j).getColor().equals(board.getCell(k + 1, j + 1)) && !board.getCell(k, j).equals(BoardCell.Empty)) {
                            steps++;
+                           color = board.getCell(k,j);
 
-                       } else if (board.getCell(k, j).getColor().equals(null)) {
+                       } else if (board.getCell(k, j).getColor().equals(BoardCell.Empty)) {
                            openBottom = true;
                            evalThreat(steps, openTop, openBottom, board.getCell(k, j));
                            steps = 1;
                            openTop = true;
 
-                       } else if (!board.getCell(k, j).getColor().equals(board.getCell(k + 1, j + 1)) && !board.getCell(k + 1, j).equals(null)) {
+                       } else if (!board.getCell(k, j).getColor().equals(board.getCell(k + 1, j + 1)) && !board.getCell(k + 1, j).equals(BoardCell.Empty)) {
                            openBottom = false;
                            evalThreat(steps, openTop, openBottom, board.getCell(j, i));
                            steps = 1;
@@ -118,6 +122,7 @@ public class ThreatSearchGlobal {
                for (int j = 0; j < board.getSize() - 5; j++) {
                    if (board.getCell(k, j).getColor().equals(board.getCell(k + 1, j + 1)) && !board.getCell(k, j).equals(BoardCell.Empty)) {
                        steps++;
+                       color = board.getCell(k,j);
 
                    } else if (board.getCell(k, j).equals(BoardCell.Empty)) {
                        openBottom = true;
@@ -141,11 +146,13 @@ public class ThreatSearchGlobal {
            boolean openTop = false;
            boolean openBottom;
            int k = i;
-           while (i < 14) {
+           BoardCell color = BoardCell.Empty;
+           while (i < board.getSize()-1) {
                if (k < board.getSize() - 1) {
                    for (int j = 0; j < board.getSize() - 1; j++) {
                        if (board.getCell(k, j).equals(board.getCell(k - 1, j + 1)) && !board.getCell(k, j).equals(BoardCell.Empty)) {
                            steps++;
+                           color = board.getCell(k,j);
 
                        } else if (board.getCell(k, j).equals(BoardCell.Empty)) {
                            openBottom = true;
@@ -164,10 +171,11 @@ public class ThreatSearchGlobal {
 
                }
            }
-           if (i == 14) {
+           if (i == board.getSize()-1) {
                for (int j = 0; j < board.getSize() - 5; j++) {
                    if (board.getCell(k, j).equals(board.getCell(k - 1, j + 1)) && !board.getCell(k, j).equals(BoardCell.Empty)) {
                        steps++;
+                       color = board.getCell(k,j);
 
                    } else if (board.getCell(k, j).getColor().equals(null)) {
                        openBottom = true;
@@ -206,13 +214,8 @@ public class ThreatSearchGlobal {
             threat=Threat.Open4;
         }
 
-        System.out.println("threat evaluation");
-        System.out.println(threat);
 
-        System.out.println("color");
-        System.out.println(color);
-
-
+        System.out.println(threat + "+" +color);
         if(color.equals(BoardCell.Black)){
             threatsBlack.add(threat);
         }
@@ -222,37 +225,44 @@ public class ThreatSearchGlobal {
     }
 
     private double threatValue(Threat threat) {
+        if (threat == null) System.out.println("I am fucked up here!");
+        else {
         switch (threat) {
             case HalfClosed2:
                 return 1;
             case HalfClosed3:
                 return 2.25;
             case HalfClosed4:
+                return 4;
             case Open2:
                 return 4;
             case Open3:
                 return 9;
             case Open4:
                 return 16;
-        }
+            case All5:
+                return 25;
+        }}
         return 0.0;
     }
 
     public double evaluate(ReadableBoard board){
         threatsBlack = new ArrayList<Threat>();
         threatsWhite = new ArrayList<Threat>();
+       double threatsBlackValue = 0;
+       double threatsWhiteValue = 0;
 
         evaluateColumns(board);
         System.out.println(threatsBlack);
         System.out.println(threatsWhite);
 
-//        evaluateRows(board);
-//        evaluateForDiagonal(board);
-//        evaluateBackDiagonal(board);
+       evaluateRows(board);
+       evaluateForDiagonal(board);
+       evaluateBackDiagonal(board);
+        if(!threatsBlack.isEmpty())  threatsBlackValue = threatsBlack.stream().map(t -> threatValue(t)).reduce(0.0, (a,b) -> a + b);
 
-        double threatsBlackValue = threatsBlack.stream().map(t -> threatValue(t)).reduce(0.0, (a,b) -> a + b);
-        double threatsWhiteValue = threatsWhite.stream().map(t -> threatValue(t)).reduce(0.0, (a,b) -> a + b);
-
+        if(!threatsWhite.isEmpty()) threatsWhiteValue = threatsWhite.stream().map(t -> threatValue(t)).reduce(0.0, (a,b) -> a + b);
+        System.out.println(threatsBlackValue-threatsWhiteValue);
         return threatsBlackValue - threatsWhiteValue;
     }
 }

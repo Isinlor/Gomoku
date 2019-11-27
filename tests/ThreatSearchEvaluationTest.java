@@ -10,11 +10,24 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
 
         System.out.println("\n\nEvaluation Threat Search Test\n");
 
-        it("gives 0 score to board with no winner and loser", () -> {
+        it("gives evaluation 0", () -> {
             BoardCell[][] boardState = {
                     {W, E, E, E, E},
-                    {W, B, B, B, E},
-                    {W, E, E, E, E},
+                    {W, W, W, E, E},
+                    {B, E, W, E, E},
+                    {B, E, E, E, E},
+                    {E, B, E, E, B},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == 0
+            );
+        });
+
+        it("gives 0  score to board ", () -> {
+            BoardCell[][] boardState = {
+                    {W, W, B, E, E},
+                    {E, E, E, E, E},
+                    {E, E, E, E, E},
                     {E, E, E, E, E},
                     {E, E, E, E, E},
             };
