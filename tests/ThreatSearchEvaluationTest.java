@@ -19,7 +19,7 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
                     {E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
-            assertTrue(new ThreatSearchGlobal().evaluate(board) == 0.0
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == 0
             );
         });
     }

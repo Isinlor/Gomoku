@@ -3,16 +3,17 @@ package Evaluation;
 import Contract.Color;
 import Contract.ReadableBoard;
 
+import java.util.ArrayList;
+
 public class ThreatSearchGlobal {
 
-    int threatCountW[];
-    int threatCountB[];
-    Threat threats[];
+    ArrayList<Threat> threatsWhite;
+    ArrayList<Threat> threatsBlack;
     //TODO CHECK THE END OF COLUMN AND ROWS
 
     //TODO CHECK OPEN SPOTS IN BETWEEN
 
-    public void evaluateRows(ReadableBoard board) {
+    private void evaluateRows(ReadableBoard board) {
 
         for(int i = 0; i<board.getSize(); i++){
             int steps = 1;
@@ -43,7 +44,7 @@ public class ThreatSearchGlobal {
             }
         }
     }
-    public void evaluateColumns(ReadableBoard board){
+    private void evaluateColumns(ReadableBoard board){
         for(int i = 0; i<board.getSize(); i++){
             int steps = 1;
             boolean openTop = false;
@@ -74,7 +75,7 @@ public class ThreatSearchGlobal {
         }
     }
 
-   public void evaluateBackDiagonal(ReadableBoard board) {
+    private void evaluateBackDiagonal(ReadableBoard board) {
        for (int i = board.getSize() - 5; i >= 0; i--) {
            int steps = 1;
            boolean openTop = false;
@@ -124,7 +125,7 @@ public class ThreatSearchGlobal {
        }
    }
 
-   public void evaluateForDiagonal (ReadableBoard board){
+    private void evaluateForDiagonal (ReadableBoard board){
        for (int i = 4; i < board.getSize();  i++) {
            int steps = 1;
            boolean openTop = false;
@@ -174,52 +175,63 @@ public class ThreatSearchGlobal {
        }
    }
 
-    public void evalThreat(int steps, boolean openBefore, boolean openAfter, Color color){
+    private void evalThreat(int steps, boolean openBefore, boolean openAfter, Color color){
+        Threat threat = null;
+        if((steps==2&&openAfter&&!openBefore) || (steps==2&&!openAfter&&openBefore)){   //H2
+            threat=Threat.HalfClosed2;
+        }
+        else if((steps==3&&openAfter&&!openBefore) || (steps==3&&!openAfter&&openBefore)){  //H3
+            threat=Threat.HalfClosed3;
+        }
+        else if(steps==2&&openAfter&&openBefore){  //O2
+            threat=Threat.Open2;
+        }
+        else if((steps==4&&openAfter&&!openBefore) || (steps==4&&!openAfter&&openBefore)){  //H4
+            threat=Threat.HalfClosed4;
+        }
+        else if(steps==3&&openAfter&&openBefore){  //O3
+            threat=Threat.Open3;
+        }
+        else if(steps==4&&openAfter&&!openBefore) {  //O4
+            threat=Threat.Open4;
+        }
+
         if(color.equals(Color.Black)){
-            if((steps==2&&openAfter&&!openBefore) || (steps==2&&!openAfter&&openBefore)){   //H2
-                threatCountB[0]++;
-            }
-            else if((steps==3&&openAfter&&!openBefore) || (steps==3&&!openAfter&&openBefore)){  //H3
-                threatCountB[1]++;
-            }
-            else if(steps==2&&openAfter&&openBefore){  //O2
-                threatCountB[2]++;
-            }
-            else if((steps==4&&openAfter&&!openBefore) || (steps==4&&!openAfter&&openBefore)){  //H4
-                threatCountB[3]++;
-            }
-            else if(steps==3&&openAfter&&openBefore){  //O3
-                threatCountB[4]++;
-            }
-            else if(steps==4&&openAfter&&!openBefore) {  //O4
-                threatCountB[5]++;
-            }
-        }if (color.equals(Color.White)){
-            if((steps==2&&openAfter&&!openBefore) || (steps==2&&!openAfter&&openBefore)){   //H2
-                threatCountW[0]++;
-            }
-            else if((steps==3&&openAfter&&!openBefore) || (steps==3&&!openAfter&&openBefore)){  //H3
-                threatCountW[1]++;
-            }
-            else if(steps==2&&openAfter&&openBefore){  //O2
-                threatCountW[2]++;
-            }
-            else if((steps==4&&openAfter&&!openBefore) || (steps==4&&!openAfter&&openBefore)){  //H4
-                threatCountW[3]++;
-            }
-            else if(steps==3&&openAfter&&openBefore){  //O3
-                threatCountW[4]++;
-            }
-            else if(steps==4&&openAfter&&!openBefore) {  //O4
-                threatCountW[5]++;
-            }
+            threatsBlack.add(threat);
+        }else {
+            threatsWhite.add(threat);
         }
     }
 
-    public void globalThreatSearch(ReadableBoard board){
+    private double threatValue(Threat threat) {
+        switch (threat) {
+            case HalfClosed2:
+                return 1;
+            case HalfClosed3:
+                return 2.25;
+            case HalfClosed4:
+            case Open2:
+                return 4;
+            case Open3:
+                return 9;
+            case Open4:
+                return 16;
+        }
+        return 0.0;
+    }
+
+    public double evaluate(ReadableBoard board){
+        threatsBlack = new ArrayList<Threat>();
+        threatsWhite = new ArrayList<Threat>();
+
         evaluateColumns(board);
         evaluateRows(board);
         evaluateForDiagonal(board);
         evaluateBackDiagonal(board);
+
+        double threatsBlackValue = threatsBlack.stream().map(t -> threatValue(t)).reduce(0.0, (a,b) -> a + b);
+        double threatsWhiteValue = threatsWhite.stream().map(t -> threatValue(t)).reduce(0.0, (a,b) -> a + b);
+
+        return threatsBlackValue - threatsWhiteValue;
     }
 }
