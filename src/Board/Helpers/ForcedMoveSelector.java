@@ -21,20 +21,24 @@ public class ForcedMoveSelector implements MoveSelector {
     public Set<Move> getMoves(ReadableBoard board) {
 
         HashSet<Move> moves = new HashSet<>();
+        HashSet<Move> winningMoves = new HashSet<>();
         for (Move move: broaderMoveSelector.getMoves(board)) {
 
-            double evaluation = this.evaluation.evaluate(board.getWithMove(move));
+            double result = evaluation.evaluate(board.getWithMove(move));
 
-            if(evaluation == Evaluation.Lost) {
-                moves = new HashSet<>();
-                moves.add(move);
-                return moves;
+            if(result == Evaluation.Lost) {
+                winningMoves.add(move);
+                continue;
             }
 
-            if(evaluation != Evaluation.Win) {
+            if(result != Evaluation.Win) {
                 moves.add(move);
             }
 
+        }
+
+        if(!winningMoves.isEmpty()) {
+            return winningMoves;
         }
 
         if(moves.isEmpty()) {

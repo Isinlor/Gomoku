@@ -211,6 +211,78 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         });
 
+        it("returns the winning move instead of a blocking move for white", () -> {
+
+            BoardCell[][] boardState = {
+                {W, W, W, W, E},
+                {E, B, E, B, E},
+                {B, B, B, B, E},
+                {W, B, W, E, E},
+                {E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            assertColor(board.getCurrentColor(), Color.White);
+            assertEqual(selector.getMoves(board).size(), 1);
+            assertTrue(selector.getMoves(board).contains(new Move(0, 4)));
+
+        });
+
+        it("returns the winning move instead of a blocking move for black", () -> {
+
+            BoardCell[][] boardState = {
+                {W, W, W, E, W},
+                {E, B, E, B, E},
+                {B, B, B, B, E},
+                {W, B, W, W, E},
+                {E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            assertColor(board.getCurrentColor(), Color.Black);
+            assertEqual(selector.getMoves(board).size(), 1);
+            assertTrue(selector.getMoves(board).contains(new Move(2, 4)));
+
+        });
+
+        it("returns all winning moves for black", () -> {
+
+            BoardCell[][] boardState = {
+                {W, W, W, W, E},
+                {E, B, E, B, E},
+                {B, B, B, B, E},
+                {W, B, W, W, E},
+                {E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            assertColor(board.getCurrentColor(), Color.Black);
+            assertEqual(selector.getMoves(board).size(), 2);
+            assertTrue(selector.getMoves(board).contains(new Move(2, 4)));
+            assertTrue(selector.getMoves(board).contains(new Move(0, 4)));
+            // this is a losing move
+            assertTrue(!selector.getMoves(board).contains(new Move(4, 0)));
+
+        });
+
+        it("returns only the winning moves for black without the blocking moves", () -> {
+
+            BoardCell[][] boardState = {
+                {B, B, B, B, E},
+                {B, B, B, B, E},
+                {W, W, W, W, E},
+                {E, E, E, E, E},
+                {W, W, W, W, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            assertColor(board.getCurrentColor(), Color.Black);
+            assertEqual(selector.getMoves(board).size(), 2);
+            assertTrue(selector.getMoves(board).contains(new Move(0, 4)));
+            assertTrue(selector.getMoves(board).contains(new Move(1, 4)));
+
+        });
+
         MoveSelector forced7 = MoveSelectors.get("forced7");
 
         it("prevents lost in more than 3 moves", () -> {
