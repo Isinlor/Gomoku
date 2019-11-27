@@ -47,7 +47,7 @@ public class MinMaxPlayer implements Player {
 
         board.move(move);
 
-        if(board.isGameFinished() || depth == 0) {
+        if(depth == 0 || board.isGameFinished()) {
             double eval = evaluation.evaluate(board);
             board.revertMove(move);
             return eval;
@@ -63,7 +63,7 @@ public class MinMaxPlayer implements Player {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
                 alpha = bestEvaluation;
-                if(alpha >= beta) {
+                if(alpha >= beta || bestEvaluation == Evaluation.Win) {
                     break;
                 }
             }
@@ -80,7 +80,7 @@ public class MinMaxPlayer implements Player {
 
         board.move(move);
 
-        if(board.isGameFinished() || depth == 0) {
+        if(depth == 0 || board.isGameFinished()) {
             double eval = -evaluation.evaluate(board);
             board.revertMove(move);
             return eval;
@@ -96,7 +96,7 @@ public class MinMaxPlayer implements Player {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
                 beta = bestEvaluation;
-                if(alpha >= beta) {
+                if(alpha >= beta || bestEvaluation == Evaluation.Lost) {
                     break;
                 }
             }

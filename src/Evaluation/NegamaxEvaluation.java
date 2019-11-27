@@ -36,7 +36,7 @@ public class NegamaxEvaluation implements Evaluation {
             value = Math.max(value, -evaluate(board, depth - 1, -beta, -alpha));
             board.revertMove(move);
             alpha = Math.max(alpha, value);
-            if(alpha >= beta) {
+            if(alpha >= beta || value == Win) {
                 break;
             }
         }
