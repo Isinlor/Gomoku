@@ -12,7 +12,7 @@ public class EvaluationPlayer implements Player {
 
     public Move getMove(ReadableBoard board) {
         Move bestMove = null;
-        double bestEvaluation = Double.NaN;
+        double bestEvaluation = Double.POSITIVE_INFINITY;
 
         for (Move move: board.getValidMoves()) {
 
