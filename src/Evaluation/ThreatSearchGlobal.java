@@ -215,4 +215,11 @@ public class ThreatSearchGlobal {
             }
         }
     }
+
+    public void globalThreatSearch(ReadableBoard board){
+        evaluateColumns(board);
+        evaluateRows(board);
+        evaluateForDiagonal(board);
+        evaluateBackDiagonal(board);
+    }
 }
