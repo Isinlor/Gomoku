@@ -10,45 +10,71 @@ import java.util.Scanner;
 public class ComparePlayers {
     public static void main(String[] args) {
 
-        Game game = CLI.setupGame();
+        System.out.println("Available players: " + Players.getNames());
 
-        int blackWin = 0;
-        int whiteWin = 0;
+        String nameA = selectPlayer();
+        String nameB = selectPlayer();
+        Player playerA = Players.get(nameA);
+        Player playerB = Players.get(nameB);
+
+        int winA = 0;
+        int winB = 0;
         int draw = 0;
 
         double startTime = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
 
-            SimpleBoard board = new SimpleBoard(5);
-            game.play(board);
+            // there is a difference between playing black and white
+            // this flips color every iteration
+            boolean flip = i % 2 == 0;
+
+            SimpleBoard board = new SimpleBoard(7);
+
+            new SimpleGame(
+                flip ? playerA : playerB,
+                flip ? playerB : playerA
+            ).play(board);
 
             if(board.getWinner() == null) {
                 draw++;
-                continue;
+            } else {
+                switch (board.getWinner()) {
+                    case Black:
+                        if(flip) {
+                            winA++;
+                        } else {
+                            winB++;
+                        }
+                        break;
+                    case White:
+                        if(flip) {
+                            winB++;
+                        } else {
+                            winA++;
+                        }
+                        break;
+                }
             }
 
-            switch (board.getWinner()) {
-                case Black:
-                    blackWin++;
-                    break;
-                case White:
-                    whiteWin++;
-                    break;
-            }
+            System.out.println(nameA + ": " + winA + "\t" + nameB + ": " + winB + "\tD: " + draw);
 
-            //Updates on the programme, change 10 to interval of update
-            if(blackWin+whiteWin%10==0){
-                System.out.println(blackWin+" Black Wins so far");
-                System.out.println(whiteWin+" White Wins so far");
-            }
         }
 
         System.out.println();
-        System.out.println("Black win: " + blackWin);
-        System.out.println("White win: " + whiteWin);
-        System.out.println("Draw: " + draw);
+        System.out.println(nameA + ": " + winA + "\t" + nameB + ": " + winB + "\tD: " + draw);
         System.out.println("Time: " + (System.currentTimeMillis() - startTime));
 
+    }
+
+    private static String selectPlayer() {
+        String playerName = null;
+        while(!Players.getNames().contains(playerName)) {
+            System.out.print("Select player: ");
+            Scanner sc = new Scanner(System.in);
+            playerName = sc.nextLine();
+        }
+        System.out.println();
+        return playerName;
     }
 
 }
