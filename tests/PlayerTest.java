@@ -13,6 +13,12 @@ public class PlayerTest extends SimpleUnitTest {
         System.out.println("\n\nMinMax Player Test\n");
         minMaxPlayerTest();
 
+        System.out.println("\n\nNegamax Player Test\n");
+        negamaxPlayerTest();
+
+        System.out.println("\n\nMCTS Player Test\n");
+        mctsPlayerTest();
+
     }
 
     private static void evaluationPlayerTest() {
@@ -97,6 +103,42 @@ public class PlayerTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(5);
 
             Game game = new SimpleGame(minMaxPlayer, minMaxPlayer);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+
+        });
+
+    }
+
+    private static void negamaxPlayerTest() {
+
+        it("allows to play out a whole game", () -> {
+
+            Player player = Players.get("negamax3");
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(player, player);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+
+        });
+
+    }
+
+    private static void mctsPlayerTest() {
+
+        it("allows to play out a whole game", () -> {
+
+            Player player = Players.get("negamax3");
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(player, player);
 
             game.play(board);
 
