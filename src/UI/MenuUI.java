@@ -6,6 +6,7 @@ import Contract.Game;
 import Contract.Move;
 import Contract.Player;
 import Player.Players;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -216,6 +217,18 @@ public class MenuUI extends Application{
 
     }
 
+    Runnable aiPlayerRunnable = () -> {
+        board.move(aiPlayer.getMove(board));
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run() {
+                updateBoard();
+            }
+        });
+    };
+
+
     public void updateBoard(){
         boardSize = board.getSize();
         GridPane gameBoard = new GridPane();
@@ -243,8 +256,9 @@ public class MenuUI extends Application{
                         System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
                         try {
                             board.move(new Move(cell_x,cell_y));
-                            if(aiPlayer!=null){
-                                board.move(aiPlayer.getMove(board));
+                            if(aiPlayer!=null && !board.hasWinner()){
+                                Thread thread = new Thread(aiPlayerRunnable);
+                                thread.start();
                             }
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
