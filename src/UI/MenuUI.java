@@ -46,9 +46,11 @@ public class MenuUI extends Application{
     private final int BOARD_PANEL_SIZE = 750;
     private Label currentPlayer;
     private Label justPlayer;
+    private Label loading;
     private Scene menuScene;
     private boolean pvpMode = true;
     private String aiMode = null;
+    private boolean aiRunning = false;
 
     private Player aiPlayer = null;
 
@@ -133,6 +135,8 @@ public class MenuUI extends Application{
                     justPlayer.setText("Player: ");
                     currentPlayer = new Label();
                     currentPlayer.setStyle("-fx-font:14 arial;");
+                    loading = new Label();
+                    loading.setStyle("-fx-font:12 arial;");
                     infoPanel.setPrefSize(BOARD_PANEL_SIZE / 4, BOARD_PANEL_SIZE);
                     infoPanel.setStyle("-fx-background-color: #808080;");
                     Scene scene = new Scene(root, 950, 767);
@@ -223,6 +227,8 @@ public class MenuUI extends Application{
         {
             @Override
             public void run() {
+                aiRunning = false;
+                loading.setText("");
                 updateBoard();
             }
         });
@@ -249,25 +255,29 @@ public class MenuUI extends Application{
                 final int cell_x = x;
                 final int cell_y = y;
 
-                tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
+                if(!aiRunning) {
+                    tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
 
-                        System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
-                        try {
-                            board.move(new Move(cell_x,cell_y));
-                            if(aiPlayer!=null && !board.hasWinner()){
-                                Thread thread = new Thread(aiPlayerRunnable);
-                                thread.start();
+                            System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
+                            try {
+                                board.move(new Move(cell_x, cell_y));
+                                if (aiPlayer != null && !board.hasWinner()) {
+                                    aiRunning = true;
+                                    loading.setText("Loading...");
+                                    Thread thread = new Thread(aiPlayerRunnable);
+                                    thread.start();
+                                }
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
                             }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
+
+                            updateBoard();
+
                         }
-
-                        updateBoard();
-
-                    }
-                });
+                    });
+                }
 
                 gameBoard.add(new StackPane(tile), y, x);
 
@@ -297,7 +307,7 @@ public class MenuUI extends Application{
 
         }
 
-        infoPanel.getChildren().setAll(justPlayer, currentPlayer);
+        infoPanel.getChildren().setAll(justPlayer, currentPlayer, loading);
         root.getChildren().setAll(gameBoard, infoPanel);
     }
 
