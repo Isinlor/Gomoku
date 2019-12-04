@@ -47,10 +47,11 @@ public class MenuUI extends Application{
     private Label currentPlayer;
     private Label justPlayer;
     private Label loading;
+    private Button reset;
     private Scene menuScene;
     private boolean pvpMode = true;
     private String aiMode = null;
-    private boolean aiRunning = false;
+    private boolean paused = false;
 
     private Player aiPlayer = null;
 
@@ -139,6 +140,13 @@ public class MenuUI extends Application{
                     loading.setStyle("-fx-font:12 arial;");
                     infoPanel.setPrefSize(BOARD_PANEL_SIZE / 4, BOARD_PANEL_SIZE);
                     infoPanel.setStyle("-fx-background-color: #808080;");
+                    reset = new Button("New Game");
+
+                    reset.setOnAction(e -> {
+                        board.resetBoard();
+                        paused = false;
+                        updateBoard();
+                    });
                     Scene scene = new Scene(root, 950, 767);
                     primaryStage.setScene(scene);
 
@@ -227,7 +235,7 @@ public class MenuUI extends Application{
         {
             @Override
             public void run() {
-                aiRunning = false;
+                paused = false;
                 loading.setText("");
                 updateBoard();
             }
@@ -255,7 +263,7 @@ public class MenuUI extends Application{
                 final int cell_x = x;
                 final int cell_y = y;
 
-                if(!aiRunning) {
+                if(!paused) {
                     tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
@@ -264,7 +272,7 @@ public class MenuUI extends Application{
                             try {
                                 board.move(new Move(cell_x, cell_y));
                                 if (aiPlayer != null && !board.hasWinner()) {
-                                    aiRunning = true;
+                                    paused = true;
                                     loading.setText("Loading...");
                                     Thread thread = new Thread(aiPlayerRunnable);
                                     thread.start();
@@ -304,10 +312,10 @@ public class MenuUI extends Application{
         if(board.hasWinner()){
             System.out.println(board.getWinner() + " won!");
             GameOver.display(board, this);
-
+            paused = true;
         }
 
-        infoPanel.getChildren().setAll(justPlayer, currentPlayer, loading);
+        infoPanel.getChildren().setAll(justPlayer, currentPlayer, loading, reset);
         root.getChildren().setAll(gameBoard, infoPanel);
     }
 
