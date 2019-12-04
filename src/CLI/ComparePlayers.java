@@ -14,15 +14,15 @@ public class ComparePlayers {
 
         String nameA = selectPlayer();
         String nameB = selectPlayer();
-        Player playerA = Players.get(nameA);
-        Player playerB = Players.get(nameB);
+        TimedPlayer playerA = new TimedPlayer(Players.get(nameA));
+        TimedPlayer playerB = new TimedPlayer(Players.get(nameB));
 
         int winA = 0;
         int winB = 0;
         int draw = 0;
 
         double startTime = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
 
             // there is a difference between playing black and white
             // this flips color every iteration
@@ -63,6 +63,16 @@ public class ComparePlayers {
         System.out.println();
         System.out.println(nameA + ": " + winA + "\t" + nameB + ": " + winB + "\tD: " + draw);
         System.out.println("Time: " + (System.currentTimeMillis() - startTime));
+
+        System.out.println();
+        System.out.println("Avg time per move " + nameA + ": " + Utils.formatTime(playerA.getAverageTimePerMove()));
+        System.out.println("Max time per move " + nameA + ": " + Utils.formatTime(playerA.getMaxTimePerMove()));
+        System.out.println("Min time per move " + nameA + ": " + Utils.formatTime(playerA.getMinTimePerMove()));
+
+        System.out.println();
+        System.out.println("Avg time per move " + nameB + ": " + Utils.formatTime(playerB.getAverageTimePerMove()));
+        System.out.println("Max time per move " + nameB + ": " + Utils.formatTime(playerB.getMaxTimePerMove()));
+        System.out.println("Min time per move " + nameB + ": " + Utils.formatTime(playerB.getMinTimePerMove()));
 
     }
 
