@@ -61,6 +61,7 @@ public class ComparePlayers {
         }
 
         System.out.println();
+        System.out.println("Final result...");
         System.out.println(nameA + ": " + winA + "\t" + nameB + ": " + winB + "\tD: " + draw);
         System.out.println("Time: " + (System.currentTimeMillis() - startTime));
 
