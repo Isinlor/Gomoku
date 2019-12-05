@@ -273,6 +273,7 @@ public class ThreatSearchGlobal {
                         openBottom = false;
                         evalThreat(steps, openTop, openBottom, board.getCell(j , i-j));
                         steps = 1;
+                        openTop= false;
                     }
                 }else{
                     if (board.getCell(j , i-j).equals(BoardCell.Empty) && steps > 1) {
