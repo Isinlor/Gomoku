@@ -18,7 +18,7 @@ public class ApproximateMoveSelector implements MoveSelector {
     public Collection<Move> getMoves(ReadableBoard board) {
 
         int boardSize = board.getSize();
-        List<Move> moves = new ArrayList<>();
+        Collection<Move> moves = new ArrayDeque<>();
         for (Move move: board.getValidMoves()) {
             for (int[] modifier: modifiers) {
                 int i = modifier[0];
