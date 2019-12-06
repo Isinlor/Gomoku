@@ -15,10 +15,10 @@ public class ApproximateMoveSelector implements MoveSelector {
         { 1, -1}, { 1, 0}, { 1,  1},
     };
 
-    public Set<Move> getMoves(ReadableBoard board) {
+    public Collection<Move> getMoves(ReadableBoard board) {
 
         int boardSize = board.getSize();
-        HashSet<Move> moves = new HashSet<>();
+        List<Move> moves = new ArrayList<>();
         for (Move move: board.getValidMoves()) {
             for (int[] modifier: modifiers) {
                 int i = modifier[0];
@@ -35,7 +35,7 @@ public class ApproximateMoveSelector implements MoveSelector {
         }
 
         if(moves.isEmpty()) {
-            return board.getValidMoves();
+            return board.getValidMoves().getCopy();
         }
 
         return moves;

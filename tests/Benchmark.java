@@ -34,7 +34,7 @@ public class Benchmark extends SimpleUnitTest {
             assertTrue(moves.contains(new Move(3, 3)));
 
         });
-        
+
     }
 
     public static void benchIt(String expectation, Runnable runnable) {

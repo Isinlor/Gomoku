@@ -124,13 +124,13 @@ public class SimpleBoard implements Board {
         return currentTurn;
     }
 
-    public HashSet<Move> getValidMoves() {
+    public Moves getValidMoves() {
 
         if(winner != null) {
-            return new HashSet<>(); // there are no valid moves if there is a winner
+            return new Moves(); // there are no valid moves if there is a winner
         }
 
-        return (HashSet<Move>)validMoves.clone();
+        return new Moves(validMoves);
 
     }
 

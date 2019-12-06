@@ -5,8 +5,8 @@ import Contract.Move;
 import Contract.MoveSelector;
 import Contract.ReadableBoard;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ForcedMoveSelector implements MoveSelector {
 
@@ -18,7 +18,7 @@ public class ForcedMoveSelector implements MoveSelector {
         this.broaderMoveSelector = broaderMoveSelector;
     }
 
-    public Set<Move> getMoves(ReadableBoard board) {
+    public Collection<Move> getMoves(ReadableBoard board) {
 
         HashSet<Move> moves = new HashSet<>();
         HashSet<Move> winningMoves = new HashSet<>();

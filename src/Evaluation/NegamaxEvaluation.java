@@ -2,7 +2,8 @@ package Evaluation;
 
 import Contract.*;
 import Board.*;
-import java.util.Set;
+
+import java.util.Collection;
 
 public class NegamaxEvaluation implements Evaluation {
 
@@ -29,7 +30,7 @@ public class NegamaxEvaluation implements Evaluation {
             return evaluation.evaluate(board);
         }
 
-        Set<Move> moves = moveSelector.getMoves(board);
+        Collection<Move> moves = moveSelector.getMoves(board);
         double value = Double.NEGATIVE_INFINITY;
         for (Move move: moves) {
             board.move(move);

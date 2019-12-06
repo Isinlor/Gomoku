@@ -1,15 +1,12 @@
 import Board.Helpers.ApproximateMoveSelector;
-import Board.Helpers.ForcedMoveSelector;
 import Board.Helpers.MoveSelectors;
 import Board.SimpleBoard;
 import Contract.BoardCell;
 import Contract.Color;
 import Contract.Move;
 import Contract.MoveSelector;
-import Evaluation.NegamaxEvaluation;
-import Evaluation.WinLossEvaluation;
 
-import java.util.Set;
+import java.util.Collection;
 
 public class MoveSelectorTest extends SimpleUnitTest {
 
@@ -116,7 +113,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.White);
 
-            Set<Move> moves = selector.getMoves(board);
+            Collection<Move> moves = selector.getMoves(board);
             assertEqual(selector.getMoves(board).size(), 2);
             assertTrue(selector.getMoves(board).contains(new Move(3, 1)));
             assertTrue(selector.getMoves(board).contains(new Move(3, 5)));
@@ -137,7 +134,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.Black);
 
-            Set<Move> moves = selector.getMoves(board);
+            Collection<Move> moves = selector.getMoves(board);
             assertEqual(selector.getMoves(board).size(), 2);
             assertTrue(selector.getMoves(board).contains(new Move(3, 1)));
             assertTrue(selector.getMoves(board).contains(new Move(3, 5)));
@@ -300,7 +297,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
             assertEqual(forced7.getMoves(board).size(), 1);
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(selector.getMoves(board).contains(new Move(4, 4)));
+            assertTrue(forced7.getMoves(board).contains(new Move(4, 4)));
 
         });
 
