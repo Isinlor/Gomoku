@@ -21,11 +21,11 @@ public class Utils {
         if(milliseconds < 1000) {
             return Utils.round(milliseconds) + " ms";
         } else if(milliseconds < 60 * 1000) {
-            return Utils.round(milliseconds) + " s";
+            return Utils.round(milliseconds / 1000) + " s";
         } else if(milliseconds < 60 * 60 * 1000) {
-            return Utils.round(milliseconds / 60) + " min";
+            return Utils.round(milliseconds / (1000 * 60)) + " min";
         } else {
-            return Utils.round(milliseconds / (60 * 60)) + " h";
+            return Utils.round(milliseconds / (1000 * 60 * 60)) + " h";
         }
     }
 }
