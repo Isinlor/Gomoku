@@ -114,9 +114,9 @@ public class MoveSelectorTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.White);
 
             Collection<Move> moves = selector.getMoves(board);
-            assertEqual(selector.getMoves(board).size(), 2);
-            assertTrue(selector.getMoves(board).contains(new Move(3, 1)));
-            assertTrue(selector.getMoves(board).contains(new Move(3, 5)));
+            assertEqual(moves.size(), 2);
+            assertTrue(moves.contains(new Move(3, 1)));
+            assertTrue(moves.contains(new Move(3, 5)));
 
         });
 
@@ -135,9 +135,9 @@ public class MoveSelectorTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.Black);
 
             Collection<Move> moves = selector.getMoves(board);
-            assertEqual(selector.getMoves(board).size(), 2);
-            assertTrue(selector.getMoves(board).contains(new Move(3, 1)));
-            assertTrue(selector.getMoves(board).contains(new Move(3, 5)));
+            assertEqual(moves.size(), 2);
+            assertTrue(moves.contains(new Move(3, 1)));
+            assertTrue(moves.contains(new Move(3, 5)));
 
         });
 
