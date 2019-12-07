@@ -293,11 +293,13 @@ public class MoveSelectorTest extends SimpleUnitTest {
                 {E, E, E, E, E, E, E},
                 {W, E, E, E, E, E, E},
             };
+            
             SimpleBoard board = new SimpleBoard(boardState);
-
-            assertEqual(forced7.getMoves(board).size(), 1);
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(forced7.getMoves(board).contains(new Move(4, 4)));
+
+            Collection<Move> moves = forced7.getMoves(board);
+            assertEqual(moves.size(), 1);
+            assertTrue(moves.contains(new Move(3, 3)));
 
         });
 
