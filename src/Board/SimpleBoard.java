@@ -7,8 +7,8 @@ import java.util.*;
 public class SimpleBoard implements Board {
 
     private int boardSize;
-    private Color currentTurn = Color.Black;
     private BoardCell[][] boardState;
+    protected Color currentTurn = Color.Black;
 
     private Move lastMove;
     private Color lastColor;
@@ -18,14 +18,13 @@ public class SimpleBoard implements Board {
     private HashSet<Move> validMoves = new HashSet<>();
 
     public SimpleBoard(ReadableBoard board) {
-        if(board instanceof SimpleBoard) {
-            SimpleBoard simpleBoard = (SimpleBoard)board;
-            lastMove = simpleBoard.lastMove;
-            lastColor = simpleBoard.lastColor;
-            winner = simpleBoard.winner;
-        }
+
         boardSize = board.getSize();
         currentTurn = board.getCurrentColor();
+        lastMove = board.getLastMove();
+        lastColor = board.getCurrentColor().getOpposite();
+        winner = board.getWinner();
+
         this.boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
@@ -36,8 +35,6 @@ public class SimpleBoard implements Board {
                 }
             }
         }
-
-        winner = getWinner();
 
     }
 
@@ -77,7 +74,7 @@ public class SimpleBoard implements Board {
             currentTurn = Color.White;
         }
 
-        winner = getWinner();
+        winner = getWinner(5);
 
     }
 
@@ -150,6 +147,10 @@ public class SimpleBoard implements Board {
         return true;
     }
 
+    public Move getLastMove() {
+        return lastMove;
+    }
+
     public void move(Move move) throws WrongMoveException {
 
         if(winner != null) {
@@ -187,7 +188,7 @@ public class SimpleBoard implements Board {
                 break;
         }
 
-        winner = getWinner();
+        winner = getWinner(5);
         validMoves.remove(new Move(x, y));
 
     }
@@ -235,7 +236,7 @@ public class SimpleBoard implements Board {
     }
 
     public boolean isGameFinished() {
-        return getWinner(5)!=null || isFull();
+        return hasWinner() || isFull();
     }
 
     public boolean isFull() {
@@ -243,15 +244,15 @@ public class SimpleBoard implements Board {
     }
 
     public boolean hasWinner() {
-    return hasWinner(5);
-}
+        return getWinner() != null;
+    }
 
     public boolean hasWinner( int steps ) {
         return getWinner(steps)!=null;
     }
 
-    public Color getWinner(){
-        return getWinner(5);
+    public Color getWinner() {
+        return winner;
     }
 
     //RETURNS WINNING COLOR OR NULL IF THERE'S A LOSS

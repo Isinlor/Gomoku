@@ -41,6 +41,8 @@ public interface ReadableBoard {
 
     boolean isValidMove(Move move);
 
+    Move getLastMove();
+
     /**
      * Returns *new board* with the given move.
      *
