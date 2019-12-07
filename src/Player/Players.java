@@ -20,13 +20,14 @@ public class Players {
     static {
         players.put("human", new CliPlayer());
         players.put("random", new RandomPlayer(MoveSelectors.get("approximate")));
-        players.put("simpleton", new EvaluationPlayer(Evaluations.get("winLoss")));
+        players.put("random3", new RandomPlayer(MoveSelectors.get("forced3")));
+        players.put("simpleton", new EvaluationPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate")));
         players.put("minmax1", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 1));
         players.put("minmax3", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 3));
         players.put("minmax5", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 5));
         players.put("minmax6", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 6));
         players.put("minmax7", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 7));
-        players.put("negamax3", new EvaluationPlayer(Evaluations.get("negamax3")));
+        players.put("negamax3", new EvaluationPlayer(Evaluations.get("negamax3"), MoveSelectors.get("approximate")));
         players.put("mcts1s",new MCTSPlayer(MoveSelectors.get("approximate"),1));
         players.put("mcts3s",new MCTSPlayer(MoveSelectors.get("approximate"),3));
         players.put("mcts10s",new MCTSPlayer(MoveSelectors.get("approximate"),10));

@@ -22,6 +22,7 @@ public class PlayerTest extends SimpleUnitTest {
     }
 
     private static void evaluationPlayerTest() {
+        Player evaluationPlayer = Players.get("simpleton");
         it("picks the best move for black - horizontal", () -> {
 
             BoardCell[][] boardState = {
@@ -36,7 +37,7 @@ public class PlayerTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.Black);
 
             assertTrue(
-                new EvaluationPlayer(new WinLossEvaluation())
+                evaluationPlayer
                     .getMove(board)
                     .isEqual(
                         new Move(0, 4)
@@ -59,7 +60,7 @@ public class PlayerTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.Black);
 
             assertTrue(
-                new EvaluationPlayer(new WinLossEvaluation())
+                evaluationPlayer
                     .getMove(board)
                     .isEqual(
                         new Move(4, 0)
@@ -82,7 +83,7 @@ public class PlayerTest extends SimpleUnitTest {
             assertTrue(board.getCurrentColor() == Color.White);
 
             assertTrue(
-                new EvaluationPlayer(new WinLossEvaluation())
+                evaluationPlayer
                     .getMove(board)
                     .isEqual(
                         new Move(1, 4)
