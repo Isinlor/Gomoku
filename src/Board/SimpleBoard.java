@@ -257,43 +257,49 @@ public class SimpleBoard implements Board {
 
     //RETURNS WINNING COLOR OR NULL IF THERE'S A LOSS
     public Color getWinner(int steps) throws NoWinnerException {
+
         if (lastMove == null || lastColor == null) {
             return getWinnerByFullBoardCheck(steps);
         }
+
         int x = lastMove.x;
         int y = lastMove.y;
-        for(int j=-1; j<=1; j++) {
+        for (int j = -1; j <= 1; j++) {
             for (int i = -1; i <= 1; i++) {
-                if (numberIsOnBoard(x+i)  && numberIsOnBoard(y+j) && !(i==0 && j==0)) {
-                    if (boardState[x+i][y+j].getColor()==lastColor){
-                        int counter=2;
-                        int reverseCounter=1;
-                        int stopCount = 0;
-                        while(counter+reverseCounter-1 < steps && stopCount!=2) {
-                            stopCount = 0;
-                            if (numberIsOnBoard(x + counter * i) && numberIsOnBoard(y + counter * j)) {
-                                if (boardState[x + (counter * i)][y + (counter * j)].getColor() == lastColor) {
-                                    counter++;
-                                }else{
-                                    stopCount++;
-                                }
-                            }else{
-                                stopCount++;
-                            }
-                            if (numberIsOnBoard(x-reverseCounter*i) && numberIsOnBoard(y-reverseCounter*j)) {
-                                if (boardState[x - (reverseCounter * i)][y - (reverseCounter * j)].getColor() == lastColor) {
-                                    reverseCounter++;
-                                }else{
-                                    stopCount++;
-                                }
-                            }else{
-                                stopCount++;
-                            }
+
+                if (!numberIsOnBoard(x + i) || !numberIsOnBoard(y + j) || (i == 0 && j == 0)) {
+                    continue;
+                }
+                if (boardState[x + i][y + j].getColor() != lastColor) {
+                    continue;
+                }
+
+                int counter = 2;
+                int reverseCounter = 1;
+                int stopCount = 0;
+                while (counter + reverseCounter - 1 < steps && stopCount != 2) {
+                    stopCount = 0;
+                    if (numberIsOnBoard(x + counter * i) && numberIsOnBoard(y + counter * j)) {
+                        if (boardState[x + (counter * i)][y + (counter * j)].getColor() == lastColor) {
+                            counter++;
+                        } else {
+                            stopCount++;
                         }
-                        if(counter+reverseCounter-1==steps){
-                            return lastColor;
-                        }
+                    } else {
+                        stopCount++;
                     }
+                    if (numberIsOnBoard(x - reverseCounter * i) && numberIsOnBoard(y - reverseCounter * j)) {
+                        if (boardState[x - (reverseCounter * i)][y - (reverseCounter * j)].getColor() == lastColor) {
+                            reverseCounter++;
+                        } else {
+                            stopCount++;
+                        }
+                    } else {
+                        stopCount++;
+                    }
+                }
+                if (counter + reverseCounter - 1 == steps) {
+                    return lastColor;
                 }
             }
         }
