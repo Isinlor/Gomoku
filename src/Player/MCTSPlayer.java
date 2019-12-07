@@ -32,6 +32,11 @@ public class MCTSPlayer implements Player {
         MCTSNode root = new MCTSNode(board,null, smartMoveSelector);
         Color MCTSColor = root.getState().getCurrentColor();
 
+        // return immediately if there is only one move to consider
+        if(root.getUntriedMoves().size() == 1) {
+            return root.getUntriedMoves().get(0);
+        }
+
         //
         double startTime = System.currentTimeMillis();
         int maxDepth = 100;
