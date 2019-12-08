@@ -2,24 +2,40 @@ package Board;
 
 import Contract.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class SimpleBoard implements Board {
 
     private int boardSize;
-    private Color currentTurn = Color.Black;
     private BoardCell[][] boardState;
+    protected Color currentTurn = Color.Black;
+
+    private Move lastMove;
+    private Color lastColor;
+
+    private Color winner = null;
+
+    private HashSet<Move> validMoves = new HashSet<>();
 
     public SimpleBoard(ReadableBoard board) {
+
         boardSize = board.getSize();
         currentTurn = board.getCurrentColor();
+        lastMove = board.getLastMove();
+        lastColor = board.getCurrentColor().getOpposite();
+        winner = board.getWinner();
+
         this.boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
-                this.boardState[x][y] = board.getCell(x, y);
+                BoardCell cell = board.getCell(x, y);
+                this.boardState[x][y] = cell;
+                if(cell == BoardCell.Empty) {
+                    validMoves.add(new Move(x, y));
+                }
             }
         }
+
     }
 
     // TODO: Add unit tests
@@ -41,6 +57,9 @@ public class SimpleBoard implements Board {
                     case White:
                         white++;
                         break;
+                    case Empty:
+                        validMoves.add(new Move(x, y));
+                        break;
                 }
                 // make sure that board state is not mutable outside the class
                 this.boardState[x][y] = boardState[x][y];
@@ -55,6 +74,8 @@ public class SimpleBoard implements Board {
             currentTurn = Color.White;
         }
 
+        winner = getWinner(5);
+
     }
 
     public SimpleBoard(int boardSize) {
@@ -63,16 +84,20 @@ public class SimpleBoard implements Board {
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
                 boardState[x][y] = BoardCell.Empty;
+                validMoves.add(new Move(x, y));
             }
         }
     }
 
     public void resetBoard(){
+        validMoves = new HashSet<>();
         for (int x = 0; x <boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
                 boardState[x][y]=BoardCell.Empty;
+                validMoves.add(new Move(x, y));
             }
         }
+        winner = null;
     }
 
     public BoardCell getCell(int x, int y) {
@@ -96,19 +121,21 @@ public class SimpleBoard implements Board {
         return currentTurn;
     }
 
-    public ArrayList<Move> getValidMoves() {
-        ArrayList<Move> moves = new ArrayList<Move>();
-        for (int x = 0; x < getSize(); x++) {
-            for (int y = 0; y < getSize(); y++) {
-                if(boardState[x][y] == BoardCell.Empty) {
-                    moves.add(new Move(x, y));
-                }
-            }
+    public Moves getValidMoves() {
+
+        if(winner != null) {
+            return new Moves(); // there are no valid moves if there is a winner
         }
-        return moves;
+
+        return new Moves(validMoves);
+
     }
 
     public boolean isValidMove(Move move) {
+        if(winner != null) {
+            return false;
+        }
+
         if(move.x < 0 || move.y < 0 || move.x >= boardSize || move.y >= boardSize) {
             return false;
         }
@@ -120,7 +147,15 @@ public class SimpleBoard implements Board {
         return true;
     }
 
+    public Move getLastMove() {
+        return lastMove;
+    }
+
     public void move(Move move) throws WrongMoveException {
+
+        if(winner != null) {
+            throw new WrongMoveException("This board is finished! The game was won by: " + winner.name());
+        }
 
         int x = move.x;
         int y = move.y;
@@ -141,13 +176,20 @@ public class SimpleBoard implements Board {
         switch (getCurrentColor()) {
             case Black:
                 boardState[x][y] = BoardCell.Black;
+                lastMove = move;
+                lastColor = getCurrentColor();
                 currentTurn = Color.White;
                 break;
             case White:
                 boardState[x][y] = BoardCell.White;
+                lastMove = move;
+                lastColor = getCurrentColor();
                 currentTurn = Color.Black;
                 break;
         }
+
+        winner = getWinner(5);
+        validMoves.remove(new Move(x, y));
 
     }
 
@@ -171,17 +213,24 @@ public class SimpleBoard implements Board {
             case Black:
                 boardState[x][y] = BoardCell.Empty;
                 currentTurn = Color.White;
+                lastColor = null;
+                lastMove = null;
                 break;
             case White:
                 boardState[x][y] = BoardCell.Empty;
                 currentTurn = Color.Black;
+                lastColor = null;
+                lastMove = null;
                 break;
         }
+
+        winner = null;
+        validMoves.add(new Move(x, y));
 
     }
 
     public SimpleBoard getWithMove(Move move) throws WrongMoveException {
-        SimpleBoard newBoard = new SimpleBoard(boardState);
+        SimpleBoard newBoard = new SimpleBoard(this);
         newBoard.move(move);
         return newBoard;
     }
@@ -191,18 +240,74 @@ public class SimpleBoard implements Board {
     }
 
     public boolean isFull() {
-        for (int x = 0; x < getSize(); x++) {
-            for (int y = 0; y < getSize(); y++) {
-                if(getCell(x, y) == BoardCell.Empty) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return validMoves.isEmpty();
     }
 
     public boolean hasWinner() {
-        return hasWinner(5);
+        return getWinner() != null;
+    }
+
+    public boolean hasWinner( int steps ) {
+        return getWinner(steps)!=null;
+    }
+
+    public Color getWinner() {
+        return winner;
+    }
+
+    //RETURNS WINNING COLOR OR NULL IF THERE'S A LOSS
+    public Color getWinner(int steps) throws NoWinnerException {
+
+        if (lastMove == null || lastColor == null) {
+            return getWinnerByFullBoardCheck(steps);
+        }
+
+        int x = lastMove.x;
+        int y = lastMove.y;
+        for (int j = -1; j <= 1; j++) {
+            for (int i = -1; i <= 1; i++) {
+
+                if (!numberIsOnBoard(x + i) || !numberIsOnBoard(y + j) || (i == 0 && j == 0)) {
+                    continue;
+                }
+                if (boardState[x + i][y + j].getColor() != lastColor) {
+                    continue;
+                }
+
+                int counter = 2;
+                int reverseCounter = 1;
+                int stopCount = 0;
+                while (counter + reverseCounter - 1 < steps && stopCount != 2) {
+                    stopCount = 0;
+                    if (numberIsOnBoard(x + counter * i) && numberIsOnBoard(y + counter * j)) {
+                        if (boardState[x + (counter * i)][y + (counter * j)].getColor() == lastColor) {
+                            counter++;
+                        } else {
+                            stopCount++;
+                        }
+                    } else {
+                        stopCount++;
+                    }
+                    if (numberIsOnBoard(x - reverseCounter * i) && numberIsOnBoard(y - reverseCounter * j)) {
+                        if (boardState[x - (reverseCounter * i)][y - (reverseCounter * j)].getColor() == lastColor) {
+                            reverseCounter++;
+                        } else {
+                            stopCount++;
+                        }
+                    } else {
+                        stopCount++;
+                    }
+                }
+                if (counter + reverseCounter - 1 == steps) {
+                    return lastColor;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean numberIsOnBoard(int number) {
+        return number >= 0 && number < boardSize;
     }
 
     public boolean checkRows(int x, int y){
@@ -313,15 +418,7 @@ public class SimpleBoard implements Board {
         return false;
     }
 
-    public boolean hasWinner( int steps ) {
-        return getWinner(steps)!=null;
-    }
-
-    public Color getWinner() throws NoWinnerException {
-        return getWinner(5);
-    }
-
-    public Color getWinner(int steps) throws NoWinnerException {
+    public Color getWinnerByFullBoardCheck(int steps) throws NoWinnerException {
         for (int x = 0; x < this.getSize(); x++) {
             for (int y = 0; y < this.getSize(); y++) {
                 if (this.checkRows(x, y, steps)) {
@@ -335,9 +432,23 @@ public class SimpleBoard implements Board {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Board (" + getSize() + "x" + getSize() + "):\n");
-        stringBuilder.append("Current color: " + getCurrentColor() + "\n");
+        stringBuilder.append("Next Move: " + getCurrentColor() + "\n");
+        stringBuilder.append("Last " + lastMove + "\n");
+        stringBuilder.append("\tY ");
+        for (int i = 0; i < getSize(); i++) {
+            stringBuilder.append(i % 10 + " ");
+        }
+        stringBuilder.append("\nX\t  ");
+        for (int i = 0; i < getSize(); i++) {
+            stringBuilder.append("--");
+        }
+        stringBuilder.append("\n");
         for (int x = 0; x < getSize(); x++) {
+            stringBuilder.append(x+"\t| ");
             for (int y = 0; y < getSize(); y++) {
+                if(lastMove != null && lastMove.x == x && lastMove.y == y) {
+                    stringBuilder.append("\u001b[1m\u001b[32m");
+                }
                 switch (getCell(x, y)) {
                     case Black:
                         stringBuilder.append("B");
@@ -349,9 +460,16 @@ public class SimpleBoard implements Board {
                         stringBuilder.append(" ");
                         break;
                 }
+                if(lastMove != null && lastMove.x == x && lastMove.y == y) {
+                    stringBuilder.append("\u001b[0m");
+                }
                 stringBuilder.append(" ");
             }
-            stringBuilder.append("\n");
+            stringBuilder.append("|\n");
+        }
+        stringBuilder.append(" \t  ");
+        for (int i = 0; i < getSize(); i++) {
+            stringBuilder.append("--");
         }
         return stringBuilder.toString();
     }

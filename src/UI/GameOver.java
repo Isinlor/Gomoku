@@ -22,12 +22,10 @@ public class GameOver {
         }else if(board.getWinner().toString().equals("Black")) {
             label = new Label(boardUI.getP2Name() + " has won!");
         }else{label = null;}
-        Button button = new Button("New Game");
+        Button button = new Button("Close");
 
         button.setOnAction(e -> {
-            board.resetBoard();
             gameover.close();
-            boardUI.updateBoard();
         });
 
 

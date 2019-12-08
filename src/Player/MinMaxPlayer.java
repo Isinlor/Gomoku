@@ -5,28 +5,36 @@ import Board.SimpleBoard;
 
 public class MinMaxPlayer implements Player {
 
-    private SimpleBoard board;
     private Evaluation evaluation;
     private MoveSelector moveSelector;
+    private int depth;
 
-    public MinMaxPlayer(Evaluation evaluation, MoveSelector moveSelector) {
+    public MinMaxPlayer(Evaluation evaluation, MoveSelector moveSelector, int depth) {
         this.evaluation = evaluation;
         this.moveSelector = moveSelector;
+        this.depth = depth;
     }
 
-    public Move getMove(ReadableBoard board) {
+    public Move getMove(ReadableBoard givenBoard) {
 
-        this.board = new SimpleBoard(board);
+        SimpleBoard board = new SimpleBoard(givenBoard);
 
         Move bestMove = null;
         double bestEvaluation = Double.NaN;
 
+        double alpha = Double.NEGATIVE_INFINITY;
+        double beta = Double.POSITIVE_INFINITY;
+
         for (Move move: moveSelector.getMoves(board)) {
 
-            double moveEvaluation = min(move, 3);
+            double moveEvaluation = min(board, move, depth, alpha, beta);
             if(bestMove == null || moveEvaluation > bestEvaluation) {
                 bestMove = move;
                 bestEvaluation = moveEvaluation;
+                alpha = moveEvaluation;
+                if(alpha >= beta) {
+                    break;
+                }
             }
 
         }
@@ -35,11 +43,11 @@ public class MinMaxPlayer implements Player {
 
     }
 
-    public double max(Move move, int depth) {
+    private double max(SimpleBoard board, Move move, int depth, double alpha, double beta) {
 
         board.move(move);
 
-        if(board.isGameFinished() || depth == 0) {
+        if(depth == 0 || board.isGameFinished()) {
             double eval = evaluation.evaluate(board);
             board.revertMove(move);
             return eval;
@@ -50,10 +58,14 @@ public class MinMaxPlayer implements Player {
 
         for (Move nextMove: moveSelector.getMoves(board)) {
 
-            double nextMoveEvaluation = min(nextMove, depth - 1);
+            double nextMoveEvaluation = min(board, nextMove, depth - 1, alpha, beta);
             if(bestNextMove == null || nextMoveEvaluation > bestEvaluation) {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
+                alpha = bestEvaluation;
+                if(alpha >= beta || bestEvaluation == Evaluation.Win) {
+                    break;
+                }
             }
 
         }
@@ -64,11 +76,11 @@ public class MinMaxPlayer implements Player {
 
     }
 
-    private double min(Move move, int depth) {
+    private double min(SimpleBoard board, Move move, int depth, double alpha, double beta) {
 
         board.move(move);
 
-        if(board.isGameFinished() || depth == 0) {
+        if(depth == 0 || board.isGameFinished()) {
             double eval = -evaluation.evaluate(board);
             board.revertMove(move);
             return eval;
@@ -79,10 +91,14 @@ public class MinMaxPlayer implements Player {
 
         for (Move nextMove: moveSelector.getMoves(board)) {
 
-            double nextMoveEvaluation = max(nextMove, depth - 1);
+            double nextMoveEvaluation = max(board, nextMove, depth - 1, alpha, beta);
             if(bestNextMove == null || nextMoveEvaluation < bestEvaluation) {
                 bestNextMove = nextMove;
                 bestEvaluation = nextMoveEvaluation;
+                beta = bestEvaluation;
+                if(alpha >= beta || bestEvaluation == Evaluation.Lost) {
+                    break;
+                }
             }
 
         }

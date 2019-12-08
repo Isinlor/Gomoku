@@ -8,6 +8,6 @@ import java.util.Collection;
 
 public class AllMovesSelector implements MoveSelector {
     public Collection<Move> getMoves(ReadableBoard board) {
-        return board.getValidMoves();
+        return board.getValidMoves().getCopy();
     }
 }
