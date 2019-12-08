@@ -3,7 +3,6 @@ package CLI;
 import Board.*;
 import Contract.*;
 import Player.*;
-import Evaluation.*;
 
 import java.util.Scanner;
 
@@ -16,7 +15,7 @@ public class CLI {
 
         Game game = setupGame();
 
-        SimpleBoard board = new SimpleBoard(5);
+        SimpleBoard board = new SimpleBoard(8);
 
         game.play(board);
 
@@ -25,7 +24,7 @@ public class CLI {
     }
 
     public static Game setupGame() {
-        System.out.println("Available players: " + Players.getPlayerNames());
+        System.out.println("Available players: " + Players.getNames());
 
         Player blackPlayer = selectPlayer(Color.Black);
         Player whitePlayer = selectPlayer(Color.White);
@@ -35,12 +34,12 @@ public class CLI {
 
     public static Player selectPlayer(Color color) {
         String playerName = null;
-        while(!Players.getPlayerNames().contains(playerName)) {
+        while(!Players.getNames().contains(playerName)) {
             System.out.println("Select " + color.name() + " player:\n");
             Scanner sc = new Scanner(System.in);
             playerName = sc.nextLine();
         }
-        return Players.getPlayer(playerName);
+        return Players.get(playerName);
     }
 
 }

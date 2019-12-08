@@ -177,5 +177,48 @@ public class BoardTest extends SimpleUnitTest {
             assertTrue(board.getWinner(4)==Color.Black);
         });
 
+        it("correctly evaluates a game", () -> {
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            assertTrue(!board.hasWinner());
+            assertColor(board.getWinner(), null);
+            assertColor(board.getCurrentColor(), B.getColor());
+
+            board.move(new Move(0, 0));
+            assertTrue(!board.hasWinner());
+            assertColor(board.getWinner(), null);
+            assertColor(board.getCurrentColor(), W.getColor());
+
+            board.move(new Move(1, 0));
+            assertTrue(!board.hasWinner());
+            assertColor(board.getWinner(), null);
+            assertColor(board.getCurrentColor(), B.getColor());
+
+            // black in left most column (x=0)
+            // white in next column (x=1)
+            board.move(new Move(0, 1));
+            board.move(new Move(1, 1));
+            board.move(new Move(0, 2));
+            board.move(new Move(1, 2));
+            board.move(new Move(0, 3));
+            board.move(new Move(1, 3));
+
+            assertTrue(!board.hasWinner());
+            assertColor(board.getWinner(), null);
+            assertColor(board.getCurrentColor(), B.getColor());
+
+            board.move(new Move(0, 4));
+            assertColor(board.getWinner(), B.getColor());
+            assertTrue(board.hasWinner());
+            assertTrue(board.isGameFinished());
+
+            board.revertMove(new Move(0, 4));
+            assertTrue(!board.hasWinner());
+            assertColor(board.getWinner(), null);
+            assertColor(board.getCurrentColor(), B.getColor());
+
+        });
+
     }
 }

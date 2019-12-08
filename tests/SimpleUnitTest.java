@@ -1,4 +1,6 @@
 import Contract.BoardCell;
+import Contract.Color;
+import Contract.Move;
 
 /**
  * Simple unit test framework.
@@ -107,6 +109,23 @@ abstract class SimpleUnitTest {
     }
 
     /**
+     * This methods allows to assert that two longs or ints are equal.
+     *
+     * @param actual The actual value.
+     * @param expected The expected value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertEqual(long actual, long expected) throws RuntimeException {
+        assertTrue(
+            actual == expected,
+            "Two numbers are not equal!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + expected + "\n"
+        );
+    }
+
+    /**
      * This methods allows to assert that two doubles are equal with certain tolerance.
      *
      * @param actual The actual value.
@@ -137,6 +156,40 @@ abstract class SimpleUnitTest {
      */
     protected static void assertEqual(double actual, double expected, double tolerance) throws RuntimeException {
         assertEqual(actual, expected, tolerance, "");
+    }
+
+    /**
+     * This methods allows to assert that two colors are equal.
+     *
+     * @param actual The actual value.
+     * @param expected The expected value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertColor(Color actual, Color expected) throws RuntimeException {
+        assertTrue(
+            actual == expected,
+            "Two colors are not equal!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + expected + "\n"
+        );
+    }
+
+    /**
+     * This methods allows to assert that two moves are equal.
+     *
+     * @param actual The actual value.
+     * @param expected The expected value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertMove(Move actual, Move expected) throws RuntimeException {
+        assertTrue(
+            actual.equals(expected),
+            "Two moves are not equal!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + expected + "\n"
+        );
     }
 
     /**

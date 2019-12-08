@@ -2,20 +2,24 @@ package Player;
 
 import Contract.*;
 
-import java.util.Random;
+import java.util.*;
 
 public class RandomPlayer implements Player {
+
+    private MoveSelector moveSelector;
+
+    public RandomPlayer(MoveSelector moveSelector) {
+        this.moveSelector = moveSelector;
+    }
 
     public Move getMove(ReadableBoard board) {
 
         Move move;
         Random random = new Random();
 
-        do {
-            move = new Move(random.nextInt(board.getSize()), random.nextInt(board.getSize()));
-        } while (board.getCell(move.x, move.y) != BoardCell.Empty);
+        List<Move> moves = new ArrayList<>(moveSelector.getMoves(board));
 
-        return move;
+        return moves.get(random.nextInt(moves.size()));
 
     }
 

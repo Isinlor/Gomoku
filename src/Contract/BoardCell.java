@@ -1,13 +1,17 @@
 package Contract;
 
 public enum BoardCell {
+
     Black, White, Empty;
 
     public Color getColor() {
-        if(name().equals("Empty")) {
-            return null;
+        switch (this) {
+            case Black:
+                return Color.Black;
+            case White:
+                return Color.White;
         }
-        return Color.valueOf(name());
+        return null;
     }
 
 }

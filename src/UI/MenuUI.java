@@ -6,6 +6,7 @@ import Contract.Game;
 import Contract.Move;
 import Contract.Player;
 import Player.Players;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -45,9 +46,12 @@ public class MenuUI extends Application{
     private final int BOARD_PANEL_SIZE = 750;
     private Label currentPlayer;
     private Label justPlayer;
+    private Label loading;
+    private Button reset;
     private Scene menuScene;
     private boolean pvpMode = true;
     private String aiMode = null;
+    private boolean paused = false;
 
     private Player aiPlayer = null;
 
@@ -100,7 +104,7 @@ public class MenuUI extends Application{
             Text aiChooseText = new Text("Select the ai you want to use below:");
             aiChooseText.setFont(new Font("Helvetica",16));
             ComboBox aiOptions = new ComboBox();
-            Collection<String> ais = Players.getPlayerNames();
+            Collection<String> ais = Players.getNames();
             ais.remove("human");
             aiOptions.getItems().addAll(ais);
             EventHandler<ActionEvent> aiOptionsEvent = new EventHandler<ActionEvent>() {
@@ -132,13 +136,22 @@ public class MenuUI extends Application{
                     justPlayer.setText("Player: ");
                     currentPlayer = new Label();
                     currentPlayer.setStyle("-fx-font:14 arial;");
+                    loading = new Label();
+                    loading.setStyle("-fx-font:12 arial;");
                     infoPanel.setPrefSize(BOARD_PANEL_SIZE / 4, BOARD_PANEL_SIZE);
                     infoPanel.setStyle("-fx-background-color: #808080;");
+                    reset = new Button("New Game");
+
+                    reset.setOnAction(e -> {
+                        board.resetBoard();
+                        paused = false;
+                        updateBoard();
+                    });
                     Scene scene = new Scene(root, 950, 767);
                     primaryStage.setScene(scene);
 
                     if(aiMode!=null) {
-                        aiPlayer = Players.getPlayer(aiMode.toLowerCase());
+                        aiPlayer = Players.get(aiMode.toLowerCase());
                     }
 
                     int boardSize = Integer.parseInt(boardSizeTextField.getCharacters().toString());
@@ -216,6 +229,20 @@ public class MenuUI extends Application{
 
     }
 
+    Runnable aiPlayerRunnable = () -> {
+        board.move(aiPlayer.getMove(board));
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run() {
+                paused = false;
+                loading.setText("");
+                updateBoard();
+            }
+        });
+    };
+
+
     public void updateBoard(){
         boardSize = board.getSize();
         GridPane gameBoard = new GridPane();
@@ -229,31 +256,36 @@ public class MenuUI extends Application{
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
 
-                Rectangle tile = new Rectangle(50, 50);
+                Rectangle tile = new Rectangle(750/boardSize, 750/boardSize);
                 tile.setFill(Color.BURLYWOOD);
                 tile.setStroke(BLACK);
 
                 final int cell_x = x;
                 final int cell_y = y;
 
-                tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
+                if(!paused) {
+                    tile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
 
-                        System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
-                        try {
-                            board.move(new Move(cell_x,cell_y));
-                            if(aiPlayer!=null){
-                                board.move(aiPlayer.getMove(board));
+                            System.out.printf("Mouse entered cell [%d, %d]%n", cell_x, cell_y);
+                            try {
+                                board.move(new Move(cell_x, cell_y));
+                                if (aiPlayer != null && !board.hasWinner()) {
+                                    paused = true;
+                                    loading.setText("Loading...");
+                                    Thread thread = new Thread(aiPlayerRunnable);
+                                    thread.start();
+                                }
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
                             }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
+
+                            updateBoard();
+
                         }
-
-                        updateBoard();
-
-                    }
-                });
+                    });
+                }
 
                 gameBoard.add(new StackPane(tile), y, x);
 
@@ -280,10 +312,10 @@ public class MenuUI extends Application{
         if(board.hasWinner()){
             System.out.println(board.getWinner() + " won!");
             GameOver.display(board, this);
-
+            paused = true;
         }
 
-        infoPanel.getChildren().setAll(justPlayer, currentPlayer);
+        infoPanel.getChildren().setAll(justPlayer, currentPlayer, loading, reset);
         root.getChildren().setAll(gameBoard, infoPanel);
     }
 

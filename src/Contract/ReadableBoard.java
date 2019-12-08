@@ -1,6 +1,9 @@
 package Contract;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import Board.Moves;
 
 public interface ReadableBoard {
 
@@ -34,9 +37,11 @@ public interface ReadableBoard {
 
     Color getWinner() throws NoWinnerException;
 
-    ArrayList<Move> getValidMoves();
+    Moves getValidMoves();
 
     boolean isValidMove(Move move);
+
+    Move getLastMove();
 
     /**
      * Returns *new board* with the given move.
