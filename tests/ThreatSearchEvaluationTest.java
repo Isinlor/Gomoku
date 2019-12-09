@@ -90,6 +90,21 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
             assertEqual(new ThreatSearchGlobal().evaluate(board), 9,0.1);
         });
 
+        it("evaluates a complex situation", () -> {
+            BoardCell[][] boardState = {
+                {E, E, E, E, E, E, E},
+                {E, E, W, W, E, E, E},
+                {E, E, W, E, B, E, E},
+                {E, E, E, B, E, E, E},
+                {E, E, B, E, E, E, E},
+                {E, E, E, E, E, E, E},
+                {E, E, E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertBlack(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), 9 - (4*3), 0.1);
+        });
+
     }
 
 }
