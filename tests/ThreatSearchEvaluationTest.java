@@ -49,6 +49,34 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
             assertEqual(new ThreatSearchGlobal().evaluate(board), -9,0.1);
         });
 
+        it("gives score -9 to White because Black Open 3 in a diagonal", () -> {
+            BoardCell[][] boardState = {
+                {W, E, E, E, E},
+                {E, E, E, B, E},
+                {E, E, B, E, E},
+                {E, B, E, E, E},
+                {E, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertWhite(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), -9,0.1);
+        });
+
+        it("gives score -16 to White because Black Open 4 in a diagonal", () -> {
+            BoardCell[][] boardState = {
+                {W, E, E, E, E, E, W},
+                {E, E, E, E, E, E, E},
+                {E, E, E, E, B, E, E},
+                {E, E, E, B, E, E, E},
+                {E, E, B, E, E, E, E},
+                {E, B, E, E, E, E, E},
+                {E, E, E, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertWhite(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), -16,0.1);
+        });
+
         it("gives score 9 to Black because Black Open 3 in a row", () -> {
             BoardCell[][] boardState = {
                 {E, E, W, E, E},
