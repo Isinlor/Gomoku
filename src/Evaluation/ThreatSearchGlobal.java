@@ -256,12 +256,12 @@ public class ThreatSearchGlobal implements Evaluation {
                 }
             }
         }
-        for (int j = 1; j < board.getSize()-5; j++) {
+        for (int j = 1; j < board.getSize()-4; j++) {
             int steps = 1;
             boolean openTop = false;
             boolean openBottom;
             BoardCell color = BoardCell.Empty;
-            for (int i = board.getSize()-1; i >= j; i--) {
+            for (int i = board.getSize()-1; i >= j; i--) { 
                 if (i-j  > 0) {
                     if (board.getCell(j , i-j).equals(BoardCell.Empty)) {
                         openBottom =true;
