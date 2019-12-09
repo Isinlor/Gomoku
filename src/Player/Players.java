@@ -5,9 +5,7 @@ import Board.Helpers.ForcedMoveSelector;
 import Board.Helpers.MoveSelectors;
 import Contract.Evaluation;
 import Contract.Player;
-import Evaluation.Evaluations;
-import Evaluation.NegamaxEvaluation;
-import Evaluation.WinLossEvaluation;
+import Evaluation.*;
 
 import java.util.Collection;
 import java.util.HashMap;
