@@ -61,7 +61,74 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
             assertBlack(board.getCurrentColor());
             assertEqual(new ThreatSearchGlobal().evaluate(board), 9,0.1);
         });
+        it("finds half-closed vertical and horizontal 3's(for white), finds open vertical and horizontal 3's (for black) eval = -13.5", () -> {
+            BoardCell[][] boardState = {
+                    {W, W, W, E, E, E, E, E, E, E},
+                    {W, E, E, E, E, E, E, E, E, E},
+                    {W, E, E, E, E, E, E, E, E, E},
+                    {E, E, B, E, B, B, B, E, E, E},
+                    {E, E, B, E, E, E, E, E, E, E},
+                    {E, E, B, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == -13.5);
+        });
 
+        it("Checks last column and row for B, W: Half-closed 3: eval 0 ", () -> {
+            BoardCell[][] boardState = {
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, W},
+                    {E, E, E, E, E, E, E, E, E, W},
+                    {E, E, E, E, E, E, B, B, B, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == 0
+            );
+        });
+
+        it("finds half-closed diagonal 3's(for white), finds open diagonal 3's (for black) eval = 13.5", () -> {
+            BoardCell[][] boardState = {
+                    {W, E, E, E, E, E, E, E, E, E},
+                    {E, W, E, E, E, E, E, E, B, E},
+                    {E, E, W, E, E, E, E, B, E, E},
+                    {E, E, E, E, E, E, B, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, B, E, E, E, E, E, E},
+                    {E, E, B, E, E, E, E, W, E, E},
+                    {E, B, E, E, E, E, E, E, W, E},
+                    {E, E, E, E, E, E, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == 13.5);
+        });
+
+        it("Checks last diagonals for B: open 3's ; W: half 3's. Eval = -13.5 ", () -> {
+            BoardCell[][] boardState = {
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, B, E, E, E, E, E, E},
+                    {E, E, B, E, E, E, E, W, E, E},
+                    {E, B, E, E, E, E, E, E, W, E},
+                    {E, E, E, E, E, E, E, E, E, W},
+                    {W, E, E, E, E, E, E, E, E, E},
+                    {E, W, E, E, E, E, E, E, B, E},
+                    {E, E, W, E, E, E, E, B, E, E},
+                    {E, E, E, E, E, E, B, E, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == 13.5);
+        });
     }
 
 }

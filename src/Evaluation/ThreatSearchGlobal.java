@@ -147,7 +147,8 @@ public class ThreatSearchGlobal implements Evaluation {
                     }
                     else if (!board.getCell(i + j, j).equals(board.getCell(i + j - 1, j - 1)) && !board.getCell(i + j, j).equals(BoardCell.Empty)) {
                         evalThreat(steps, openTop, false, board.getCell(i + j - 1, j - 1));
-                }}
+                    }
+                }
             }
         }
         for (int i = board.getSize() - 5; i > 0; i--) {
@@ -215,7 +216,10 @@ public class ThreatSearchGlobal implements Evaluation {
                 if (j-i  > 0) {
                     if (board.getCell(i , j - i).equals(BoardCell.Empty)) {
                         openBottom=true;
-                        if(steps>1) evalThreat(steps,openTop,openBottom,board.getCell(i+1, j-1-i));
+                        if(steps>1) {
+                            evalThreat(steps,openTop,openBottom,board.getCell(i+1, j-1-i));
+                            steps = 1;
+                        }
                         openTop = true;
 
                     } else if (board.getCell(i, j-i).equals(board.getCell(i + 1, j -i - 1)) && !board.getCell(i, j-i).equals(BoardCell.Empty)) {
@@ -234,11 +238,12 @@ public class ThreatSearchGlobal implements Evaluation {
                         openBottom = false;
                         evalThreat(steps, openTop, openBottom, board.getCell(i , j-i));
                         steps = 1;
+                        openTop = false;
                     }
                 }else{
                     if (board.getCell(i , j-i).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
-                        evalThreat(steps, openTop, openBottom, board.getCell(i , j-i));
+                        evalThreat(steps, openTop, openBottom, board.getCell(i -1, j - i +1));
                         steps = 1;
                         openTop = true;
                     }else if (board.getCell(i, j-i).equals(board.getCell(i -1, j - i +1)) && !board.getCell(i , j-i ).equals(BoardCell.Empty)) {
@@ -247,7 +252,8 @@ public class ThreatSearchGlobal implements Evaluation {
                     }
                     else if (!board.getCell(i , j- i).equals(board.getCell(i  - 1, j -i + 1)) && !board.getCell(i, j-i).equals(BoardCell.Empty)) {
                         evalThreat(steps, openTop, false, board.getCell(i  - 1, j -i + 1));
-                    }}
+                    }
+                }
             }
         }
         for (int j = 1; j < board.getSize()-5; j++) {
@@ -258,7 +264,11 @@ public class ThreatSearchGlobal implements Evaluation {
             for (int i = board.getSize()-1; i >= j; i--) {
                 if (i-j  > 0) {
                     if (board.getCell(j , i-j).equals(BoardCell.Empty)) {
-                        if(steps>1) evalThreat(steps,openTop,true,board.getCell(j+1, i-j-1));
+                        openBottom =true;
+                        if(steps>1) {
+                            evalThreat(steps,openTop,true,board.getCell(j+1, i-j-1));
+                            steps = 1;
+                        }
                         openTop = true;
                     } else if (board.getCell(j, i-j).equals(board.getCell(j + 1, i-j - 1)) && !board.getCell(j, i-j).equals(BoardCell.Empty)) {
                         steps++;
@@ -281,7 +291,7 @@ public class ThreatSearchGlobal implements Evaluation {
                 }else{
                     if (board.getCell(j , i-j).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
-                        evalThreat(steps, openTop, openBottom, board.getCell(j , i-j));
+                        evalThreat(steps, openTop, openBottom, board.getCell(j -1,  i- j +1));
                         steps = 1;
                         openTop = true;
                     }else if (board.getCell(j, i-j).equals(board.getCell(j -1,  i- j +1)) && !board.getCell(j , i-j ).equals(BoardCell.Empty)) {
@@ -290,7 +300,8 @@ public class ThreatSearchGlobal implements Evaluation {
                     }
                     else if (!board.getCell(j ,  i-j).equals(board.getCell(j  - 1, i-j + 1)) && !board.getCell(j, i-j).equals(BoardCell.Empty)) {
                         evalThreat(steps, openTop, false, board.getCell(j- 1, i-j + 1));
-                    }}
+                    }
+                }
             }
         }
     }
@@ -360,7 +371,9 @@ public class ThreatSearchGlobal implements Evaluation {
         evaluateColumns(board);
         evaluateRows(board);
         evaluateForDiagonal(board);
-     //   evaluateBackDiagonal(board);
+        evaluateBackDiagonal(board);
+
+        Logger.enabled =true;
         Logger.log("Threats for black" + threatsBlack);
         Logger.log("Threats for white" + threatsWhite);
         if (!threatsBlack.isEmpty())
@@ -369,7 +382,7 @@ public class ThreatSearchGlobal implements Evaluation {
         if (!threatsWhite.isEmpty())
             threatsWhiteValue = threatsWhite.stream().map(t -> threatValue(t)).reduce(0.0, (a, b) -> a + b);
         Logger.log(threatsBlackValue - threatsWhiteValue);
-
+        Logger.enabled = false;
         switch (board.getCurrentColor()) {
             case Black:
                 return threatsBlackValue - threatsWhiteValue;
@@ -378,6 +391,5 @@ public class ThreatSearchGlobal implements Evaluation {
             default:
                 throw new RuntimeException("Unexpected color: " + board.getCurrentColor());
         }
-
     }
 }

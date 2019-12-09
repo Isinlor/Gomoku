@@ -4,7 +4,7 @@ import Contract.Color;
 import Contract.Move;
 import Contract.ReadableBoard;
 
-public class BoardTest extends SimpleUnitTest {
+public class ThreatTest extends SimpleUnitTest {
 
     public static void main(String[] args) {
 
