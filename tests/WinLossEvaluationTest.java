@@ -4,7 +4,7 @@ import Contract.Color;
 import Contract.Move;
 import Evaluation.WinLossEvaluation;
 
-public class EvaluationTest extends SimpleUnitTest {
+public class WinLossEvaluationTest extends SimpleUnitTest {
 
     public static void main(String[] args) {
 
