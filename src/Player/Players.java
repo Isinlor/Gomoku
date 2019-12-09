@@ -42,6 +42,7 @@ public class Players {
         players.put("mcts60s+",new MCTSPlayer(
             MoveSelectors.get("forced5"), MoveSelectors.get("approximate"), 60
         ));
+        players.put("threat", new EvaluationPlayer(new ThreatSearchGlobal(), MoveSelectors.get("approximate")));
     }
 
     public static Player get(String name) {

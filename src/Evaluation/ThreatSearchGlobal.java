@@ -2,11 +2,12 @@ package Evaluation;
 
 import Contract.BoardCell;
 import Contract.Color;
+import Contract.Evaluation;
 import Contract.ReadableBoard;
 
 import java.util.ArrayList;
 
-public class ThreatSearchGlobal {
+public class ThreatSearchGlobal implements Evaluation {
 
     ArrayList<Threat> threatsWhite;
     ArrayList<Threat> threatsBlack;
