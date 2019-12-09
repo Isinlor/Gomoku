@@ -13,7 +13,7 @@ public class CLI {
 
     public static void main(String[] args) {
 
-        Game game = setupGame();
+        Game game = args.length == 0 ? setupGame() : new SimpleGame(Players.get(args[0]), Players.get(args[1]));
 
         SimpleBoard board = new SimpleBoard(8);
 
