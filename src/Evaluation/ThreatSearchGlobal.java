@@ -256,6 +256,7 @@ public class ThreatSearchGlobal implements Evaluation {
                 }
             }
         }
+        //TODO fix case for final diagonal
         for (int j = 1; j < board.getSize()-4; j++) {
             int steps = 1;
             boolean openTop = false;
