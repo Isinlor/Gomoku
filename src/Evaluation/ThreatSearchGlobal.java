@@ -4,6 +4,7 @@ import Contract.BoardCell;
 import Contract.Color;
 import Contract.Evaluation;
 import Contract.ReadableBoard;
+import UI.Logger;
 
 import java.util.ArrayList;
 
@@ -35,11 +36,11 @@ public class ThreatSearchGlobal implements Evaluation {
                 } else if (board.getCell(i, j).equals(board.getCell(i, j + 1)) && !board.getCell(i, j).equals(BoardCell.Empty)) {
                     steps++;
                     color = board.getCell(i, j);
-                    System.out.println(color);
-                    System.out.println(steps);
+                    Logger.log(color);
+                    Logger.log(steps);
                 } else if (board.getCell(i, j + 1).equals(BoardCell.Empty)) {
                     openRight = true;
-                    System.out.println(steps);
+                    Logger.log(steps);
                     evalThreat(steps, openLeft, openRight, board.getCell(i, j));
                     steps = 1;
                 } else if (!board.getCell(i, j).equals(board.getCell(i, j + 1)) && !board.getCell(i, j + 1).equals(BoardCell.Empty)) {
@@ -68,9 +69,9 @@ public class ThreatSearchGlobal implements Evaluation {
                         evalThreat(steps, openTop, openBottom, board.getCell(j, i));
                         steps = 1;
                     }
-                    // System.out.println("");
-                    // System.out.println(board.getCell(j, i));
-                    // System.out.println(board.getCell(j+1, i));
+                    // Logger.log();("");
+                    // Logger.log();(board.getCell(j, i));
+                    // Logger.log();(board.getCell(j+1, i));
                     else if (board.getCell(j + 1, i).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
                         evalThreat(steps, openTop, openBottom, color);
@@ -82,8 +83,8 @@ public class ThreatSearchGlobal implements Evaluation {
                     } else if (board.getCell(j, i).equals(board.getCell(j + 1, i)) && !board.getCell(j, i).equals(BoardCell.Empty)) {
                         steps++;
                         color = board.getCell(j, i);
-                        //   System.out.println("steps");
-                        //   System.out.println(steps);
+                        //   Logger.log();("steps");
+                        //   Logger.log();(steps);
 
                     } else if (!board.getCell(j, i).equals(board.getCell(j + 1, i)) && !board.getCell(j + 1, i).equals(BoardCell.Empty)) {
                         openBottom = false;
@@ -119,7 +120,7 @@ public class ThreatSearchGlobal implements Evaluation {
                     } else if (board.getCell(i + j, j).equals(board.getCell(i + j + 1, j + 1)) && !board.getCell(i + j, j).equals(BoardCell.Empty)) {
                         steps++;
                         color = board.getCell(i + j, j);
-                        System.out.println(steps + "LOOOK HERE ");
+                            Logger.log(steps + "LOOOK HERE ");
 
                     } else if (board.getCell(i + j + 1, j + 1).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
@@ -170,7 +171,7 @@ public class ThreatSearchGlobal implements Evaluation {
                     } else if (board.getCell(j,i+ j).equals(board.getCell( j + 1, i+j + 1)) && !board.getCell( j,i+ j).equals(BoardCell.Empty)) {
                         steps++;
                         color = board.getCell(j,i+ j);
-                        System.out.println(steps + "LOOOK HERE ");
+                        Logger.log(steps + "LOOOK HERE ");
 
                     } else if (board.getCell( j + 1, i + j + 1).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
@@ -219,7 +220,7 @@ public class ThreatSearchGlobal implements Evaluation {
                     } else if (board.getCell(i, j-i).equals(board.getCell(i + 1, j -i - 1)) && !board.getCell(i, j-i).equals(BoardCell.Empty)) {
                         steps++;
                         color = board.getCell(i, j-i);
-                        System.out.println(steps + "LOOOK HERE ");
+                        Logger.log(steps + "LOOOK HERE ");
 
                     } else if (board.getCell(i+ 1, j -i - 1).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
@@ -261,7 +262,7 @@ public class ThreatSearchGlobal implements Evaluation {
                     } else if (board.getCell(j, i-j).equals(board.getCell(j + 1, i-j - 1)) && !board.getCell(j, i-j).equals(BoardCell.Empty)) {
                         steps++;
                         color = board.getCell(j, i-j);
-                        System.out.println(steps + "LOOOK HERE ");
+                        Logger.log(steps + "LOOOK HERE ");
 
                     } else if (board.getCell(j+ 1, i-j - 1).equals(BoardCell.Empty) && steps > 1) {
                         openBottom = true;
@@ -296,8 +297,8 @@ public class ThreatSearchGlobal implements Evaluation {
 
     private void evalThreat(int steps, boolean openBefore, boolean openAfter, BoardCell color) {
         Threat threat = null;
-        System.out.println(openBefore);
-        System.out.println(openAfter);
+        Logger.log(openBefore);
+        Logger.log(openAfter);
         if (!openAfter && !openBefore) {}
         else if ((steps == 2 && openAfter && !openBefore) || (steps == 2 && !openAfter && openBefore)) {   //H2
             threat = Threat.HalfClosed2;
@@ -314,7 +315,7 @@ public class ThreatSearchGlobal implements Evaluation {
         }
 
 
-        System.out.println(threat + "+" + color);
+        Logger.log(threat + "+" + color);
         if (threat == null) {
         } else {
             if (color.equals(BoardCell.Black)) {
@@ -327,7 +328,7 @@ public class ThreatSearchGlobal implements Evaluation {
 
 
     private double threatValue(Threat threat) {
-        if (threat == null) System.out.println("I am fucked up here!");
+        if (threat == null) Logger.log("I am fucked up here!");
         else {
             switch (threat) {
                 case HalfClosed2:
@@ -355,18 +356,27 @@ public class ThreatSearchGlobal implements Evaluation {
         double threatsBlackValue = 0;
         double threatsWhiteValue = 0;
 
-      //  evaluateColumns(board);
-      //  evaluateRows(board);
+        evaluateColumns(board);
+        evaluateRows(board);
         evaluateForDiagonal(board);
      //   evaluateBackDiagonal(board);
-        System.out.println("Threats for black" + threatsBlack);
-        System.out.println("Threats for white" + threatsWhite);
+        Logger.log("Threats for black" + threatsBlack);
+        Logger.log("Threats for white" + threatsWhite);
         if (!threatsBlack.isEmpty())
             threatsBlackValue = threatsBlack.stream().map(t -> threatValue(t)).reduce(0.0, (a, b) -> a + b);
 
         if (!threatsWhite.isEmpty())
             threatsWhiteValue = threatsWhite.stream().map(t -> threatValue(t)).reduce(0.0, (a, b) -> a + b);
-        System.out.println(threatsBlackValue - threatsWhiteValue);
-        return threatsBlackValue - threatsWhiteValue;
+        Logger.log(threatsBlackValue - threatsWhiteValue);
+
+        switch (board.getCurrentColor()) {
+            case Black:
+                return threatsBlackValue - threatsWhiteValue;
+            case White:
+                return threatsWhiteValue - threatsBlackValue;
+            default:
+                throw new RuntimeException("Unexpected color: " + board.getCurrentColor());
+        }
+
     }
 }

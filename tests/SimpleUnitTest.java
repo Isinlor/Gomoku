@@ -159,6 +159,38 @@ abstract class SimpleUnitTest {
     }
 
     /**
+     * This methods allows to assert that the color is black.
+     *
+     * @param actual The actual value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertBlack(Color actual) throws RuntimeException {
+        assertTrue(
+            actual == Color.Black,
+            "Asserting black failed!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + Color.Black + "\n"
+        );
+    }
+
+    /**
+     * This methods allows to assert that the color is white.
+     *
+     * @param actual The actual value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertWhite(Color actual) throws RuntimeException {
+        assertTrue(
+            actual == Color.White,
+            "Asserting white failed!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + Color.White + "\n"
+        );
+    }
+
+    /**
      * This methods allows to assert that two colors are equal.
      *
      * @param actual The actual value.

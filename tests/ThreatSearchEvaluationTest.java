@@ -10,34 +10,56 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
 
         System.out.println("\n\nEvaluation Threat Search Test\n");
 
-        it("gives evaluation 0", () -> {
+        it("gives score -1 to White because Black Half Closed 2 in a row", () -> {
             BoardCell[][] boardState = {
-                    {W, E, B, E, B, B, E, E, E, W},
-                    {W, E, E, B, W, E, B, E, E, E},
-                    {W, W, B, E, B, E, E, B, E, E},
-                    {E, E, E, E, E, B, W, E, B, E},
-                    {E, E, E, E, E, E, E, W, E, W},
-                    {W, B, E, E, E, B, W, E, W, E},
-                    {W, E, E, E, E, E, E, E, W, E},
-                    {E, E, B, W, W, E, E, B, E, E},
-                    {E, B, E, E, E, E, W, E, B, E},
-                    {B, W, W, E, E, E, E, E, B, B},
+                {E, E, E, E, E},
+                {E, E, E, E, E},
+                {W, B, B, E, E},
+                {E, E, E, E, E},
+                {E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
-            assertTrue(new ThreatSearchGlobal().evaluate(board) == 2);
+            assertWhite(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), -1, 0.1);
         });
 
-        it("gives 0  score to board ", () -> {
+        it("gives score -4 to White because Black Open 2 in a row", () -> {
             BoardCell[][] boardState = {
-                    {W, E, B, E, E},
-                    {E, W, E, E, E},
-                    {E, E, E, E, E},
-                    {E, E, E, E, E},
-                    {E, E, E, E, E},
+                {E, E, E, E, E},
+                {E, E, E, E, E},
+                {E, B, B, E, W},
+                {E, E, E, E, E},
+                {E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
-            assertTrue(new ThreatSearchGlobal().evaluate(board) == 0
-            );
+            assertWhite(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), -4,0.1);
+        });
+
+        it("gives score -9 to White because Black Open 3 in a row", () -> {
+            BoardCell[][] boardState = {
+                {E, E, E, E, E},
+                {E, E, E, E, E},
+                {E, B, B, B, E},
+                {E, E, E, E, E},
+                {W, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertWhite(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), -9,0.1);
+        });
+
+        it("gives score 9 to Black because Black Open 3 in a row", () -> {
+            BoardCell[][] boardState = {
+                {E, E, W, E, E},
+                {E, E, E, E, E},
+                {E, B, B, B, E},
+                {E, E, E, E, E},
+                {W, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertBlack(board.getCurrentColor());
+            assertEqual(new ThreatSearchGlobal().evaluate(board), 9,0.1);
         });
 
     }
