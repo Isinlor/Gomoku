@@ -257,50 +257,51 @@ public class ThreatSearchGlobal implements Evaluation {
             }
         }
         //TODO fix case for final diagonal
-        for (int j = 1; j < board.getSize()-4; j++) {
-            int steps = 1;
-            boolean openTop = false;
-            boolean openBottom;
-            BoardCell color = BoardCell.Empty;
-            for (int i = board.getSize()-1; i >= j; i--) {
-                if (i-j  > 0) {
-                    if (board.getCell(j , i-j).equals(BoardCell.Empty)) {
-                        openBottom =true;
-                        if(steps>1) {
-                            evalThreat(steps,openTop,true,board.getCell(j+1, i-j-1));
+        if (board.getSize()>5) {
+            for (int j = 1; j <= board.getSize() - 4; j++) {
+                int steps = 1;
+                boolean openTop = false;
+                boolean openBottom;
+                BoardCell color = BoardCell.Empty;
+                for (int i = board.getSize() - 1; i > board.getSize() - 5; i--) {
+                    if (i - j > 0) {
+                        if (board.getCell(j, i - j).equals(BoardCell.Empty)) {
+                            openBottom = true;
+                            if (steps > 1) {
+                                evalThreat(steps, openTop, true, board.getCell(j + 1, i - j - 1));
+                                steps = 1;
+                            }
+                            openTop = true;
+                        } else if (board.getCell(j, i - j).equals(board.getCell(j + 1, i - j - 1)) && !board.getCell(j, i - j).equals(BoardCell.Empty)) {
+                            steps++;
+                            color = board.getCell(j, i - j);
+                            Logger.log(steps + "LOOOK HERE ");
+
+                        } else if (board.getCell(j + 1, i - j - 1).equals(BoardCell.Empty) && steps > 1) {
+                            openBottom = true;
+                            evalThreat(steps, openTop, openBottom, board.getCell(j, i - j));
                             steps = 1;
+                            openTop = true;
+
+
+                        } else if (!board.getCell(j, i - j).equals(board.getCell(j + 1, i - j - 1)) && !board.getCell(j + 1, i - j - 1).equals(BoardCell.Empty)) {
+                            openBottom = false;
+                            evalThreat(steps, openTop, openBottom, board.getCell(j, i - j));
+                            steps = 1;
+                            openTop = false;
                         }
-                        openTop = true;
-                    } else if (board.getCell(j, i-j).equals(board.getCell(j + 1, i-j - 1)) && !board.getCell(j, i-j).equals(BoardCell.Empty)) {
-                        steps++;
-                        color = board.getCell(j, i-j);
-                        Logger.log(steps + "LOOOK HERE ");
+                    } else {
+                        if (board.getCell(j, i - j).equals(BoardCell.Empty) && steps > 1) {
+                            openBottom = true;
+                            evalThreat(steps, openTop, openBottom, board.getCell(j - 1, i - j + 1));
+                            steps = 1;
+                            openTop = true;
+                        } else if (board.getCell(j, i - j).equals(board.getCell(j - 1, i - j + 1)) && !board.getCell(j, i - j).equals(BoardCell.Empty)) {
+                            evalThreat(steps, openTop, false, board.getCell(j, i - j));
 
-                    } else if (board.getCell(j+ 1, i-j - 1).equals(BoardCell.Empty) && steps > 1) {
-                        openBottom = true;
-                        evalThreat(steps, openTop, openBottom, board.getCell(j , i-j));
-                        steps = 1;
-                        openTop = true;
-
-
-                    } else if (!board.getCell(j, i-j).equals(board.getCell(j + 1, i-j - 1)) && !board.getCell(j + 1, i-j -1).equals(BoardCell.Empty)) {
-                        openBottom = false;
-                        evalThreat(steps, openTop, openBottom, board.getCell(j , i-j));
-                        steps = 1;
-                        openTop= false;
-                    }
-                }else{
-                    if (board.getCell(j , i-j).equals(BoardCell.Empty) && steps > 1) {
-                        openBottom = true;
-                        evalThreat(steps, openTop, openBottom, board.getCell(j -1,  i- j +1));
-                        steps = 1;
-                        openTop = true;
-                    }else if (board.getCell(j, i-j).equals(board.getCell(j -1,  i- j +1)) && !board.getCell(j , i-j ).equals(BoardCell.Empty)) {
-                        evalThreat(steps, openTop, false, board.getCell(j,i-j ));
-
-                    }
-                    else if (!board.getCell(j ,  i-j).equals(board.getCell(j  - 1, i-j + 1)) && !board.getCell(j, i-j).equals(BoardCell.Empty)) {
-                        evalThreat(steps, openTop, false, board.getCell(j- 1, i-j + 1));
+                        } else if (!board.getCell(j, i - j).equals(board.getCell(j - 1, i - j + 1)) && !board.getCell(j, i - j).equals(BoardCell.Empty)) {
+                            evalThreat(steps, openTop, false, board.getCell(j - 1, i - j + 1));
+                        }
                     }
                 }
             }

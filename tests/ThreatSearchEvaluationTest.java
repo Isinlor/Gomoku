@@ -141,21 +141,21 @@ public class ThreatSearchEvaluationTest extends SimpleUnitTest {
             assertTrue(new ThreatSearchGlobal().evaluate(board) == 13.5);
         });
 
-        it("Checks last diagonals for B: open 3's ; W: half 3's. Eval = -13.5 ", () -> {
+        it("Checks last diagonals for B: open 3 ; W: half 3. Eval = 6.75 ", () -> {
             BoardCell[][] boardState = {
                     {E, E, E, E, E, E, E, E, E, E},
-                    {E, E, E, B, E, E, E, E, E, E},
-                    {E, E, B, E, E, E, E, W, E, E},
-                    {E, B, E, E, E, E, E, E, W, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, W, E, E},
+                    {E, E, E, E, E, E, E, E, W, E},
                     {E, E, E, E, E, E, E, E, E, W},
-                    {W, E, E, E, E, E, E, E, E, E},
-                    {E, W, E, E, E, E, E, E, B, E},
-                    {E, E, W, E, E, E, E, B, E, E},
+                    {E, E, E, E, E, E, E, E, E, E},
+                    {E, E, E, E, E, E, E, E, B, E},
+                    {E, E, E, E, E, E, E, B, E, E},
                     {E, E, E, E, E, E, B, E, E, E},
                     {E, E, E, E, E, E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
-            assertTrue(new ThreatSearchGlobal().evaluate(board) == 13.5);
+            assertTrue(new ThreatSearchGlobal().evaluate(board) == 6.75);
         });
         it("evaluates a complex situation", () -> {
             BoardCell[][] boardState = {
