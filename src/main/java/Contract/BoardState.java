@@ -17,15 +17,22 @@ public class BoardState implements Serializable {
     }
 
     public float[] toVector() {
-        float[] vector = new float[grid.length * grid.length * 2];
+
+        int cells = grid.length * grid.length;
+        float[] vector = new float[cells * 2];
         Arrays.fill(vector, 0);
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid.length; j++) {
-                if(grid[i][j] == BoardCell.Empty) continue;
-                int position = grid[i][j].getColor() == currentPlayer ? 1 : 2;
-                vector[i * j * position] = 1;
+
+        int counter = 0;
+        for (BoardCell[] row: grid) {
+            for (BoardCell cell: row) {
+                if (cell != BoardCell.Empty) {
+                    int next = cell.getColor() == currentPlayer ? 0 : cells;
+                    vector[counter + next] = 1;
+                }
+                counter++;
             }
         }
+
         return vector;
     }
 }
