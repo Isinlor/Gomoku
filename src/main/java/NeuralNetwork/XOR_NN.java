@@ -44,19 +44,17 @@ public class XOR_NN {
             new int[]{numSamples, labelLength}
         );
 
+        Nadam optimizer = new Nadam();
+        optimizer.setLearningRate(0.012);
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
             .seed(123) //include a random seed for reproducibility
             .activation(Activation.RELU)
             .weightInit(WeightInit.XAVIER)
-            .updater(new Nadam())
+            .updater(optimizer)
             .list()
             .layer(new DenseLayer.Builder()
                 .nIn(2)
-                .nOut(10)
-                .build())
-            .layer(new DenseLayer.Builder()
-                .nIn(10)
-                .nOut(10)
+                .nOut(2)
                 .build())
             .layer(new OutputLayer.Builder(LossFunctions.LossFunction.SQUARED_LOSS)
                 .activation(Activation.SIGMOID)
