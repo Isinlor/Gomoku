@@ -65,13 +65,15 @@ public class XOR_NN {
             .build();
 
         MultiLayerNetwork model = new MultiLayerNetwork(conf);
+
+        model.setListeners(new ScoreIterationListener(1));
+
         model.init();
 
         DataSet ds = new DataSet(samples, labels);
-        for (int epoch = 0; epoch < 1000; epoch++)
+        for (int iterations = 0; iterations < 100; iterations++)
             model.fit(ds);
 
-        model.setListeners(new ScoreIterationListener(1));
 
         System.out.println(model.output(
             Nd4j.create(
