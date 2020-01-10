@@ -2,6 +2,8 @@ package NeuralNetwork;
 
 import org.datavec.api.records.reader.BaseRecordReader;
 import org.datavec.api.util.RecordUtils;
+import org.deeplearning4j.datasets.iterator.INDArrayDataSetIterator;
+import org.deeplearning4j.datasets.iterator.RandomDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -11,11 +13,15 @@ import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.api.iter.INDArrayIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nadam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+import org.nd4j.linalg.primitives.Pair;
+
+import java.util.ArrayList;
 
 public class XOR_NN {
     public static void main(String[] args) {
@@ -71,27 +77,42 @@ public class XOR_NN {
 
         model.init();
 
-        DataSet ds = new DataSet(samples, labels);
-        for (int iterations = 0; iterations < 100; iterations++)
-            model.fit(ds);
+        float[][][] dataset = {
+            {{0, 0}, {0}},
+            {{0, 1}, {1}},
+            {{1, 0}, {1}},
+            {{1, 1}, {0}},
+        };
 
+        ArrayList<Pair<INDArray, INDArray>> list = new ArrayList<>();
+        for (float[][] example: dataset) {
+            Pair<INDArray, INDArray> pair = new Pair<INDArray, INDArray>(
+                Nd4j.create(example[0], new int[]{1, sampleLength}),
+                Nd4j.create(example[1], new int[]{1, labelLength})
+            );
+            list.add(pair);
+        }
 
-        INDArray output = model.output(
-            Nd4j.create(
-                new float[]{
-                    0, 0,
-                    0, 1,
-                    1, 0,
-                    1, 1
-                },
-                new int[]{numSamples, sampleLength}
-            )
-        );
-        System.out.println(output);
+        RandomDataSetIterator
 
-        Evaluation eval = new Evaluation();
-        eval.eval(ds.getLabels(), output);
-        System.out.println(eval.stats());
+        INDArrayDataSetIterator iterator = new INDArrayDataSetIterator(list, 1);
+        model.fit(iterator, 100);
+//
+//        DataSet ds = new DataSet(samples, labels);
+//        INDArray output = model.output(
+//            Nd4j.create(
+//                new float[]{
+//                    0, 0,
+//                    0, 1,
+//                    1, 0,
+//                    1, 1
+//                },
+//                new int[]{numSamples, sampleLength}
+//            )
+//        );
+//        System.out.println(output);
+
+        System.out.println(model.evaluate(iterator));
 
     }
 }
