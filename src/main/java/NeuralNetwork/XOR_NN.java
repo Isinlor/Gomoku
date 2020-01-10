@@ -1,5 +1,7 @@
 package NeuralNetwork;
 
+import org.datavec.api.records.reader.BaseRecordReader;
+import org.datavec.api.util.RecordUtils;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -7,6 +9,7 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -73,7 +76,7 @@ public class XOR_NN {
             model.fit(ds);
 
 
-        System.out.println(model.output(
+        INDArray output = model.output(
             Nd4j.create(
                 new float[]{
                     0, 0,
@@ -83,6 +86,12 @@ public class XOR_NN {
                 },
                 new int[]{numSamples, sampleLength}
             )
-        ));
+        );
+        System.out.println(output);
+
+        Evaluation eval = new Evaluation();
+        eval.eval(ds.getLabels(), output);
+        System.out.println(eval.stats());
+
     }
 }
