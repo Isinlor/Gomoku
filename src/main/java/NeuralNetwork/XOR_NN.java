@@ -93,8 +93,6 @@ public class XOR_NN {
             list.add(pair);
         }
 
-        RandomDataSetIterator
-
         INDArrayDataSetIterator iterator = new INDArrayDataSetIterator(list, 1);
         model.fit(iterator, 100);
 //

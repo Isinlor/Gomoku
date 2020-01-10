@@ -30,12 +30,12 @@
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-core</artifactId>
-            <version>1.0.0-beta4</version>
+            <version>1.0.0-beta6</version>
         </dependency>
         <dependency> <!-- See: https://deeplearning4j.org/docs/latest/deeplearning4j-config-gpu-cpu -->
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
-            <version>1.0.0-beta4</version>
+            <version>1.0.0-beta6</version>
         </dependency>
         <dependency> <!-- See: https://github.com/eclipse/deeplearning4j/issues/5344 -->
             <groupId>org.slf4j</groupId>

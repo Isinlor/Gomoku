@@ -7,10 +7,7 @@ import Contract.Player;
 import Player.Players;
 import Player.MCTSPlayer;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.Scanner;
 
 public class GenerateGames {
@@ -20,25 +17,28 @@ public class GenerateGames {
         try {
 
             String filePath = "src/main/resources/games.ser";
-            if(args.length>0) {
+            if (args.length > 0) {
                 filePath = args[0];
             }
             File file = new File(filePath);
-            FileOutputStream fileOut = new FileOutputStream(file,true);
+            FileOutputStream fileOut = new FileOutputStream(file, false);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("approximate"),0.01);
+            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("approximate"), 0.01);
 
-        while (true) {
-            TrainingGame game = new TrainingGame(player, player);
-            SimpleBoard board = new SimpleBoard(9);
-            game.play(board);
-            System.out.println("Game won by: " + game.getWinner());
-            System.out.println("Number of turns: " + game.getHistory().size());
-            out.writeObject(game);
-        }
-
-        } catch (IOException i) {
-            i.printStackTrace();
+            for (int i = 0; i < 200; i++) {
+                TrainingGame game = new TrainingGame(player, player);
+                SimpleBoard board = new SimpleBoard(9);
+                game.play(board);
+                System.out.println("Game won by: " + game.getWinner());
+                System.out.println("Number of turns: " + game.getHistory().size());
+                out.writeObject(game);
+            }
+            out.close();
+            fileOut.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

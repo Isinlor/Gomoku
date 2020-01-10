@@ -1,5 +1,9 @@
 package NeuralNetwork;
 
+import Board.TrainingGame;
+import Contract.BoardState;
+import Contract.Game;
+import org.deeplearning4j.datasets.iterator.INDArrayDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -9,18 +13,75 @@ import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Nadam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+import org.nd4j.linalg.primitives.Pair;
+
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Train {
-    public static void main(String[] args) {
 
-        //number of rows and columns in the input pictures
+    private static ArrayList<TrainingGame> loadGames(String filePath) {
+        ArrayList games = new ArrayList<TrainingGame>();
+
+        try {
+            FileInputStream fileIn = new FileInputStream(filePath);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            TrainingGame game;
+            while((game = (TrainingGame)in.readObject()) !=null ) {
+                games.add(game);
+            }
+            in.close();
+            fileIn.close();
+        } catch (EOFException e) {
+
+        } catch (IOException | ClassNotFoundException i)  {
+            i.printStackTrace();
+        }
+        System.out.println("Loaded games: " + games.size());
+        return games;
+    }
+
+    public static void main(String[] args) {
+        String filePath = "src/main/resources/games.ser";
+        if(args.length>0) {
+            filePath = args[0];
+        }
+        ArrayList<TrainingGame> games = loadGames(filePath);
+
+        ArrayList<Pair<INDArray, INDArray>> dataset = new ArrayList<>();
+        for(TrainingGame game:games) {
+            for(BoardState boardState: game.getHistory()) {
+                {
+                    int gameOutcome;
+                    if(game.winner==null) {
+                        gameOutcome = 0;
+                    } else{
+                        gameOutcome = game.winner==boardState.getCurrentPlayer() ? 1 : -1;
+                    }
+                    float [] boardStateVector = boardState.toVector();
+                    Pair<INDArray, INDArray> pair = new Pair<INDArray, INDArray>(
+                            Nd4j.create(boardStateVector, new int[]{1, boardStateVector.length}),
+                            Nd4j.create(new float[]{gameOutcome}, new int[]{1, 1})
+                    );
+                    dataset.add(pair);
+                }
+            }
+        }
+        INDArrayDataSetIterator iterator = new INDArrayDataSetIterator(dataset, 15);
+
         final int boardSize = 9;
         int outputNum = 1; // number of output classes
         int batchSize = 10; // batch size for each epoch
         int rngSeed = 123; // random number seed for reproducibility
-        int numEpochs = 2; // number of epochs to perform
+        int numEpochs = 500; // number of epochs to perform
         double rate = 0.0015; // learning rate
 
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
@@ -39,7 +100,7 @@ public class Train {
                 .nOut(100)
                 .build())
             .layer(new OutputLayer.Builder(LossFunctions.LossFunction.SQUARED_LOSS) //create hidden layer
-                .activation(Activation.SIGMOID)
+                .activation(Activation.TANH)
                 .nOut(outputNum)
                 .build())
             .build();
@@ -47,13 +108,9 @@ public class Train {
         MultiLayerNetwork model = new MultiLayerNetwork(conf);
         model.init();
 
-//        model.setListeners(new ScoreIterationListener(100));  //print the score with every iteration
-//
-//        log.info("Train model....");
-//        model.fit(mnistTrain, numEpochs);
-//
-//        log.info("Evaluate model....");
-//        Evaluation eval = model.evaluate(mnistTest);
+        model.setListeners(new ScoreIterationListener(25));  //print the score with every iteration
+
+        model.fit(iterator, numEpochs);
 
     }
 }

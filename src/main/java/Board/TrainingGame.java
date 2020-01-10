@@ -13,7 +13,7 @@ public class TrainingGame implements Serializable, Contract.Game  {
 
     private transient MCTSPlayer black;
     private transient MCTSPlayer white;
-    public ArrayList history = new ArrayList<BoardState>();
+    public ArrayList<BoardState> history = new ArrayList<BoardState>();
     public Color winner;
 
     public TrainingGame(MCTSPlayer black, MCTSPlayer white) {
@@ -21,7 +21,7 @@ public class TrainingGame implements Serializable, Contract.Game  {
         this.white = white;
     }
 
-    public ArrayList getHistory() {
+    public ArrayList<BoardState> getHistory() {
         return history;
     }
 
