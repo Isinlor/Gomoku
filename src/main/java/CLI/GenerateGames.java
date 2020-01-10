@@ -23,13 +23,13 @@ public class GenerateGames {
             File file = new File(filePath);
             FileOutputStream fileOut = new FileOutputStream(file, false);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("approximate"), 0.01);
+            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), 0.01);
 
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 1000; i++) {
                 TrainingGame game = new TrainingGame(player, player);
                 SimpleBoard board = new SimpleBoard(9);
                 game.play(board);
-                System.out.println("Game won by: " + game.getWinner());
+                System.out.println("Game " + i + " won by: " + game.getWinner());
                 System.out.println("Number of turns: " + game.getHistory().size());
                 out.writeObject(game);
             }

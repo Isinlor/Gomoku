@@ -40,7 +40,7 @@ public class TrainingGame implements Serializable, Contract.Game  {
                     board.move(white.getMove(board));
                     break;
             }
-            history.add(new BoardState(board.getCurrentColor(), board.getBoardState()));
+            history.add(board.getBoardState());
         }
         this.winner = board.getWinner();
 

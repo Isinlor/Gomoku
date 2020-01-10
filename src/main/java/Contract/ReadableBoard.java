@@ -24,7 +24,7 @@ public interface ReadableBoard {
     /**
      * @return The board cell states.
      */
-    BoardCell[][] getBoardState();
+    BoardState getBoardState();
 
     /**
      * @return The size of the board.

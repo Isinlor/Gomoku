@@ -113,8 +113,8 @@ public class SimpleBoard implements Board {
         }
     }
 
-    public BoardCell[][] getBoardState() {
-        return boardState;
+    public BoardState getBoardState() {
+        return new BoardState(getCurrentColor(), boardState);
     }
 
     public int getSize() {

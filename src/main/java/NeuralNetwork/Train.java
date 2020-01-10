@@ -11,6 +11,7 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -19,10 +20,7 @@ import org.nd4j.linalg.learning.config.Nadam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.primitives.Pair;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -49,7 +47,7 @@ public class Train {
         return games;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String filePath = "src/main/resources/games.ser";
         if(args.length>0) {
             filePath = args[0];
@@ -81,7 +79,7 @@ public class Train {
         int outputNum = 1; // number of output classes
         int batchSize = 10; // batch size for each epoch
         int rngSeed = 123; // random number seed for reproducibility
-        int numEpochs = 500; // number of epochs to perform
+        int numEpochs = 50; // number of epochs to perform
         double rate = 0.0015; // learning rate
 
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
@@ -111,6 +109,8 @@ public class Train {
         model.setListeners(new ScoreIterationListener(25));  //print the score with every iteration
 
         model.fit(iterator, numEpochs);
+
+        model.save(new File("src/main/resources/model.dl4j"), true);
 
     }
 }
