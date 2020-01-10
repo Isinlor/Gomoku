@@ -7,6 +7,7 @@ import Board.SimpleGame;
 
 public class MCTSPlayer implements Player {
 
+    public Boolean debug = false;
     private MoveSelector smartMoveSelector;
     private MoveSelector quickMoveSelector;
     private double parameter;
@@ -25,7 +26,9 @@ public class MCTSPlayer implements Player {
     @Override
     public Move getMove(ReadableBoard board) {
 
-        System.out.println(board);
+        if(debug) {
+            System.out.println(board);
+        }
 
         //Initializes the tree with the current turn as root node
         //Root has a child for each possible turn
@@ -80,24 +83,27 @@ public class MCTSPlayer implements Player {
             timeSinceStart = System.currentTimeMillis()-startTime;
         }
 
-        System.out.println(root.getGamesPlayed()+" Simulations run");
+        if(debug) {
+            System.out.println(root.getGamesPlayed() + " Simulations run");
 
-        //If there's a next move that wins, pick that
-        for(MCTSNode node: root.getChildren()) {
-            //Print Scores for each child node of Root for testing
-            System.out.println(node.getGamesWon()+" Win");
-            System.out.println(node.getGamesPlayed()+" Played");
-            System.out.println(node.getWinRatio()+" Win ratio");
-            System.out.println(node.getLastMove());
-            System.out.println("---------");
-            if(node.getStateWinner() == MCTSColor) {
-                System.out.println("MCTS win move: " + node.getLastMove());
+            //If there's a next move that wins, pick that
+            for (MCTSNode node : root.getChildren()) {
+                //Print Scores for each child node of Root for testing
+                System.out.println(node.getGamesWon() + " Win");
+                System.out.println(node.getGamesPlayed() + " Played");
+                System.out.println(node.getWinRatio() + " Win ratio");
+                System.out.println(node.getLastMove());
+                System.out.println("---------");
+                if (node.getStateWinner() == MCTSColor) {
+                    System.out.println("MCTS win move: " + node.getLastMove());
+                }
             }
         }
 
         Move selectedMove = root.getBestChild().getLastMove();
-
-        System.out.println("MCTS selected move: " + selectedMove);
+        if(debug) {
+            System.out.println("MCTS selected move: " + selectedMove);
+        }
 
         return selectedMove;
     }

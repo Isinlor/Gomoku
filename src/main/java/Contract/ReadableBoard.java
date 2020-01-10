@@ -22,6 +22,11 @@ public interface ReadableBoard {
     BoardCell getCell(int x, int y);
 
     /**
+     * @return The board cell states.
+     */
+    BoardCell[][] getBoardState();
+
+    /**
      * @return The size of the board.
      */
     int getSize();

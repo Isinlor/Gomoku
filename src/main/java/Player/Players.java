@@ -26,6 +26,7 @@ public class Players {
         players.put("minmax6", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 6));
         players.put("minmax7", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 7));
         players.put("negamax3", new EvaluationPlayer(Evaluations.get("negamax3"), MoveSelectors.get("approximate")));
+        players.put("mcts0.01s",new MCTSPlayer(MoveSelectors.get("approximate"),0.01));
         players.put("mcts1s",new MCTSPlayer(MoveSelectors.get("approximate"),1));
         players.put("mcts3s",new MCTSPlayer(MoveSelectors.get("approximate"),3));
         players.put("mcts10s",new MCTSPlayer(MoveSelectors.get("approximate"),10));
