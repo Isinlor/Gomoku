@@ -6,6 +6,9 @@ import java.util.Arrays;
 
 public class BoardStateTest extends SimpleUnitTest {
     public static void main(String[] args) {
+
+        System.out.println("\n\nBoard State Test\n");
+
         it("correctly converts empty state to vector for current black player", () -> {
             BoardCell[][] grid = {
                 {E, E},
