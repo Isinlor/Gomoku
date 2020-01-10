@@ -1,5 +1,6 @@
 import Board.Helpers.AllMovesSelector;
 import Board.*;
+import Board.Helpers.MoveSelectors;
 import Contract.*;
 import Evaluation.WinLossEvaluation;
 import Player.*;
@@ -18,6 +19,12 @@ public class PlayerTest extends SimpleUnitTest {
 
         System.out.println("\n\nMCTS Player Test\n");
         mctsPlayerTest();
+
+        System.out.println("\n\nTimed Player Test\n");
+        timedPlayerTest();
+
+        System.out.println("\n\nThreat Player Test\n");
+        threatPlayerTest();
 
     }
 
@@ -135,7 +142,46 @@ public class PlayerTest extends SimpleUnitTest {
 
         it("allows to play out a whole game", () -> {
 
-            Player player = Players.get("negamax3");
+            Player player = new MCTSPlayer(MoveSelectors.get("approximate"),0.01);
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(player, player);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+
+        });
+
+    }
+
+    private static void timedPlayerTest() {
+
+        it("allows to play out a whole game", () -> {
+
+            TimedPlayer player = new TimedPlayer(Players.get("random"));
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(player, player);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+            assertTrue(player.getMaxTimePerMove() >= 0);
+            assertTrue(player.getMinTimePerMove() >= 0);
+            assertTrue(player.getAverageTimePerMove() >= 0);
+
+        });
+
+    }
+
+    private static void threatPlayerTest() {
+
+        it("allows to play out a whole game", () -> {
+
+            Player player = Players.get("threat");
 
             SimpleBoard board = new SimpleBoard(5);
 

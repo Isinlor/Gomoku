@@ -13,15 +13,11 @@ public class Evaluations {
 
     static {
         evaluations.put("winLoss", new WinLossEvaluation());
-        evaluations.put("negamax3", new NegamaxEvaluation(
-            get("winLoss"), new ApproximateMoveSelector(), 3)
-        );
-        evaluations.put("negamax5", new NegamaxEvaluation(
-            get("winLoss"), new ApproximateMoveSelector(), 5)
-        );
-        evaluations.put("negamax7", new NegamaxEvaluation(
-            get("winLoss"), new ApproximateMoveSelector(), 7)
-        );
+        for (int i = 1; i <= 7 ; i++) {
+            evaluations.put("negamax" + i, new NegamaxEvaluation(
+                get("winLoss"), new ApproximateMoveSelector(), i)
+            );
+        }
     }
 
     public static Evaluation get(String name) {
