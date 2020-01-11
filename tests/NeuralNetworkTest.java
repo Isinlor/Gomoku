@@ -50,5 +50,12 @@ public class NeuralNetworkTest extends SimpleUnitTest {
             assertEqual(model.output(features).toFloatVector(), new float[]{0,1,-1}, 0.02);
         });
 
+        it("overfits dumb dataset using dataset SamplingDataSetIterator", () -> {
+            MultiLayerNetwork model = Model.get(boardSize);
+            assertEqual(model.output(features).toFloatVector(), new float[]{0,0,0}, 0.5);
+            model.fit(iterator, 10);
+            assertEqual(model.output(features).toFloatVector(), new float[]{0,1,-1}, 0.02);
+        });
+
     }
 }
