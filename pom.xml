@@ -37,11 +37,6 @@
             <artifactId>nd4j-native-platform</artifactId>
             <version>1.0.0-beta6</version>
         </dependency>
-        <dependency> <!-- See: https://github.com/eclipse/deeplearning4j/issues/5344 -->
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
-        </dependency>
 
         <!-- See: https://github.com/eclipse/deeplearning4j/issues/5344 -->
         <!-- Logback allows to configure logging. Especially disable logging during testing. -->
@@ -52,7 +47,7 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
-        
+
     </dependencies>
 
 
