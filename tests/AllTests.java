@@ -6,5 +6,6 @@ public class AllTests {
         MoveSelectorTest.main(args);
         SamplingTest.main(args);
         PlayerTest.main(args);
+        NeuralNetworkTest.main(args);
     }
 }

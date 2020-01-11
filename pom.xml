@@ -42,6 +42,17 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.25</version>
         </dependency>
+
+        <!-- See: https://github.com/eclipse/deeplearning4j/issues/5344 -->
+        <!-- Logback allows to configure logging. Especially disable logging during testing. -->
+        <!-- See: https://stackify.com/logging-logback/ -->
+        <!-- See: https://stackoverflow.com/questions/50560184/which-takes-priority-logback-xml-or-logback-test-xml -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        
     </dependencies>
 
 

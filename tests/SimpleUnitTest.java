@@ -126,6 +126,24 @@ abstract class SimpleUnitTest {
     }
 
     /**
+     * This methods allows to assert that two longs or ints are equal.
+     *
+     * @param actual The actual value.
+     * @param expected The expected value.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertEqual(long actual, long expected, String explanation) throws RuntimeException {
+        assertTrue(
+            actual == expected,
+            explanation +
+                "\nTwo numbers are not equal!\n" +
+                "Actual: " + actual + "\n" +
+                "Expected: " + expected + "\n"
+        );
+    }
+
+    /**
      * This methods allows to assert that two doubles are equal with certain tolerance.
      *
      * @param actual The actual value.
@@ -156,6 +174,22 @@ abstract class SimpleUnitTest {
      */
     protected static void assertEqual(double actual, double expected, double tolerance) throws RuntimeException {
         assertEqual(actual, expected, tolerance, "");
+    }
+
+    /**
+     * This methods allows to assert that two doubles are equal with certain tolerance.
+     *
+     * @param actual The actual value.
+     * @param expected The expected value.
+     * @param tolerance The allowed tolerance.
+     *
+     * @throws RuntimeException
+     */
+    protected static void assertEqual(float[] actual, float[] expected, double tolerance) throws RuntimeException {
+        assertEqual(actual.length, expected.length, "The arrays are not equal length!");
+        for (int i = 0; i < expected.length; i++) {
+            assertEqual(actual[i], expected[i], tolerance, "The value at index " + i + " is wrong!");
+        }
     }
 
     /**
