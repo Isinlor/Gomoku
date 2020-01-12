@@ -16,28 +16,20 @@ public class GameOver {
 
         gameover.initModality(Modality.APPLICATION_MODAL);
         gameover.setTitle("Game Over!");
-        Label label;
-        if(board.getWinner().toString().equals("White")) {
-            label = new Label(boardUI.getP1Name() + " has won!");
-        }else if(board.getWinner().toString().equals("Black")) {
-            label = new Label(boardUI.getP2Name() + " has won!");
-        }else{label = null;}
+        Label label = new Label(board.getWinner() + " has won!");
         Button button = new Button("Close");
 
         button.setOnAction(e -> {
             gameover.close();
         });
 
-
         VBox layout= new VBox(15);
-
 
         layout.getChildren().addAll(label, button);
 
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout, 300, 250);
-
 
         gameover.setScene(scene);
 
@@ -54,10 +46,9 @@ public class GameOver {
         gameover.initModality(Modality.APPLICATION_MODAL);
         gameover.setTitle("Game Over!");
 
+        Label label = new Label(board.getWinner() + " has won!!");
 
-        Label label= new Label(board.getWinner() +" has won!!");
-
-        Button button= new Button("New Game");
+        Button button = new Button("New Game");
 
 
         button.setOnAction(e -> {
