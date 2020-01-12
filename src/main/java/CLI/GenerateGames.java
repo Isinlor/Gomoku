@@ -1,14 +1,10 @@
 package CLI;
 
 import Board.Helpers.MoveSelectors;
-import Board.SimpleBoard;import Board.TrainingGame;
-import Contract.Color;
-import Contract.Player;
-import Player.Players;
+import NeuralNetwork.TrainingGame;
 import Player.MCTSPlayer;
 
 import java.io.*;
-import java.util.Scanner;
 
 public class GenerateGames {
 
@@ -25,10 +21,8 @@ public class GenerateGames {
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), 0.01);
 
-            for (int i = 0; i < 1000; i++) {
-                TrainingGame game = new TrainingGame(player, player);
-                SimpleBoard board = new SimpleBoard(9);
-                game.play(board);
+            for (int i = 0; i < 10000; i++) {
+                TrainingGame game = new TrainingGame(player, player,9);
                 System.out.println("Game " + i + " won by: " + game.getWinner());
                 System.out.println("Number of turns: " + game.getHistory().size());
                 out.writeObject(game);

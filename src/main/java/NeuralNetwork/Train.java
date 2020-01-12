@@ -1,28 +1,19 @@
 package NeuralNetwork;
 
-import Board.TrainingGame;
 import Contract.BoardState;
-import Contract.Game;
-import org.deeplearning4j.datasets.iterator.INDArrayDataSetIterator;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.optimize.listeners.EvaluativeListener;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
-import org.deeplearning4j.util.ModelSerializer;
-import org.nd4j.evaluation.classification.Evaluation;
-import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.api.iterator.SamplingDataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.config.Nadam;
-import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.primitives.Pair;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Train {
 
@@ -52,65 +43,92 @@ public class Train {
         if(args.length>0) {
             filePath = args[0];
         }
-        ArrayList<TrainingGame> games = loadGames(filePath);
 
-        ArrayList<Pair<INDArray, INDArray>> dataset = new ArrayList<>();
-        for(TrainingGame game:games) {
-            for(BoardState boardState: game.getHistory()) {
-                {
-                    int gameOutcome;
-                    if(game.winner==null) {
-                        gameOutcome = 0;
-                    } else{
-                        gameOutcome = game.winner==boardState.getCurrentPlayer() ? 1 : -1;
-                    }
-                    float [] boardStateVector = boardState.toVector();
-                    Pair<INDArray, INDArray> pair = new Pair<INDArray, INDArray>(
-                            Nd4j.create(boardStateVector, new int[]{1, boardStateVector.length}),
-                            Nd4j.create(new float[]{gameOutcome}, new int[]{1, 1})
-                    );
-                    dataset.add(pair);
-                }
-            }
-        }
-        INDArrayDataSetIterator iterator = new INDArrayDataSetIterator(dataset, 15);
+        List<TrainingGame> games = loadGames(filePath);
+        List<TrainingGame> testGames = games.subList(0, 100);
+        games = games.subList(100, 103);
+
+        DataSetIterator iterator = getDataSetIterator(games);
+        DataSetIterator testIterator = getDataSetIterator(testGames);
 
         final int boardSize = 9;
-        int outputNum = 1; // number of output classes
-        int batchSize = 10; // batch size for each epoch
-        int rngSeed = 123; // random number seed for reproducibility
         int numEpochs = 50; // number of epochs to perform
-        double rate = 0.0015; // learning rate
+        MultiLayerNetwork model = Model.get(boardSize);
 
-        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-            .seed(rngSeed) //include a random seed for reproducibility
-            .activation(Activation.RELU)
-            .weightInit(WeightInit.XAVIER)
-            .updater(new Nadam())
-            .l2(rate * 0.005) // regularize learning model
-            .list()
-            .layer(new DenseLayer.Builder() //create the first input layer.
-                .nIn(boardSize * boardSize * 2)
-                .nOut(100)
-                .build())
-            .layer(new DenseLayer.Builder() //create the second input layer
-                .nIn(100)
-                .nOut(100)
-                .build())
-            .layer(new OutputLayer.Builder(LossFunctions.LossFunction.SQUARED_LOSS) //create hidden layer
-                .activation(Activation.TANH)
-                .nOut(outputNum)
-                .build())
-            .build();
+        System.out.println(model.evaluateRegression(iterator).stats());
+        System.out.println(iterator.next());
 
-        MultiLayerNetwork model = new MultiLayerNetwork(conf);
-        model.init();
-
-        model.setListeners(new ScoreIterationListener(25));  //print the score with every iteration
+        model.setListeners(new ScoreIterationListener(10));  //print the score with every iteration
+        model.setListeners(new EvaluativeListener(iterator, 10, model.evaluateRegression(iterator)));  //print the score with every iteration
 
         model.fit(iterator, numEpochs);
 
         model.save(new File("src/main/resources/model.dl4j"), true);
 
+        System.out.println(model.output(iterator));
+
+        System.out.println(model.evaluateRegression(testIterator).stats());
+
+    }
+
+    public static DataSetIterator getDataSetIterator(List<TrainingGame> games) {
+        DataSet dataset = getDataSet(games);
+        return new SamplingDataSetIterator(dataset, 3, 10);
+    }
+
+    public static DataSet getDataSet(List<TrainingGame> games) {
+        int rows = 0;
+        int black = 0;
+        int white = 0;
+        int draw = 0;
+        for(TrainingGame game: games) {
+            rows += game.getHistory().size();
+            if(game.getWinner() != null) {
+                switch (game.getWinner()) {
+                    case Black:
+                        black++;
+                        break;
+                    case White:
+                        white++;
+                        break;
+                }
+            } else {
+                draw++;
+            }
+
+        }
+        int rowLength = games.get(0).getHistory().get(0).toVector().length;
+
+//        System.out.println("Black: " + black + " White: " + white + " Draw: " + draw);
+
+        INDArray features = Nd4j.zeros(rows, rowLength);
+        INDArray labels = Nd4j.zeros(rows, 1);
+
+        int row = 0;
+        ArrayList<Pair<INDArray, INDArray>> pairs = new ArrayList<>();
+        for(TrainingGame game:games) {
+            for(BoardState boardState: game.getHistory()) {
+                int gameOutcome;
+                if(game.winner==null) {
+                    gameOutcome = 0;
+                } else{
+                    gameOutcome = game.winner==boardState.getCurrentPlayer() ? 1 : -1;
+                }
+                float [] boardStateVector = boardState.toVector();
+
+                features.putRow(row, Nd4j.create(boardStateVector, new int[]{1, boardStateVector.length}));
+                labels.putRow(row, Nd4j.create(new float[]{gameOutcome}, new int[]{1, 1}));
+
+                Pair<INDArray, INDArray> pair = new Pair<INDArray, INDArray>(
+                        Nd4j.create(boardStateVector, new int[]{1, boardStateVector.length}),
+                        Nd4j.create(new float[]{gameOutcome}, new int[]{1, 1})
+                );
+                pairs.add(pair);
+                row++;
+            }
+        }
+//        INDArrayDataSetIterator iterator = new INDArrayDataSetIterator(pairs, 15);
+
+        return new DataSet(features, labels);
     }
 }

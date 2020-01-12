@@ -1,12 +1,17 @@
-import NeuralNetwork.Model;
+import Board.Helpers.MoveSelectors;
+import Contract.Color;
 import NeuralNetwork.Train;
+import NeuralNetwork.TrainingGame;
+import NeuralNetwork.Model;
+import Player.MCTSPlayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.SamplingDataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 public class NeuralNetworkTest extends SimpleUnitTest {
     public static void main(String[] args) {
@@ -55,6 +60,44 @@ public class NeuralNetworkTest extends SimpleUnitTest {
             assertEqual(model.output(features).toFloatVector(), new float[]{0,0,0}, 0.5);
             model.fit(iterator, 10);
             assertEqual(model.output(features).toFloatVector(), new float[]{0,1,-1}, 0.02);
+            assertEqual(model.score(dataset), 0, 0.001);
+        });
+
+        it("overfits simple games", () -> {
+
+            int size = 7;
+            ArrayList<TrainingGame> trainingGames = new ArrayList<>();
+
+            boolean hasBlackWinner = false;
+            boolean hasWhiteWinner = false;
+            while(!hasBlackWinner || !hasWhiteWinner) {
+                TrainingGame trainingGame = new TrainingGame(
+                    new MCTSPlayer(MoveSelectors.get("all"), 0.003),
+                    new MCTSPlayer(MoveSelectors.get("all"), 0.003),
+                    size
+                );
+                if(!hasBlackWinner && trainingGame.getWinner() == Color.Black) {
+                    trainingGames.add(trainingGame);
+                    hasBlackWinner = true;
+                }
+                if(!hasWhiteWinner && trainingGame.getWinner() == Color.White) {
+                    trainingGames.add(trainingGame);
+                    hasWhiteWinner = true;
+                }
+            }
+
+            DataSet gamesDataset = Train.getDataSet(trainingGames);
+            DataSetIterator gamesDatasetIterator = new SamplingDataSetIterator(
+                gamesDataset,
+                3, 1
+            );
+
+            MultiLayerNetwork model = Model.get(size);
+
+            assertEqual(model.score(gamesDataset), 1, 2);
+            model.fit(gamesDatasetIterator, 10);
+            assertEqual(model.score(gamesDataset), 0, 0.1);
+
         });
 
     }
