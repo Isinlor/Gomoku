@@ -1,6 +1,7 @@
 package Player;
 
 import Contract.*;
+import UI.Logger;
 
 public class EvaluationPlayer implements Player {
 
@@ -16,13 +17,15 @@ public class EvaluationPlayer implements Player {
         Move bestMove = null;
         double bestEvaluation = Double.POSITIVE_INFINITY;
 
-        for (Move move: board.getValidMoves()) {
+        for (Move move: moveSelector.getMoves(board)) {
 
             double moveEvaluation = evaluation.evaluate(board.getWithMove(move));
             if(bestMove == null || moveEvaluation < bestEvaluation) {
                 bestMove = move;
                 bestEvaluation = moveEvaluation;
             }
+
+            Logger.log(move + " " + moveEvaluation);
 
         }
 
