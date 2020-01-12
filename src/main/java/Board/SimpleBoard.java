@@ -97,6 +97,7 @@ public class SimpleBoard implements Board {
                 validMoves.add(new Move(x, y));
             }
         }
+        currentTurn = Color.Black;
         winner = null;
     }
 
