@@ -1,10 +1,10 @@
 package UI;
 
+import org.slf4j.LoggerFactory;
+
 public class Logger {
-    static public boolean enabled = false; // enable if you want to see logs
+    static private org.slf4j.Logger logger = LoggerFactory.getLogger("game");
     static public void log(Object string) {
-        if(enabled) {
-            System.out.println(string);
-        }
+        logger.debug(string.toString());
     }
 }

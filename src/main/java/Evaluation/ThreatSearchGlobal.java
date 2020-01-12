@@ -375,7 +375,6 @@ public class ThreatSearchGlobal implements Evaluation {
         evaluateForDiagonal(board);
         evaluateBackDiagonal(board);
 
-        Logger.enabled =true;
         Logger.log("Threats for black" + threatsBlack);
         Logger.log("Threats for white" + threatsWhite);
         if (!threatsBlack.isEmpty())
@@ -384,7 +383,7 @@ public class ThreatSearchGlobal implements Evaluation {
         if (!threatsWhite.isEmpty())
             threatsWhiteValue = threatsWhite.stream().map(t -> threatValue(t)).reduce(0.0, (a, b) -> a + b);
         Logger.log(threatsBlackValue - threatsWhiteValue);
-        Logger.enabled = false;
+
         switch (board.getCurrentColor()) {
             case Black:
                 return threatsBlackValue - threatsWhiteValue;
