@@ -11,7 +11,7 @@ import Contract.ReadableBoard;
 public class WinLossEvaluation implements Evaluation {
     public double evaluate(ReadableBoard board) {
         if(board.hasWinner()) {
-            return board.getWinner() == board.getCurrentColor() ? Double.MAX_VALUE : -Double.MAX_VALUE;
+            return board.getWinner() == board.getCurrentColor() ? Win : Lost;
         }
         return 0;
     }
