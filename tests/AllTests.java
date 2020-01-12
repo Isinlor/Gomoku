@@ -1,3 +1,5 @@
+import Evaluation.NeuralNetworkEvaluation;
+
 public class AllTests {
     public static void main(String[] args) {
         BoardTest.main(args);
@@ -7,5 +9,6 @@ public class AllTests {
         SamplingTest.main(args);
         PlayerTest.main(args);
         NeuralNetworkTest.main(args);
+        NeuralNetworkEvaluationTest.main(args);
     }
 }

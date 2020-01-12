@@ -6,7 +6,10 @@ import Evaluation.NeuralNetworkEvaluation;
 public class NeuralNetworkEvaluationTest extends SimpleUnitTest {
 
     public static void main(String[] args) {
-        it("allows to evaluate board", () -> {
+
+        System.out.println("\n\nNeural Network Evaluation Test\n");
+
+        it("allows to evaluate empty board based on saved model", () -> {
             Evaluation evaluation = new NeuralNetworkEvaluation("tests/resources/model.dl4j");
             BoardCell[][] boardState = {
                 {E, E, E, E, E, E, E, E, E},
@@ -22,7 +25,7 @@ public class NeuralNetworkEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(Double.isFinite(evaluation.evaluate(board)));
         });
-        it("allows to evaluate board", () -> {
+        it("allows to evaluate board favoring white from saved model", () -> {
             Evaluation evaluation = new NeuralNetworkEvaluation("tests/resources/model.dl4j");
             BoardCell[][] boardState = {
                 {B, E, E, E, E, E, E, E, B},
