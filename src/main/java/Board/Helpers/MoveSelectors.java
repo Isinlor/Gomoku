@@ -24,6 +24,7 @@ public class MoveSelectors {
     }
 
     public static MoveSelector get(String name) {
+        if(!moveSelectors.containsKey(name)) throw new RuntimeException("No move selector: " + name);
         return moveSelectors.get(name);
     }
 

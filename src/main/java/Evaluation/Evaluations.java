@@ -21,6 +21,7 @@ public class Evaluations {
     }
 
     public static Evaluation get(String name) {
+        if(!evaluations.containsKey(name)) throw new RuntimeException("No evaluation: " + name);
         return evaluations.get(name);
     }
 

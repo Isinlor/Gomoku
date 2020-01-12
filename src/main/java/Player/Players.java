@@ -45,6 +45,7 @@ public class Players {
     }
 
     public static Player get(String name) {
+        if(!players.containsKey(name)) throw new RuntimeException("No player: " + name);
         return players.get(name);
     }
 
