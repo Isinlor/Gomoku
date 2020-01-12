@@ -46,6 +46,8 @@ public interface ReadableBoard {
 
     boolean isValidMove(Move move);
 
+    boolean isOnBoard(int index);
+
     Move getLastMove();
 
     /**

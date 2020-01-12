@@ -272,7 +272,7 @@ public class SimpleBoard implements Board {
         for (int j = -1; j <= 1; j++) {
             for (int i = -1; i <= 1; i++) {
 
-                if (!numberIsOnBoard(x + i) || !numberIsOnBoard(y + j) || (i == 0 && j == 0)) {
+                if (!isOnBoard(x + i) || !isOnBoard(y + j) || (i == 0 && j == 0)) {
                     continue;
                 }
                 if (boardState[x + i][y + j].getColor() != lastColor) {
@@ -284,7 +284,7 @@ public class SimpleBoard implements Board {
                 int stopCount = 0;
                 while (counter + reverseCounter - 1 < steps && stopCount != 2) {
                     stopCount = 0;
-                    if (numberIsOnBoard(x + counter * i) && numberIsOnBoard(y + counter * j)) {
+                    if (isOnBoard(x + counter * i) && isOnBoard(y + counter * j)) {
                         if (boardState[x + (counter * i)][y + (counter * j)].getColor() == lastColor) {
                             counter++;
                         } else {
@@ -293,7 +293,7 @@ public class SimpleBoard implements Board {
                     } else {
                         stopCount++;
                     }
-                    if (numberIsOnBoard(x - reverseCounter * i) && numberIsOnBoard(y - reverseCounter * j)) {
+                    if (isOnBoard(x - reverseCounter * i) && isOnBoard(y - reverseCounter * j)) {
                         if (boardState[x - (reverseCounter * i)][y - (reverseCounter * j)].getColor() == lastColor) {
                             reverseCounter++;
                         } else {
@@ -311,8 +311,8 @@ public class SimpleBoard implements Board {
         return null;
     }
 
-    public boolean numberIsOnBoard(int number) {
-        return number >= 0 && number < boardSize;
+    public boolean isOnBoard(int index) {
+        return index >= 0 && index < boardSize;
     }
 
     public boolean checkRows(int x, int y){
