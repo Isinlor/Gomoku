@@ -7,6 +7,8 @@ import Board.SimpleGame;
 
 public class MCTSPlayer implements Player {
 
+    private boolean useMaxIterations;
+    private int maxIterations = -1;
     public Boolean debug = false;
     private MoveSelector smartMoveSelector;
     private MoveSelector quickMoveSelector;
@@ -15,12 +17,30 @@ public class MCTSPlayer implements Player {
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter){
         this.smartMoveSelector = smartMoveSelector;
         this.parameter = parameter;
+        this.useMaxIterations = false;
+    }
+
+    public MCTSPlayer(MoveSelector smartMoveSelector, double parameter, boolean useMaxIterations){
+        this.smartMoveSelector = smartMoveSelector;
+        this.parameter = parameter;
+        this.maxIterations = (int) parameter;
+        this.useMaxIterations = useMaxIterations;
     }
 
     public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, double parameter){
         this.smartMoveSelector = smartMoveSelector;
         this.quickMoveSelector = quickMoveSelector;
         this.parameter = parameter;
+        this.useMaxIterations = false;
+    }
+
+
+    public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, double parameter, boolean useMaxIterations){
+        this.smartMoveSelector = smartMoveSelector;
+        this.quickMoveSelector = quickMoveSelector;
+        this.parameter = parameter;
+        this.maxIterations = (int) parameter;
+        this.useMaxIterations = useMaxIterations;
     }
 
     @Override
@@ -52,7 +72,11 @@ public class MCTSPlayer implements Player {
             quickMoveSelector = smartMoveSelector;
         }
 
-        while(timeSinceStart<allowedTime){
+        int iterations = 0;
+
+
+        while(this.useMaxIterations ? (iterations < this.maxIterations) : (timeSinceStart < allowedTime)){
+            iterations++;
             /*
             Traverse till hasUntriedMoves() is false, UntriedMoves are the possible moves from the current state
             Pick one of those moves and add it as a child node of the leaf.
@@ -78,12 +102,12 @@ public class MCTSPlayer implements Player {
                 rollout(leaf, MCTSColor);
             }
 
-
-
             timeSinceStart = System.currentTimeMillis()-startTime;
         }
 
+
         if(debug) {
+            System.out.println("MCTS iterations: " + iterations);
             System.out.println(root.getGamesPlayed() + " Simulations run");
 
             //If there's a next move that wins, pick that
