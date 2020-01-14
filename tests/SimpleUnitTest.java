@@ -86,6 +86,16 @@ abstract class SimpleUnitTest {
     }
 
     /**
+     * This method allows you to skipp a test that takes to long os is not relevant right now.
+     *
+     * @param expectation here you can explain what is your test testing
+     * @param runnable this runnable will be executed; if it throws exception you will be notified
+     */
+    protected static void xit(String expectation, Runnable runnable) {
+        System.out.println("? (Skipped) It " + expectation);
+    }
+
+    /**
      * This method allows to assert that certain condition is true.
      *
      * @param condition The condition that must be true.
