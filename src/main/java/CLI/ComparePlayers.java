@@ -28,7 +28,7 @@ public class ComparePlayers {
             // this flips color every iteration
             boolean flip = i % 2 == 0;
 
-            SimpleBoard board = new SimpleBoard(7);
+            SimpleBoard board = new SimpleBoard(9);
 
             new SimpleGame(
                 flip ? playerA : playerB,

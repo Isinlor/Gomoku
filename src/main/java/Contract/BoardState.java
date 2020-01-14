@@ -36,6 +36,21 @@ public class BoardState implements Serializable {
         return rotated;
     }
 
+    public float[][][] toFloatMatrix() {
+        int channels = 2; //one for current player, one for other player
+        float[][][] data = new float[channels][grid.length][grid.length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                BoardCell cell = grid[i][j];
+                if (cell != BoardCell.Empty) {
+                    int c = cell.getColor() == currentPlayer ? 0 : 1;
+                    data[c][i][j] = 1;
+                }
+            }
+        }
+        return data;
+    }
+
     public int[][][] toMultiDimensionalMatrix() {
 
         int channels = 2; //one for current player, one for other player

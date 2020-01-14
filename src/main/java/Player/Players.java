@@ -44,6 +44,8 @@ public class Players {
         for (int i = 1; i <= 7; i++) {
             players.put("random" + i, new RandomPlayer(MoveSelectors.get("forced" + i)));
         }
+        players.put("cnn", new EvaluationPlayer(new NeuralNetworkCNNEvaluation("model.h5"), MoveSelectors.get("approximate")));
+
     }
 
     public static Player get(String name) {
