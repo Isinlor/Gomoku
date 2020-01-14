@@ -1,6 +1,7 @@
 package Contract;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -73,4 +74,10 @@ public class BoardState implements Serializable {
 
         return vector;
     }
+
+    public INDArray toINDArray() {
+        float[] vector = toVector();
+        return Nd4j.create(vector, new int[]{1, vector.length});
+    }
+
 }

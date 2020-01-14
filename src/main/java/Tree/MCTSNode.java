@@ -95,7 +95,7 @@ public class MCTSNode {
 
     public MCTSNode traverse(double c){
         if(!hasUntriedMoves() && stateWinner == null && !children.isEmpty()) {
-            HashMap<MCTSNode,Double> weightedChildren = new HashMap<MCTSNode, Double>();
+            HashMap<MCTSNode,Double> weightedChildren = new LinkedHashMap<>();
             for(MCTSNode child: children){
                 double weight = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
                 weightedChildren.put(child,weight);
