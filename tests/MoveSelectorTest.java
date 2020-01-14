@@ -51,6 +51,49 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         });
 
+        it("returns all moves around pieces even after reverting a move", () -> {
+
+                BoardCell[][] boardState = {
+                    {E, E, E, E, E},
+                    {E, E, E, E, E},
+                    {E, E, E, E, E},
+                    {E, E, E, E, E},
+                    {E, E, E, E, E},
+                };
+                SimpleBoard board = new SimpleBoard(boardState);
+
+                assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 25, "Empty");
+                board.move(new Move(2, 2));
+                assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 8, "After Move(2,2)");
+                board.revertMove(new Move(2, 2));
+                assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 25, "Revert Move(2,2)");
+
+        });
+
+        it("returns all moves around pieces even after reverting many moves", () -> {
+
+            BoardCell[][] boardState = {
+                {E, E, E, E, E},
+                {E, E, E, E, E},
+                {E, E, B, E, E},
+                {E, E, E, E, E},
+                {E, E, E, E, E},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 8, "After Move(2,2)");
+            board.move(new Move(0, 0));
+            assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 10, "After Move(0,0)");
+            board.move(new Move(3, 3));
+            assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 14, "After Move(3,3)");
+
+            board.revertMove(new Move(3, 3));
+            assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 10, "Revert Move(3,3)");
+            board.revertMove(new Move(0, 0));
+            assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 8, "Revert Move(0,0)");
+
+        });
+
         it("returns all moves following made moves", () -> {
 
             SimpleBoard board = new SimpleBoard(5);
