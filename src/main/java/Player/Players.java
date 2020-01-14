@@ -18,7 +18,6 @@ public class Players {
     static {
         players.put("human", new CliPlayer());
         players.put("random", new RandomPlayer(MoveSelectors.get("approximate")));
-        players.put("random3", new RandomPlayer(MoveSelectors.get("forced3")));
         players.put("simpleton", new EvaluationPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate")));
         players.put("minmax1", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 1));
         players.put("minmax3", new MinMaxPlayer(Evaluations.get("winLoss"), MoveSelectors.get("approximate"), 3));
@@ -42,6 +41,9 @@ public class Players {
             MoveSelectors.get("forced5"), MoveSelectors.get("approximate"), 60
         ));
         players.put("threat", new EvaluationPlayer(new ThreatSearchGlobal(), MoveSelectors.get("approximate")));
+        for (int i = 1; i <= 7; i++) {
+            players.put("random" + i, new RandomPlayer(MoveSelectors.get("forced" + i)));
+        }
     }
 
     public static Player get(String name) {
