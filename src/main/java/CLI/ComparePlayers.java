@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class ComparePlayers {
     public static void main(String[] args) {
 
+        Logger.enabled = false;
         System.out.println("Available players: " + Players.getNames());
 
         String nameA = selectPlayer();
