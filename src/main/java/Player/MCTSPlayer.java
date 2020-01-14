@@ -12,6 +12,7 @@ public class MCTSPlayer implements Player {
     public Boolean debug = false;
     private MoveSelector smartMoveSelector;
     private MoveSelector quickMoveSelector;
+    private Game game = new SimpleGame(Players.get("random"), Players.get("random"));
     private double parameter;
 
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter){
@@ -34,13 +35,25 @@ public class MCTSPlayer implements Player {
         this.useMaxIterations = false;
     }
 
-
     public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, double parameter, boolean useMaxIterations){
         this.smartMoveSelector = smartMoveSelector;
         this.quickMoveSelector = quickMoveSelector;
         this.parameter = parameter;
         this.maxIterations = (int) parameter;
         this.useMaxIterations = useMaxIterations;
+    }
+
+    public MCTSPlayer(MoveSelector moveSelector, Game rolloutGame, double parameter, boolean useMaxIterations){
+        this(moveSelector, moveSelector, rolloutGame, parameter, useMaxIterations);
+    }
+
+    public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, Game rolloutGame, double parameter, boolean useMaxIterations){
+        this.smartMoveSelector = smartMoveSelector;
+        this.quickMoveSelector = quickMoveSelector;
+        this.parameter = parameter;
+        this.maxIterations = (int) parameter;
+        this.useMaxIterations = useMaxIterations;
+        this.game = rolloutGame;
     }
 
     @Override
@@ -132,16 +145,7 @@ public class MCTSPlayer implements Player {
         return selectedMove;
     }
 
-    public static Game setupGame() {
-
-        Player blackPlayer = Players.get("random");
-        Player whitePlayer = Players.get("random");
-
-        return new SimpleGame(blackPlayer, whitePlayer);
-    }
-
-    public static void rollout(MCTSNode currentNode, Color MCTSColor){
-        Game game = setupGame();
+    private void rollout(MCTSNode currentNode, Color MCTSColor) {
         SimpleBoard tempBoard = new SimpleBoard(currentNode.getState());
         game.play(tempBoard);
         Color winner = tempBoard.getWinner();

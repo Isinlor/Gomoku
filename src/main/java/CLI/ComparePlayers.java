@@ -9,6 +9,7 @@ import UI.Logger;
 import java.util.Scanner;
 
 public class ComparePlayers {
+
     public static void main(String[] args) {
 
         Logger.enabled = false;
@@ -16,21 +17,30 @@ public class ComparePlayers {
 
         String nameA = selectPlayer();
         String nameB = selectPlayer();
-        TimedPlayer playerA = new TimedPlayer(Players.get(nameA));
-        TimedPlayer playerB = new TimedPlayer(Players.get(nameB));
+        Player player1 = Players.get(nameA);
+        Player player2 = Players.get(nameB);
+
+        compare(9, 100, nameA, player1, nameB, player2);
+
+    }
+
+    public static void compare(int boardSize, int games, String name1, Player player1, String name2, Player player2) {
+
+        TimedPlayer playerA = new TimedPlayer(player1);
+        TimedPlayer playerB = new TimedPlayer(player2);
 
         int winA = 0;
         int winB = 0;
         int draw = 0;
 
         double startTime = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < games; i++) {
 
             // there is a difference between playing black and white
             // this flips color every iteration
             boolean flip = i % 2 == 0;
 
-            SimpleBoard board = new SimpleBoard(7);
+            SimpleBoard board = new SimpleBoard(boardSize);
 
             new SimpleGame(
                 flip ? playerA : playerB,
@@ -58,25 +68,24 @@ public class ComparePlayers {
                 }
             }
 
-            System.out.println(nameA + ": " + winA + "\t" + nameB + ": " + winB + "\tD: " + draw);
+            System.out.print(
+                "[" + (i + 1) + "/" + games + "]\t" +
+                    name1 + ": " + winA + "\t" + name2 + ": " + winB + "\tD: " + draw + "\r"
+            );
 
         }
 
         System.out.println();
-        System.out.println("Final result...");
-        System.out.println(nameA + ": " + winA + "\t" + nameB + ": " + winB + "\tD: " + draw);
-        System.out.println("Time: " + (System.currentTimeMillis() - startTime));
-
-        System.out.println();
-        System.out.println("Avg time per move " + nameA + ": " + Utils.formatTime(playerA.getAverageTimePerMove()));
-        System.out.println("Max time per move " + nameA + ": " + Utils.formatTime(playerA.getMaxTimePerMove()));
-        System.out.println("Min time per move " + nameA + ": " + Utils.formatTime(playerA.getMinTimePerMove()));
-
-        System.out.println();
-        System.out.println("Avg time per move " + nameB + ": " + Utils.formatTime(playerB.getAverageTimePerMove()));
-        System.out.println("Max time per move " + nameB + ": " + Utils.formatTime(playerB.getMaxTimePerMove()));
-        System.out.println("Min time per move " + nameB + ": " + Utils.formatTime(playerB.getMinTimePerMove()));
-
+        System.out.println(String.format("%1$-50s", "Time per move " + name1)
+            + "\t\tavg: " + Utils.formatTime(playerA.getAverageTimePerMove())
+            + "\t\tmax: " + Utils.formatTime(playerA.getMaxTimePerMove())
+            + "\t\tmin: " + Utils.formatTime(playerA.getMinTimePerMove())
+        );
+        System.out.println(String.format("%1$-50s", "Time per move " + name2)
+            + "\t\tavg: " + Utils.formatTime(playerB.getAverageTimePerMove())
+            + "\t\tmax: " + Utils.formatTime(playerB.getMaxTimePerMove())
+            + "\t\tmin: " + Utils.formatTime(playerB.getMinTimePerMove())
+        );
     }
 
     private static String selectPlayer() {
