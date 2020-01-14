@@ -147,7 +147,7 @@ public class SimpleBoard implements Board {
 
     public Moves getValidMoves() {
 
-        if(winner != null) {
+        if(hasWinner()) {
             return new Moves(); // there are no valid moves if there is a winner
         }
 
@@ -156,9 +156,15 @@ public class SimpleBoard implements Board {
     }
 
     public Collection<Move> getApproximateValidMoves() {
-        if(approximateValidMoves.isEmpty()){
-            return validMoves;
+
+        if(hasWinner()) {
+            return new ArrayList<>(); // there are no valid moves if there is a winner
         }
+
+        if(approximateValidMoves.isEmpty()){
+            return getValidMoves().getCopy(); // the copy is necessary to avoid concurrent access error
+        }
+
         return (Collection<Move>) approximateValidMoves.clone();
     }
 

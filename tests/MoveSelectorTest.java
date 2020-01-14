@@ -119,6 +119,20 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         });
 
+        it("returns no moves when there is a winner", () -> {
+
+            BoardCell[][] boardState = {
+                {W, E, E, E, W},
+                {E, E, E, E, E},
+                {B, B, B, B, B},
+                {E, E, E, E, E},
+                {W, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+            assertEqual(new ApproximateMoveSelector().getMoves(board).size(), 0);
+
+        });
+
     }
 
     public static void forcedMoveSelectorTest() {
