@@ -4,12 +4,14 @@ import Board.*;
 import Contract.*;
 import Player.*;
 import Evaluation.*;
+import UI.Logger;
 
 import java.util.Scanner;
 
 public class ComparePlayers {
     public static void main(String[] args) {
 
+        Logger.enabled = false;
         System.out.println("Available players: " + Players.getNames());
 
         String nameA = selectPlayer();

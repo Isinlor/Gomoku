@@ -24,7 +24,7 @@ public class Move {
     }
 
     public int hashCode() {
-        return Objects.hash(x, y);
+        return 100000 * x + y; // allows boards up to 999 in size
     }
 
     public String toString() {

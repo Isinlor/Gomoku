@@ -1,5 +1,6 @@
 import Board.Helpers.AllMovesSelector;
 import Board.*;
+import Board.Helpers.ApproximateMoveSelector;
 import Board.Helpers.MoveSelectors;
 import Contract.*;
 import Evaluation.WinLossEvaluation;
@@ -102,7 +103,7 @@ public class PlayerTest extends SimpleUnitTest {
 
     private static void minMaxPlayerTest() {
 
-        it("allows to play out a whole game", () -> {
+        it("allows to play out a whole game with all moves selector", () -> {
 
             MinMaxPlayer minMaxPlayer = new MinMaxPlayer(
                 new WinLossEvaluation(), new AllMovesSelector(), 3
@@ -110,7 +111,23 @@ public class PlayerTest extends SimpleUnitTest {
 
             SimpleBoard board = new SimpleBoard(5);
 
-            Game game = new SimpleGame(minMaxPlayer, minMaxPlayer);
+            Game game = new SimpleGame(minMaxPlayer);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+
+        });
+
+        it("allows to play out a whole game with approximate moves selector", () -> {
+
+            MinMaxPlayer minMaxPlayer = new MinMaxPlayer(
+                new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+            );
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(minMaxPlayer);
 
             game.play(board);
 

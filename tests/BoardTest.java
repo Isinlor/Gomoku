@@ -212,6 +212,7 @@ public class BoardTest extends SimpleUnitTest {
             assertColor(board.getWinner(), B.getColor());
             assertTrue(board.hasWinner());
             assertTrue(board.isGameFinished());
+            assertTrue(board.getValidMoves().isEmpty());
 
             board.revertMove(new Move(0, 4));
             assertTrue(!board.hasWinner());

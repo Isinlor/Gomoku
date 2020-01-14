@@ -13,6 +13,11 @@ public class SimpleGame implements Contract.Game {
         this.white = white;
     }
 
+    public SimpleGame(Player player) {
+        this.black = player;
+        this.white = player;
+    }
+
     public void play(Board board) {
 
         while(!board.isGameFinished()) {

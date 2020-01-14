@@ -24,6 +24,10 @@ public class Moves implements Iterable<Move> {
         return moves.isEmpty();
     }
 
+    /**
+     * The copy is necessary to avoid concurrent access error.
+     * The error occurs because without clone the same instance can be modified outside board.
+     */
     public Set<Move> getCopy() {
         return (HashSet<Move>)moves.clone();
     }
