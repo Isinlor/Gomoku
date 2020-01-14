@@ -325,7 +325,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         MoveSelector forced7 = MoveSelectors.get("forced7");
 
-        it("prevents lost in more than 3 moves", () -> {
+        xit("prevents lost in more than 3 moves", () -> {
 
             BoardCell[][] boardState = {
                 {W, E, E, E, E, E, W},
