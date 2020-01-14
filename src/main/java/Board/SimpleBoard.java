@@ -1,7 +1,10 @@
 package Board;
 
+import Board.Helpers.ApproximateMoveSelector;
+import Board.Helpers.GlobalApproximateMoveSelector;
 import Contract.*;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class SimpleBoard implements Board {
@@ -16,6 +19,8 @@ public class SimpleBoard implements Board {
     private Color winner = null;
 
     private HashSet<Move> validMoves = new HashSet<>();
+
+    private LinkedHashSet<Move> approximateValidMoves = new LinkedHashSet<>();
 
     public SimpleBoard(ReadableBoard board) {
 
@@ -35,7 +40,16 @@ public class SimpleBoard implements Board {
                 }
             }
         }
+        if(!isEmpty()) {
+            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
+        }else{
+            approximateValidMoves = new LinkedHashSet<>();
+        }
 
+    }
+
+    private boolean isEmpty() {
+        return validMoves.size() == boardSize * boardSize;
     }
 
     // TODO: Add unit tests
@@ -76,6 +90,10 @@ public class SimpleBoard implements Board {
 
         winner = getWinner(5);
 
+        if(black+white>0) {
+            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
+        }
+
     }
 
     public SimpleBoard(int boardSize) {
@@ -91,6 +109,7 @@ public class SimpleBoard implements Board {
 
     public void resetBoard(){
         validMoves = new HashSet<>();
+        approximateValidMoves = new LinkedHashSet<>();
         for (int x = 0; x <boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
                 boardState[x][y]=BoardCell.Empty;
@@ -134,6 +153,13 @@ public class SimpleBoard implements Board {
 
         return new Moves(validMoves);
 
+    }
+
+    public Collection<Move> getApproximateValidMoves() {
+        if(approximateValidMoves.isEmpty()){
+            return validMoves;
+        }
+        return approximateValidMoves;
     }
 
     public boolean isValidMove(Move move) {
@@ -194,7 +220,73 @@ public class SimpleBoard implements Board {
         }
 
         winner = getWinner(5);
-        validMoves.remove(new Move(x, y));
+        validMoves.remove(move);
+        updateApproximateMovesAfterMakingMove(move);
+    }
+
+    private final int[][] modifiers = {
+            {-1, -1}, {-1, 0}, {-1,  1},
+            { 0, -1},          { 0,  1},
+            { 1, -1}, { 1, 0}, { 1,  1},
+    };
+
+    private Collection <Move> getSurroundingMoves(Move move) {
+        Collection<Move> moves = new ArrayList<>();
+        for (int[] modifier: modifiers) {
+            int i = modifier[0];
+            int j = modifier[1];
+            if(
+                    move.x + i >= 0 && move.y + j >= 0 &&
+                            move.x + i < boardSize && move.y + j < boardSize &&
+                            this.getCell(move.x + i, move.y + j) == BoardCell.Empty
+            ) {
+                moves.add(new Move(move.x + i, move.y + j));
+            }
+        }
+        return moves;
+    }
+
+    private Collection <Move> getSurroundingPieces(Move move) {
+        Collection<Move> moves = new ArrayList<>();
+        for (int[] modifier: modifiers) {
+            int i = modifier[0];
+            int j = modifier[1];
+            if(
+                    move.x + i >= 0 && move.y + j >= 0 &&
+                            move.x + i < boardSize && move.y + j < boardSize &&
+                            this.getCell(move.x + i, move.y + j) != BoardCell.Empty
+            ) {
+                moves.add(new Move(move.x + i, move.y + j));
+            }
+        }
+        return moves;
+    }
+
+    private boolean hasSurroundingPieces(Move move){
+        return !this.getSurroundingPieces(move).isEmpty();
+    }
+
+    private void updateApproximateMovesAfterMakingMove(Move move) {
+        approximateValidMoves.addAll(this.getSurroundingMoves(move));
+        approximateValidMoves.remove(move);
+   }
+
+    private void updateApproximateMovesAfterRevertingMove(Move move) {
+
+        if(validMoves.size()==boardSize * boardSize) {
+            approximateValidMoves = new LinkedHashSet<>();
+            return;
+        }
+
+        if(hasSurroundingPieces(move)){
+            approximateValidMoves.add(move);
+        }
+
+        for (Move surroundingMove: this.getSurroundingMoves(move)) {
+            if(!hasSurroundingPieces(surroundingMove)){
+                approximateValidMoves.remove(surroundingMove);
+            }
+        }
 
     }
 
@@ -230,8 +322,8 @@ public class SimpleBoard implements Board {
         }
 
         winner = null;
-        validMoves.add(new Move(x, y));
-
+        validMoves.add(move);
+        updateApproximateMovesAfterRevertingMove(move);
     }
 
     public SimpleBoard getWithMove(Move move) throws WrongMoveException {
