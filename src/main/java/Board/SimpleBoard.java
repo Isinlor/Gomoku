@@ -159,7 +159,7 @@ public class SimpleBoard implements Board {
         if(approximateValidMoves.isEmpty()){
             return validMoves;
         }
-        return approximateValidMoves;
+        return (Collection<Move>) approximateValidMoves.clone();
     }
 
     public boolean isValidMove(Move move) {
@@ -361,6 +361,7 @@ public class SimpleBoard implements Board {
 
         int x = lastMove.x;
         int y = lastMove.y;
+
         for (int j = -1; j <= 1; j++) {
             for (int i = -1; i <= 1; i++) {
 
