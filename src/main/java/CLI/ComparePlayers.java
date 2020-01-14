@@ -4,6 +4,7 @@ import Board.*;
 import Contract.*;
 import Player.*;
 import Evaluation.*;
+import UI.Logger;
 
 import java.util.Scanner;
 
