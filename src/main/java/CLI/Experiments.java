@@ -23,6 +23,7 @@ public class Experiments {
 
     public static void main(String[] args) {
 
+
         all_vs_approximate_move_selector();
         mcts_vs_minmax();
 
@@ -30,6 +31,9 @@ public class Experiments {
         // See: https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it
         mcts_move_selector();
         mcts_rollouts();
+
+        // This is a tricky test. Requires code changes to run.
+        // global_vs_local_approximate_move_selector();
 
     }
 
@@ -228,6 +232,36 @@ public class Experiments {
             new MCTSPlayer(new AllMovesSelector(), forced1RandomGame, defaultTimeMCTS, false)
         );
 
+    }
+
+    @SuppressWarnings("unused")
+    private static void global_vs_local_approximate_move_selector() {
+        System.out.println("\n\n\n\n\n\nGlobal vs. Local Approximate Move Selector - What is faster?");
+        System.out.println("(This is probably not interesting for the paper as it is strictly implementation specific.)");
+        System.out.println(
+            "Testing this appears to be very tricky.\n" +
+            "Most importantly, global version should not be punished by board maintaining data for local version.\n" +
+            "You will need to modify the simple board code to run this test!!!"
+        );
+
+        System.out.println("\nMinMax 2");
+        ComparePlayers.compare(
+            boardSize, games * 10,
+            "Global Approx. Move Selector",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 1),
+                    new ApproximateMoveSelector()
+                )
+            ),
+            "Local Approx. Move Selector",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 1),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
     }
 
 }

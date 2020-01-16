@@ -1,10 +1,8 @@
 package Board;
 
 import Board.Helpers.ApproximateMoveSelector;
-import Board.Helpers.GlobalApproximateMoveSelector;
 import Contract.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class SimpleBoard implements Board {
@@ -40,11 +38,12 @@ public class SimpleBoard implements Board {
                 }
             }
         }
-        if(!isEmpty()) {
-            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
-        }else{
-            approximateValidMoves = new LinkedHashSet<>();
-        }
+
+//        if(!isEmpty()) {
+//            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
+//        }else{
+//            approximateValidMoves = new LinkedHashSet<>();
+//        }
 
     }
 
@@ -90,9 +89,9 @@ public class SimpleBoard implements Board {
 
         winner = getWinner(5);
 
-        if(black+white>0) {
-            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
-        }
+//        if(black+white>0) {
+//            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
+//        }
 
     }
 
@@ -157,15 +156,17 @@ public class SimpleBoard implements Board {
 
     public Collection<Move> getApproximateValidMoves() {
 
-        if(hasWinner()) {
-            return new ArrayList<>(); // there are no valid moves if there is a winner
-        }
+        return new ApproximateMoveSelector().getMoves(this);
 
-        if(approximateValidMoves.isEmpty()){
-            return getValidMoves().getCopy(); // the copy is necessary to avoid concurrent access error
-        }
-
-        return (Collection<Move>) approximateValidMoves.clone();
+//        if(hasWinner()) {
+//            return new ArrayList<>(); // there are no valid moves if there is a winner
+//        }
+//
+//        if(approximateValidMoves.isEmpty()){
+//            return getValidMoves().getCopy(); // the copy is necessary to avoid concurrent access error
+//        }
+//
+//        return (Collection<Move>) approximateValidMoves.clone();
     }
 
     public boolean isValidMove(Move move) {
@@ -227,7 +228,7 @@ public class SimpleBoard implements Board {
 
         winner = getWinner(5);
         validMoves.remove(move);
-        updateApproximateMovesAfterMakingMove(move);
+//        updateApproximateMovesAfterMakingMove(move);
     }
 
     private final int[][] modifiers = {
@@ -329,7 +330,7 @@ public class SimpleBoard implements Board {
 
         winner = null;
         validMoves.add(move);
-        updateApproximateMovesAfterRevertingMove(move);
+//        updateApproximateMovesAfterRevertingMove(move);
     }
 
     public SimpleBoard getWithMove(Move move) throws WrongMoveException {
