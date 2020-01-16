@@ -1,6 +1,7 @@
 import Contract.BoardCell;
 import Contract.BoardState;
 import Contract.Color;
+import Contract.Move;
 
 import java.util.Arrays;
 
@@ -14,7 +15,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {E, E},
                 {E, E}
             };
-            BoardState state = new BoardState(Color.Black, grid);
+            BoardState state = new BoardState(grid, Color.Black, null);
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 0, 0, 0, 0,
                 0, 0, 0, 0,
@@ -25,7 +26,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {B, E},
                 {E, E}
             };
-            BoardState state = new BoardState(Color.Black, grid);
+            BoardState state = new BoardState(grid, Color.Black, new Move(0,0));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 1, 0, 0, 0,
                 0, 0, 0, 0,
@@ -36,7 +37,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {E, E},
                 {E, B}
             };
-            BoardState state = new BoardState(Color.Black, grid);
+            BoardState state = new BoardState(grid, Color.Black, new Move(1, 1));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 0, 0, 0, 1,
                 0, 0, 0, 0,
@@ -47,7 +48,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {B, B},
                 {B, B}
             };
-            BoardState state = new BoardState(Color.Black, grid);
+            BoardState state = new BoardState(grid, Color.Black, new Move(0, 0));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 1, 1, 1, 1,
                 0, 0, 0, 0,
@@ -58,7 +59,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {W, W},
                 {W, W}
             };
-            BoardState state = new BoardState(Color.Black, grid);
+            BoardState state = new BoardState(grid, Color.Black, new Move(0, 0));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 0, 0, 0, 0,
                 1, 1, 1, 1,
@@ -69,7 +70,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {B, E},
                 {E, E}
             };
-            BoardState state = new BoardState(Color.White, grid);
+            BoardState state = new BoardState(grid, Color.White, new Move(0, 0));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 0, 0, 0, 0,
                 1, 0, 0, 0,
@@ -80,7 +81,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {E, E},
                 {E, B}
             };
-            BoardState state = new BoardState(Color.White, grid);
+            BoardState state = new BoardState(grid, Color.White, new Move(1, 1));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 0, 0, 0, 0,
                 0, 0, 0, 1,
@@ -91,7 +92,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {B, B},
                 {B, B}
             };
-            BoardState state = new BoardState(Color.White, grid);
+            BoardState state = new BoardState(grid, Color.White, new Move(1, 1));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 0, 0, 0, 0,
                 1, 1, 1, 1,
@@ -102,7 +103,7 @@ public class BoardStateTest extends SimpleUnitTest {
                 {W, W},
                 {W, W}
             };
-            BoardState state = new BoardState(Color.White, grid);
+            BoardState state = new BoardState(grid, Color.White, new Move(1, 1));
             assertTrue(Arrays.equals(state.toVector(), new float[]{
                 1, 1, 1, 1,
                 0, 0, 0, 0,

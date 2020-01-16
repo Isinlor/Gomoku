@@ -7,7 +7,8 @@ message DataSet {
 }
 
 message DataInstance {
-    repeated int32 state = 1;
-    int32 value = 2;
-    repeated float policy = 3;
+    int32 game_id = 1;
+    repeated double state = 2;
+    double value = 3;
+    repeated double policy = 4;
 }

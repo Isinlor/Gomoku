@@ -4,19 +4,23 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BoardState implements Serializable {
 
-    private static final long serialVersionUID = 4352191259830654682L;
+    private static final long serialVersionUID = 1;
 
-    Color currentPlayer;
     BoardCell[][] grid;
+    Color currentPlayer;
+    Move lastMove;
 
-    public BoardState(Color currentPlayer, BoardCell[][] grid) {
-        this.currentPlayer = currentPlayer;
+    public BoardState(BoardCell[][] grid, Color currentPlayer, Move lastMove) {
         this.grid = grid;
+        this.currentPlayer = currentPlayer;
+        this.lastMove = lastMove;
+    }
+
+    public BoardState() {
     }
 
     public Color getCurrentPlayer() {
@@ -36,37 +40,24 @@ public class BoardState implements Serializable {
         return rotated;
     }
 
-    public float[][][] toFloatMatrix() {
+    public double[][][] toMultiDimensionalMatrix() {
         int channels = 2; //one for current player, one for other player
-        float[][][] data = new float[channels][grid.length][grid.length];
+        double[][][] data = new double[channels][grid.length][grid.length];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
                 BoardCell cell = grid[i][j];
                 if (cell != BoardCell.Empty) {
                     int c = cell.getColor() == currentPlayer ? 0 : 1;
-                    data[c][i][j] = 1;
+                    double value = 1;
+                    //set to 10 if last move
+                    //TODO set to 10 also for the last last move (2 moves ago)
+                    if(i == lastMove.x && j == lastMove.y) {
+                        value = 10;
+                    }
+                    data[c][i][j] = value;
                 }
             }
         }
-        return data;
-    }
-
-    public int[][][] toMultiDimensionalMatrix() {
-
-        int channels = 2; //one for current player, one for other player
-        int[][][] data = new int[grid.length][grid.length][channels];
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid.length; j++) {
-                BoardCell cell = grid[i][j];
-                int[] vector = new int[]{0, 0};
-                if (cell != BoardCell.Empty) {
-                    int k = cell.getColor() == currentPlayer ? 0 : 1;
-                    vector[k] = 1;
-                }
-                data[i][j] = vector;
-            }
-        }
-
         return data;
     }
 

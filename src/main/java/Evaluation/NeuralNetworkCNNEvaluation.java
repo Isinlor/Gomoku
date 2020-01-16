@@ -39,10 +39,13 @@ public class NeuralNetworkCNNEvaluation implements Evaluation {
     public double evaluate(ReadableBoard board) {
         int boardSize = 9;
         int channels = 2;
-        float[][][][] multiDimensionalMatrix =  new float[1][channels][boardSize][boardSize];
-        multiDimensionalMatrix[0] = board.getBoardState().toFloatMatrix();
+        double[][][][] multiDimensionalMatrix =  new double[1][channels][boardSize][boardSize];
+        multiDimensionalMatrix[0] = board.getBoardState().toMultiDimensionalMatrix();
         INDArray input = Nd4j.create(multiDimensionalMatrix);
+        final long start = System.currentTimeMillis();
         double prediction = model.output(input).getDouble(0);
+        final long end = System.currentTimeMillis();
+//        System.out.println(end-start);
         return prediction;
     }
 }

@@ -807,44 +807,50 @@ public final class DatasetProtos {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>repeated int32 state = 1;</code>
+     * <code>int32 game_id = 1;</code>
+     * @return The gameId.
+     */
+    int getGameId();
+
+    /**
+     * <code>repeated double state = 2;</code>
      * @return A list containing the state.
      */
-    java.util.List<java.lang.Integer> getStateList();
+    java.util.List<java.lang.Double> getStateList();
     /**
-     * <code>repeated int32 state = 1;</code>
+     * <code>repeated double state = 2;</code>
      * @return The count of state.
      */
     int getStateCount();
     /**
-     * <code>repeated int32 state = 1;</code>
+     * <code>repeated double state = 2;</code>
      * @param index The index of the element to return.
      * @return The state at the given index.
      */
-    int getState(int index);
+    double getState(int index);
 
     /**
-     * <code>int32 value = 2;</code>
+     * <code>double value = 3;</code>
      * @return The value.
      */
-    int getValue();
+    double getValue();
 
     /**
-     * <code>repeated float policy = 3;</code>
+     * <code>repeated double policy = 4;</code>
      * @return A list containing the policy.
      */
-    java.util.List<java.lang.Float> getPolicyList();
+    java.util.List<java.lang.Double> getPolicyList();
     /**
-     * <code>repeated float policy = 3;</code>
+     * <code>repeated double policy = 4;</code>
      * @return The count of policy.
      */
     int getPolicyCount();
     /**
-     * <code>repeated float policy = 3;</code>
+     * <code>repeated double policy = 4;</code>
      * @param index The index of the element to return.
      * @return The policy at the given index.
      */
-    float getPolicy(int index);
+    double getPolicy(int index);
   }
   /**
    * Protobuf type {@code DataInstance}
@@ -859,8 +865,8 @@ public final class DatasetProtos {
       super(builder);
     }
     private DataInstance() {
-      state_ = emptyIntList();
-      policy_ = emptyFloatList();
+      state_ = emptyDoubleList();
+      policy_ = emptyDoubleList();
     }
 
     @java.lang.Override
@@ -895,48 +901,53 @@ public final class DatasetProtos {
               done = true;
               break;
             case 8: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                state_ = newIntList();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              state_.addInt(input.readInt32());
+
+              gameId_ = input.readInt32();
               break;
             }
-            case 10: {
+            case 17: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                state_ = newDoubleList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              state_.addDouble(input.readDouble());
+              break;
+            }
+            case 18: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
-                state_ = newIntList();
+                state_ = newDoubleList();
                 mutable_bitField0_ |= 0x00000001;
               }
               while (input.getBytesUntilLimit() > 0) {
-                state_.addInt(input.readInt32());
+                state_.addDouble(input.readDouble());
               }
               input.popLimit(limit);
               break;
             }
-            case 16: {
+            case 25: {
 
-              value_ = input.readInt32();
+              value_ = input.readDouble();
               break;
             }
-            case 29: {
+            case 33: {
               if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-                policy_ = newFloatList();
+                policy_ = newDoubleList();
                 mutable_bitField0_ |= 0x00000002;
               }
-              policy_.addFloat(input.readFloat());
+              policy_.addDouble(input.readDouble());
               break;
             }
-            case 26: {
+            case 34: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
-                policy_ = newFloatList();
+                policy_ = newDoubleList();
                 mutable_bitField0_ |= 0x00000002;
               }
               while (input.getBytesUntilLimit() > 0) {
-                policy_.addFloat(input.readFloat());
+                policy_.addDouble(input.readDouble());
               }
               input.popLimit(limit);
               break;
@@ -979,67 +990,77 @@ public final class DatasetProtos {
               Protobuf.DatasetProtos.DataInstance.class, Protobuf.DatasetProtos.DataInstance.Builder.class);
     }
 
-    public static final int STATE_FIELD_NUMBER = 1;
-    private com.google.protobuf.Internal.IntList state_;
+    public static final int GAME_ID_FIELD_NUMBER = 1;
+    private int gameId_;
     /**
-     * <code>repeated int32 state = 1;</code>
+     * <code>int32 game_id = 1;</code>
+     * @return The gameId.
+     */
+    public int getGameId() {
+      return gameId_;
+    }
+
+    public static final int STATE_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.DoubleList state_;
+    /**
+     * <code>repeated double state = 2;</code>
      * @return A list containing the state.
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Double>
         getStateList() {
       return state_;
     }
     /**
-     * <code>repeated int32 state = 1;</code>
+     * <code>repeated double state = 2;</code>
      * @return The count of state.
      */
     public int getStateCount() {
       return state_.size();
     }
     /**
-     * <code>repeated int32 state = 1;</code>
+     * <code>repeated double state = 2;</code>
      * @param index The index of the element to return.
      * @return The state at the given index.
      */
-    public int getState(int index) {
-      return state_.getInt(index);
+    public double getState(int index) {
+      return state_.getDouble(index);
     }
     private int stateMemoizedSerializedSize = -1;
 
-    public static final int VALUE_FIELD_NUMBER = 2;
-    private int value_;
+    public static final int VALUE_FIELD_NUMBER = 3;
+    private double value_;
     /**
-     * <code>int32 value = 2;</code>
+     * <code>double value = 3;</code>
      * @return The value.
      */
-    public int getValue() {
+    public double getValue() {
       return value_;
     }
 
-    public static final int POLICY_FIELD_NUMBER = 3;
-    private com.google.protobuf.Internal.FloatList policy_;
+    public static final int POLICY_FIELD_NUMBER = 4;
+    private com.google.protobuf.Internal.DoubleList policy_;
     /**
-     * <code>repeated float policy = 3;</code>
+     * <code>repeated double policy = 4;</code>
      * @return A list containing the policy.
      */
-    public java.util.List<java.lang.Float>
+    public java.util.List<java.lang.Double>
         getPolicyList() {
       return policy_;
     }
     /**
-     * <code>repeated float policy = 3;</code>
+     * <code>repeated double policy = 4;</code>
      * @return The count of policy.
      */
     public int getPolicyCount() {
       return policy_.size();
     }
     /**
-     * <code>repeated float policy = 3;</code>
+     * <code>repeated double policy = 4;</code>
      * @param index The index of the element to return.
      * @return The policy at the given index.
      */
-    public float getPolicy(int index) {
-      return policy_.getFloat(index);
+    public double getPolicy(int index) {
+      return policy_.getDouble(index);
     }
     private int policyMemoizedSerializedSize = -1;
 
@@ -1058,22 +1079,25 @@ public final class DatasetProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      if (gameId_ != 0) {
+        output.writeInt32(1, gameId_);
+      }
       if (getStateList().size() > 0) {
-        output.writeUInt32NoTag(10);
+        output.writeUInt32NoTag(18);
         output.writeUInt32NoTag(stateMemoizedSerializedSize);
       }
       for (int i = 0; i < state_.size(); i++) {
-        output.writeInt32NoTag(state_.getInt(i));
+        output.writeDoubleNoTag(state_.getDouble(i));
       }
-      if (value_ != 0) {
-        output.writeInt32(2, value_);
+      if (value_ != 0D) {
+        output.writeDouble(3, value_);
       }
       if (getPolicyList().size() > 0) {
-        output.writeUInt32NoTag(26);
+        output.writeUInt32NoTag(34);
         output.writeUInt32NoTag(policyMemoizedSerializedSize);
       }
       for (int i = 0; i < policy_.size(); i++) {
-        output.writeFloatNoTag(policy_.getFloat(i));
+        output.writeDoubleNoTag(policy_.getDouble(i));
       }
       unknownFields.writeTo(output);
     }
@@ -1084,12 +1108,13 @@ public final class DatasetProtos {
       if (size != -1) return size;
 
       size = 0;
+      if (gameId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, gameId_);
+      }
       {
         int dataSize = 0;
-        for (int i = 0; i < state_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(state_.getInt(i));
-        }
+        dataSize = 8 * getStateList().size();
         size += dataSize;
         if (!getStateList().isEmpty()) {
           size += 1;
@@ -1098,13 +1123,13 @@ public final class DatasetProtos {
         }
         stateMemoizedSerializedSize = dataSize;
       }
-      if (value_ != 0) {
+      if (value_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, value_);
+          .computeDoubleSize(3, value_);
       }
       {
         int dataSize = 0;
-        dataSize = 4 * getPolicyList().size();
+        dataSize = 8 * getPolicyList().size();
         size += dataSize;
         if (!getPolicyList().isEmpty()) {
           size += 1;
@@ -1128,10 +1153,13 @@ public final class DatasetProtos {
       }
       Protobuf.DatasetProtos.DataInstance other = (Protobuf.DatasetProtos.DataInstance) obj;
 
+      if (getGameId()
+          != other.getGameId()) return false;
       if (!getStateList()
           .equals(other.getStateList())) return false;
-      if (getValue()
-          != other.getValue()) return false;
+      if (java.lang.Double.doubleToLongBits(getValue())
+          != java.lang.Double.doubleToLongBits(
+              other.getValue())) return false;
       if (!getPolicyList()
           .equals(other.getPolicyList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -1145,12 +1173,15 @@ public final class DatasetProtos {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + GAME_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getGameId();
       if (getStateCount() > 0) {
         hash = (37 * hash) + STATE_FIELD_NUMBER;
         hash = (53 * hash) + getStateList().hashCode();
       }
       hash = (37 * hash) + VALUE_FIELD_NUMBER;
-      hash = (53 * hash) + getValue();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          java.lang.Double.doubleToLongBits(getValue()));
       if (getPolicyCount() > 0) {
         hash = (37 * hash) + POLICY_FIELD_NUMBER;
         hash = (53 * hash) + getPolicyList().hashCode();
@@ -1288,11 +1319,13 @@ public final class DatasetProtos {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        state_ = emptyIntList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        value_ = 0;
+        gameId_ = 0;
 
-        policy_ = emptyFloatList();
+        state_ = emptyDoubleList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        value_ = 0D;
+
+        policy_ = emptyDoubleList();
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
@@ -1321,6 +1354,7 @@ public final class DatasetProtos {
       public Protobuf.DatasetProtos.DataInstance buildPartial() {
         Protobuf.DatasetProtos.DataInstance result = new Protobuf.DatasetProtos.DataInstance(this);
         int from_bitField0_ = bitField0_;
+        result.gameId_ = gameId_;
         if (((bitField0_ & 0x00000001) != 0)) {
           state_.makeImmutable();
           bitField0_ = (bitField0_ & ~0x00000001);
@@ -1380,6 +1414,9 @@ public final class DatasetProtos {
 
       public Builder mergeFrom(Protobuf.DatasetProtos.DataInstance other) {
         if (other == Protobuf.DatasetProtos.DataInstance.getDefaultInstance()) return this;
+        if (other.getGameId() != 0) {
+          setGameId(other.getGameId());
+        }
         if (!other.state_.isEmpty()) {
           if (state_.isEmpty()) {
             state_ = other.state_;
@@ -1390,7 +1427,7 @@ public final class DatasetProtos {
           }
           onChanged();
         }
-        if (other.getValue() != 0) {
+        if (other.getValue() != 0D) {
           setValue(other.getValue());
         }
         if (!other.policy_.isEmpty()) {
@@ -1433,7 +1470,37 @@ public final class DatasetProtos {
       }
       private int bitField0_;
 
-      private com.google.protobuf.Internal.IntList state_ = emptyIntList();
+      private int gameId_ ;
+      /**
+       * <code>int32 game_id = 1;</code>
+       * @return The gameId.
+       */
+      public int getGameId() {
+        return gameId_;
+      }
+      /**
+       * <code>int32 game_id = 1;</code>
+       * @param value The gameId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setGameId(int value) {
+        
+        gameId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 game_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearGameId() {
+        
+        gameId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.Internal.DoubleList state_ = emptyDoubleList();
       private void ensureStateIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
           state_ = mutableCopy(state_);
@@ -1441,60 +1508,60 @@ public final class DatasetProtos {
          }
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @return A list containing the state.
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Double>
           getStateList() {
         return ((bitField0_ & 0x00000001) != 0) ?
                  java.util.Collections.unmodifiableList(state_) : state_;
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @return The count of state.
        */
       public int getStateCount() {
         return state_.size();
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @param index The index of the element to return.
        * @return The state at the given index.
        */
-      public int getState(int index) {
-        return state_.getInt(index);
+      public double getState(int index) {
+        return state_.getDouble(index);
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @param index The index to set the value at.
        * @param value The state to set.
        * @return This builder for chaining.
        */
       public Builder setState(
-          int index, int value) {
+          int index, double value) {
         ensureStateIsMutable();
-        state_.setInt(index, value);
+        state_.setDouble(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @param value The state to add.
        * @return This builder for chaining.
        */
-      public Builder addState(int value) {
+      public Builder addState(double value) {
         ensureStateIsMutable();
-        state_.addInt(value);
+        state_.addDouble(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @param values The state to add.
        * @return This builder for chaining.
        */
       public Builder addAllState(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Double> values) {
         ensureStateIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, state_);
@@ -1502,47 +1569,47 @@ public final class DatasetProtos {
         return this;
       }
       /**
-       * <code>repeated int32 state = 1;</code>
+       * <code>repeated double state = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearState() {
-        state_ = emptyIntList();
+        state_ = emptyDoubleList();
         bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
 
-      private int value_ ;
+      private double value_ ;
       /**
-       * <code>int32 value = 2;</code>
+       * <code>double value = 3;</code>
        * @return The value.
        */
-      public int getValue() {
+      public double getValue() {
         return value_;
       }
       /**
-       * <code>int32 value = 2;</code>
+       * <code>double value = 3;</code>
        * @param value The value to set.
        * @return This builder for chaining.
        */
-      public Builder setValue(int value) {
+      public Builder setValue(double value) {
         
         value_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 value = 2;</code>
+       * <code>double value = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearValue() {
         
-        value_ = 0;
+        value_ = 0D;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.Internal.FloatList policy_ = emptyFloatList();
+      private com.google.protobuf.Internal.DoubleList policy_ = emptyDoubleList();
       private void ensurePolicyIsMutable() {
         if (!((bitField0_ & 0x00000002) != 0)) {
           policy_ = mutableCopy(policy_);
@@ -1550,60 +1617,60 @@ public final class DatasetProtos {
          }
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @return A list containing the policy.
        */
-      public java.util.List<java.lang.Float>
+      public java.util.List<java.lang.Double>
           getPolicyList() {
         return ((bitField0_ & 0x00000002) != 0) ?
                  java.util.Collections.unmodifiableList(policy_) : policy_;
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @return The count of policy.
        */
       public int getPolicyCount() {
         return policy_.size();
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @param index The index of the element to return.
        * @return The policy at the given index.
        */
-      public float getPolicy(int index) {
-        return policy_.getFloat(index);
+      public double getPolicy(int index) {
+        return policy_.getDouble(index);
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @param index The index to set the value at.
        * @param value The policy to set.
        * @return This builder for chaining.
        */
       public Builder setPolicy(
-          int index, float value) {
+          int index, double value) {
         ensurePolicyIsMutable();
-        policy_.setFloat(index, value);
+        policy_.setDouble(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @param value The policy to add.
        * @return This builder for chaining.
        */
-      public Builder addPolicy(float value) {
+      public Builder addPolicy(double value) {
         ensurePolicyIsMutable();
-        policy_.addFloat(value);
+        policy_.addDouble(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @param values The policy to add.
        * @return This builder for chaining.
        */
       public Builder addAllPolicy(
-          java.lang.Iterable<? extends java.lang.Float> values) {
+          java.lang.Iterable<? extends java.lang.Double> values) {
         ensurePolicyIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, policy_);
@@ -1611,11 +1678,11 @@ public final class DatasetProtos {
         return this;
       }
       /**
-       * <code>repeated float policy = 3;</code>
+       * <code>repeated double policy = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearPolicy() {
-        policy_ = emptyFloatList();
+        policy_ = emptyDoubleList();
         bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
@@ -1693,9 +1760,10 @@ public final class DatasetProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\rdataset.proto\"&\n\007DataSet\022\033\n\004data\030\001 \003(\013" +
-      "2\r.DataInstance\"<\n\014DataInstance\022\r\n\005state" +
-      "\030\001 \003(\005\022\r\n\005value\030\002 \001(\005\022\016\n\006policy\030\003 \003(\002B\031\n" +
-      "\010ProtobufB\rDatasetProtosb\006proto3"
+      "2\r.DataInstance\"M\n\014DataInstance\022\017\n\007game_" +
+      "id\030\001 \001(\005\022\r\n\005state\030\002 \003(\001\022\r\n\005value\030\003 \001(\001\022\016" +
+      "\n\006policy\030\004 \003(\001B\031\n\010ProtobufB\rDatasetProto" +
+      "sb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1712,7 +1780,7 @@ public final class DatasetProtos {
     internal_static_DataInstance_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DataInstance_descriptor,
-        new java.lang.String[] { "State", "Value", "Policy", });
+        new java.lang.String[] { "GameId", "State", "Value", "Policy", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

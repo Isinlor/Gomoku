@@ -1,9 +1,6 @@
 package NeuralNetwork;
 
-import Contract.Board;
-import Contract.BoardCell;
-import Contract.BoardState;
-import Contract.Color;
+import Contract.*;
 import Player.MCTSPlayer;
 import Board.SimpleBoard;
 
@@ -14,7 +11,7 @@ public class TrainingGame implements Serializable  {
 
     private transient MCTSPlayer black;
     private transient MCTSPlayer white;
-    public ArrayList<BoardState> history = new ArrayList<BoardState>();
+    public ArrayList<ExtendedBoardState> history = new ArrayList<ExtendedBoardState>();
     public Color winner;
 
     public TrainingGame(MCTSPlayer black, MCTSPlayer white, int boardSize) {
@@ -23,7 +20,7 @@ public class TrainingGame implements Serializable  {
         play(new SimpleBoard(boardSize));
     }
 
-    public ArrayList<BoardState> getHistory() {
+    public ArrayList<ExtendedBoardState> getHistory() {
         return history;
     }
 
@@ -34,15 +31,18 @@ public class TrainingGame implements Serializable  {
     private void play(Board board) {
 
         while(!board.isGameFinished()) {
+            MCTSPlayer player = null;
             switch (board.getCurrentColor()) {
                 case Black:
-                    board.move(black.getMove(board));
+                    player = black;
                     break;
                 case White:
-                    board.move(white.getMove(board));
+                    player = white;
                     break;
             }
-            history.add(board.getBoardState());
+            board.move(player.getMove(board));
+
+            history.add(new ExtendedBoardState(board.getBoardState(), player.getLatestWeightedMoves()));
         }
         this.winner = board.getWinner();
 

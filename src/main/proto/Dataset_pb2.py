@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=b'\n\010ProtobufB\rDatasetProtos',
-  serialized_pb=b'\n\rDataset.proto\"&\n\x07\x44\x61taSet\x12\x1b\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\r.DataInstance\"<\n\x0c\x44\x61taInstance\x12\r\n\x05state\x18\x01 \x03(\x05\x12\r\n\x05value\x18\x02 \x01(\x05\x12\x0e\n\x06policy\x18\x03 \x03(\x02\x42\x19\n\x08ProtobufB\rDatasetProtosb\x06proto3'
+  serialized_pb=b'\n\rDataset.proto\"&\n\x07\x44\x61taSet\x12\x1b\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\r.DataInstance\"M\n\x0c\x44\x61taInstance\x12\x0f\n\x07game_id\x18\x01 \x01(\x05\x12\r\n\x05state\x18\x02 \x03(\x01\x12\r\n\x05value\x18\x03 \x01(\x01\x12\x0e\n\x06policy\x18\x04 \x03(\x01\x42\x19\n\x08ProtobufB\rDatasetProtosb\x06proto3'
 )
 
 
@@ -63,22 +63,29 @@ _DATAINSTANCE = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='state', full_name='DataInstance.state', index=0,
-      number=1, type=5, cpp_type=1, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='DataInstance.value', index=1,
-      number=2, type=5, cpp_type=1, label=1,
+      name='game_id', full_name='DataInstance.game_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='policy', full_name='DataInstance.policy', index=2,
-      number=3, type=2, cpp_type=6, label=3,
+      name='state', full_name='DataInstance.state', index=1,
+      number=2, type=1, cpp_type=5, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='DataInstance.value', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='policy', full_name='DataInstance.policy', index=3,
+      number=4, type=1, cpp_type=5, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -96,7 +103,7 @@ _DATAINSTANCE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=57,
-  serialized_end=117,
+  serialized_end=134,
 )
 
 _DATASET.fields_by_name['data'].message_type = _DATAINSTANCE

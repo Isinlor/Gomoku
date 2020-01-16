@@ -5,6 +5,11 @@ import Tree.MCTSNode;
 import Board.SimpleBoard;
 import Board.SimpleGame;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 public class MCTSPlayer implements Player {
 
     private boolean useMaxIterations;
@@ -14,6 +19,7 @@ public class MCTSPlayer implements Player {
     private MoveSelector quickMoveSelector;
     private Game game = new SimpleGame(Players.get("random"), Players.get("random"));
     private double parameter;
+    private MCTSNode root;
 
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter){
         this.smartMoveSelector = smartMoveSelector;
@@ -65,7 +71,7 @@ public class MCTSPlayer implements Player {
 
         //Initializes the tree with the current turn as root node
         //Root has a child for each possible turn
-        MCTSNode root = new MCTSNode(board,null, smartMoveSelector);
+        root = new MCTSNode(board,null, smartMoveSelector);
         Color MCTSColor = root.getState().getCurrentColor();
 
         // return immediately if there is only one move to consider
@@ -143,6 +149,15 @@ public class MCTSPlayer implements Player {
         }
 
         return selectedMove;
+    }
+
+    public HashMap<Move, Double> getLatestWeightedMoves() {
+        HashMap<Move, Double> weightedChildren = new LinkedHashMap<>();
+        for(MCTSNode child: root.getChildren()){
+            double weight = child.getGamesPlayed()/root.getGamesPlayed();
+            weightedChildren.put(child.getLastMove(), weight);
+        }
+        return weightedChildren;
     }
 
     private void rollout(MCTSNode currentNode, Color MCTSColor) {

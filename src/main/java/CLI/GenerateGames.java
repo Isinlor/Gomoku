@@ -8,35 +8,36 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
-import com.google.common.collect.EvictingQueue;
 
 public class GenerateGames {
 
-    private static Queue<TrainingGame> games;
-    private static int max_training_games = 10000;
-    private static String filePath = "src/main/resources/training_games.ser";
+    private static List<TrainingGame> games;
+    private static int max_training_games = 1000;
+    private static String filePath = "src/main/resources/training_games_mcts_forced3_all.ser";
     private static int save_interval = 10;
 
     public static void main(String[] args) {
 
-        //save games on exit signal
+//        save games on exit signal
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {save_games();};
         });
 
-        games = EvictingQueue.create(max_training_games);
+        games = new ArrayList<>();
+
         if (args.length > 0) {
             filePath = args[0];
         }
         load_games();
-        generate_games(493);
+        generate_games(1000);
         save_games();
     }
 
     private static void generate_games(int number_of_games) {
-        MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), 30, true);
+        MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("all"), 400, true);
+//        MCTSPlayer player2 = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 400, true);
+//        MCTSPlayer player2 = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 400, true);
         List<Integer> list = Arrays.asList(new Integer[number_of_games]);
         //parallel loop
         list.parallelStream().forEach(i -> {
@@ -56,7 +57,7 @@ public class GenerateGames {
             File file = new File(filePath);
             FileInputStream fi = new FileInputStream(file);
             ObjectInputStream oi = new ObjectInputStream(fi);
-            games = (Queue<TrainingGame>) oi.readObject();
+            games = (ArrayList<TrainingGame>) oi.readObject();
             oi.close();
             fi.close();
         } catch (FileNotFoundException ex) {
