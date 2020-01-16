@@ -8,6 +8,10 @@ import Board.Moves;
 
 public interface ReadableBoard {
 
+    int getMadeMovesCounter();
+
+    Move getMove(int index);
+
     /**
      * Return the state of a board cell.
      *

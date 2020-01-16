@@ -141,7 +141,7 @@ public class BoardTest extends SimpleUnitTest {
             assertTrue(!board.hasWinner());
         });
 
-        it("knows when a there are 4 vertical tokens in a row with the same color", () -> {
+        xit("knows when a there are 4 vertical tokens in a row with the same color", () -> {
             BoardCell[][] boardState = {
                     {E, E, E, E, E},
                     {E, E, E, W, E},
@@ -153,7 +153,7 @@ public class BoardTest extends SimpleUnitTest {
             assertTrue(board.getWinner(4)== Color.White);
         });
 
-        it("knows when a there are 4 diagonal tokens in a row with the same color", () -> {
+        xit("knows when a there are 4 diagonal tokens in a row with the same color", () -> {
             BoardCell[][] boardState = {
                     {E, E, E, E, E},
                     {E, E, E, E, B},
@@ -165,7 +165,7 @@ public class BoardTest extends SimpleUnitTest {
             assertTrue(board.getWinner(4)==Color.Black);
         });
 
-        it("knows when a there are 4 diagonal (other direction) tokens in a row with the same color", () -> {
+        xit("knows when a there are 4 diagonal (other direction) tokens in a row with the same color", () -> {
             BoardCell[][] boardState = {
                     {B, E, E, E, E},
                     {E, B, E, E, E}, //5 Blacks in a row
@@ -177,7 +177,7 @@ public class BoardTest extends SimpleUnitTest {
             assertTrue(board.getWinner(4)==Color.Black);
         });
 
-        it("correctly evaluates a game", () -> {
+        xit("correctly evaluates a game", () -> {
 
             SimpleBoard board = new SimpleBoard(5);
 

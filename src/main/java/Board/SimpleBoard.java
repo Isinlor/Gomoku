@@ -11,21 +11,19 @@ public class SimpleBoard implements Board {
     private BoardCell[][] boardState;
     protected Color currentTurn = Color.Black;
 
-    private Move lastMove;
-    private Color lastColor;
-
     private Color winner = null;
 
     private HashSet<Move> validMoves = new HashSet<>();
 
     private LinkedHashSet<Move> approximateValidMoves = new LinkedHashSet<>();
 
+    private int madeMovesCounter;
+    private Move[] moveHistory;
+
     public SimpleBoard(ReadableBoard board) {
 
         boardSize = board.getSize();
         currentTurn = board.getCurrentColor();
-        lastMove = board.getLastMove();
-        lastColor = board.getCurrentColor().getOpposite();
         winner = board.getWinner();
 
         this.boardState = new BoardCell[boardSize][boardSize];
@@ -37,6 +35,11 @@ public class SimpleBoard implements Board {
                     validMoves.add(new Move(x, y));
                 }
             }
+        }
+
+        moveHistory = new Move[boardSize * boardSize];
+        for (int i = 0; i < board.getMadeMovesCounter(); i++) {
+            moveHistory[i] = board.getMove(i);
         }
 
 //        if(!isEmpty()) {
@@ -51,12 +54,31 @@ public class SimpleBoard implements Board {
         return validMoves.size() == boardSize * boardSize;
     }
 
+    public int getMadeMovesCounter() {
+        return madeMovesCounter;
+    }
+
+    public Move getMove(int index) {
+        return moveHistory[index];
+    }
+
+    private void appendMoveHistory(Move move) {
+        moveHistory[madeMovesCounter] = move;
+        madeMovesCounter++;
+    }
+
+    private void truncateMoveHistory() {
+        moveHistory[madeMovesCounter - 1] = null;
+        madeMovesCounter--;
+    }
+
     // TODO: Add unit tests
     public SimpleBoard(BoardCell[][] boardState) {
 
         int white = 0;
         int black = 0;
         boardSize = boardState.length;
+        moveHistory = new Move[boardSize * boardSize];
         this.boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             if(boardState[x].length != boardSize) {
@@ -66,8 +88,10 @@ public class SimpleBoard implements Board {
                 switch (boardState[x][y]) {
                     case Black:
                         black++;
+                        appendMoveHistory(new Move(x, y));
                         break;
                     case White:
+                        appendMoveHistory(new Move(x, y));
                         white++;
                         break;
                     case Empty:
@@ -87,7 +111,7 @@ public class SimpleBoard implements Board {
             currentTurn = Color.White;
         }
 
-        winner = getWinner(5);
+        winner = getWinnerByFullBoardCheck(5);
 
 //        if(black+white>0) {
 //            approximateValidMoves = new LinkedHashSet<>(new GlobalApproximateMoveSelector().getMoves(this));
@@ -97,6 +121,7 @@ public class SimpleBoard implements Board {
 
     public SimpleBoard(int boardSize) {
         this.boardSize = boardSize;
+        moveHistory = new Move[boardSize * boardSize];
         boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
@@ -108,6 +133,7 @@ public class SimpleBoard implements Board {
 
     public void resetBoard(){
         validMoves = new HashSet<>();
+        moveHistory = new Move[boardSize * boardSize];
         approximateValidMoves = new LinkedHashSet<>();
         for (int x = 0; x <boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
@@ -133,7 +159,7 @@ public class SimpleBoard implements Board {
     }
 
     public BoardState getBoardState() {
-        return new BoardState(boardState, getCurrentColor(), lastMove);
+        return new BoardState(boardState, getCurrentColor(), getLastMove());
     }
 
     public int getSize() {
@@ -186,7 +212,8 @@ public class SimpleBoard implements Board {
     }
 
     public Move getLastMove() {
-        return lastMove;
+        if(madeMovesCounter == 0) return null;
+        return moveHistory[madeMovesCounter - 1];
     }
 
     public void move(Move move) throws WrongMoveException {
@@ -214,18 +241,15 @@ public class SimpleBoard implements Board {
         switch (getCurrentColor()) {
             case Black:
                 boardState[x][y] = BoardCell.Black;
-                lastMove = move;
-                lastColor = getCurrentColor();
                 currentTurn = Color.White;
                 break;
             case White:
                 boardState[x][y] = BoardCell.White;
-                lastMove = move;
-                lastColor = getCurrentColor();
                 currentTurn = Color.Black;
                 break;
         }
 
+        appendMoveHistory(move);
         winner = getWinner(5);
         validMoves.remove(move);
 //        updateApproximateMovesAfterMakingMove(move);
@@ -243,9 +267,9 @@ public class SimpleBoard implements Board {
             int i = modifier[0];
             int j = modifier[1];
             if(
-                    move.x + i >= 0 && move.y + j >= 0 &&
-                            move.x + i < boardSize && move.y + j < boardSize &&
-                            this.getCell(move.x + i, move.y + j) == BoardCell.Empty
+                move.x + i >= 0 && move.y + j >= 0 &&
+                move.x + i < boardSize && move.y + j < boardSize &&
+                this.getCell(move.x + i, move.y + j) == BoardCell.Empty
             ) {
                 moves.add(new Move(move.x + i, move.y + j));
             }
@@ -259,9 +283,9 @@ public class SimpleBoard implements Board {
             int i = modifier[0];
             int j = modifier[1];
             if(
-                    move.x + i >= 0 && move.y + j >= 0 &&
-                            move.x + i < boardSize && move.y + j < boardSize &&
-                            this.getCell(move.x + i, move.y + j) != BoardCell.Empty
+                move.x + i >= 0 && move.y + j >= 0 &&
+                move.x + i < boardSize && move.y + j < boardSize &&
+                this.getCell(move.x + i, move.y + j) != BoardCell.Empty
             ) {
                 moves.add(new Move(move.x + i, move.y + j));
             }
@@ -297,6 +321,10 @@ public class SimpleBoard implements Board {
 
     }
 
+    public void revertLastMove() {
+        revertMove(getLastMove());
+    }
+
     public void revertMove(Move move) throws WrongMoveException {
 
         int x = move.x;
@@ -317,19 +345,16 @@ public class SimpleBoard implements Board {
             case Black:
                 boardState[x][y] = BoardCell.Empty;
                 currentTurn = Color.White;
-                lastColor = null;
-                lastMove = null;
                 break;
             case White:
                 boardState[x][y] = BoardCell.Empty;
                 currentTurn = Color.Black;
-                lastColor = null;
-                lastMove = null;
                 break;
         }
 
         winner = null;
         validMoves.add(move);
+        truncateMoveHistory();
 //        updateApproximateMovesAfterRevertingMove(move);
     }
 
@@ -362,9 +387,8 @@ public class SimpleBoard implements Board {
     //RETURNS WINNING COLOR OR NULL IF THERE'S A LOSS
     public Color getWinner(int steps) throws NoWinnerException {
 
-        if (lastMove == null || lastColor == null) {
-            return getWinnerByFullBoardCheck(steps);
-        }
+        Color lastColor = currentTurn.getOpposite();
+        Move lastMove = getLastMove();
 
         int x = lastMove.x;
         int y = lastMove.y;
@@ -538,7 +562,7 @@ public class SimpleBoard implements Board {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Board (" + getSize() + "x" + getSize() + "):\n");
         stringBuilder.append("Next Move: " + getCurrentColor() + "\n");
-        stringBuilder.append("Last " + lastMove + "\n");
+        stringBuilder.append("Last " + getLastMove() + "\n");
         stringBuilder.append("\tY ");
         for (int i = 0; i < getSize(); i++) {
             stringBuilder.append(i % 10 + " ");
@@ -551,7 +575,7 @@ public class SimpleBoard implements Board {
         for (int x = 0; x < getSize(); x++) {
             stringBuilder.append(x+"\t| ");
             for (int y = 0; y < getSize(); y++) {
-                if(lastMove != null && lastMove.x == x && lastMove.y == y) {
+                if(getLastMove() != null && getLastMove().x == x && getLastMove().y == y) {
                     stringBuilder.append("\u001b[1m\u001b[32m");
                 }
                 switch (getCell(x, y)) {
@@ -565,7 +589,7 @@ public class SimpleBoard implements Board {
                         stringBuilder.append(" ");
                         break;
                 }
-                if(lastMove != null && lastMove.x == x && lastMove.y == y) {
+                if(getLastMove() != null && getLastMove().x == x && getLastMove().y == y) {
                     stringBuilder.append("\u001b[0m");
                 }
                 stringBuilder.append(" ");

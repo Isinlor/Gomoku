@@ -49,7 +49,7 @@ public class MinMaxPlayer implements Player {
 
         if(depth == 0 || board.isGameFinished()) {
             double eval = evaluation.evaluate(board);
-            board.revertMove(move);
+            board.revertLastMove();
             return eval;
         }
 
@@ -70,7 +70,7 @@ public class MinMaxPlayer implements Player {
 
         }
 
-        board.revertMove(move);
+        board.revertLastMove();
 
         return bestEvaluation;
 
@@ -82,7 +82,7 @@ public class MinMaxPlayer implements Player {
 
         if(depth == 0 || board.isGameFinished()) {
             double eval = -evaluation.evaluate(board);
-            board.revertMove(move);
+            board.revertLastMove();
             return eval;
         }
 
@@ -103,7 +103,7 @@ public class MinMaxPlayer implements Player {
 
         }
 
-        board.revertMove(move);
+        board.revertLastMove();
 
         return bestEvaluation;
 

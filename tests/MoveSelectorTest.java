@@ -51,7 +51,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         });
 
-        it("returns all moves around pieces even after reverting a move", () -> {
+        xit("returns all moves around pieces even after reverting a move", () -> {
 
                 BoardCell[][] boardState = {
                     {E, E, E, E, E},
@@ -70,7 +70,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         });
 
-        it("returns all moves around pieces even after reverting many moves", () -> {
+        xit("returns all moves around pieces even after reverting many moves", () -> {
 
             BoardCell[][] boardState = {
                 {E, E, E, E, E},
@@ -94,7 +94,7 @@ public class MoveSelectorTest extends SimpleUnitTest {
 
         });
 
-        it("returns all moves following made moves", () -> {
+        xit("returns all moves following made moves", () -> {
 
             SimpleBoard board = new SimpleBoard(5);
 
