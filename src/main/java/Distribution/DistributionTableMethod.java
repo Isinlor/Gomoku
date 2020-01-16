@@ -27,6 +27,9 @@ public class DistributionTableMethod<T> implements Distribution {
             weights.add(eventsWeights.get(event));
             events.add(event);
         }
+        if(!Double.isFinite(weightSum)) {
+            throw new RuntimeException("Sum of event weights is not a finite double! WeightedSum: " + weightSum);
+        }
     }
 
     public T sample() {
