@@ -12,6 +12,8 @@ import Player.MCTSPlayer;
 import Player.MinMaxPlayer;
 import Player.RandomPlayer;
 
+import java.util.ArrayList;
+
 public class Experiments {
 
     private static int boardSize = 9;
@@ -27,6 +29,9 @@ public class Experiments {
         System.out.println("Default amount of iterations: " + defaultIterMCTS);
         System.out.println("Default amount of time: " + defaultIterMCTS);
 
+        // You may also want to read: https://en.wikipedia.org/wiki/Statistical_significance
+        what_is_significant_strength_difference();
+
         all_vs_approximate_move_selector();
         mcts_vs_minmax();
 
@@ -38,6 +43,40 @@ public class Experiments {
 
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
+
+    }
+
+    private static void what_is_significant_strength_difference() {
+
+        System.out.println("\nWhat is significant difference between players?");
+
+        System.out.println("Differences in wins between equal players in " + games + " games.");
+        ArrayList<Integer> differences = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Results results = ComparePlayers.compare(
+                boardSize, games,
+                "fully random",
+                new RandomPlayer(new AllMovesSelector()),
+                "fully random",
+                new RandomPlayer(new AllMovesSelector()),
+                false
+            );
+            int winDifference = Math.abs(results.winA - results.winB);
+            System.out.print(winDifference + "\t" + (i % 10 == 9 ? "\n" : ""));
+            differences.add(winDifference);
+        }
+
+        int sum = 0;
+        int max = 0;
+        for (Integer diff: differences) {
+            sum += diff;
+            max = Math.max(max, diff);
+        }
+        float mean_absolute_deviation = sum / (float)differences.size();
+
+        System.out.println("On average you can expect " + mean_absolute_deviation + " difference in wins between equal players.");
+        System.out.println("Max observed difference " + max + " in wins between equal players.");
+        System.out.println("In other words, differences of that size are not necessarily significant.");
 
     }
 
