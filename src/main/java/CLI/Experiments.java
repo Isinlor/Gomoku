@@ -34,6 +34,7 @@ public class Experiments {
         // See: https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it
         mcts_move_selector();
         mcts_rollouts();
+        mcts_forced_rollouts();
 
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
@@ -258,6 +259,65 @@ public class Experiments {
             "forced 1 rollout",
             new MCTSPlayer(new AllMovesSelector(), forced1RandomGame, defaultTimeMCTS, false)
         );
+
+        System.out.println("\n\nForced 1 rollout appears to be the best.\n\n");
+    }
+
+    private static void mcts_forced_rollouts() {
+
+        System.out.println("\n\nIs Forced 2 rollout better than Forced 1 rollout?\n\n");
+
+        Game forced1WinLossRandomGame = new SimpleGame(new RandomPlayer(
+            new ForcedMoveSelector(
+                new WinLossEvaluation(),
+                new ApproximateMoveSelector()
+            )
+        ));
+
+        Game forced1NegamaxRandomGame = new SimpleGame(new RandomPlayer(
+            new ForcedMoveSelector(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 1),
+                new ApproximateMoveSelector()
+            )
+        ));
+
+        Game forced2RandomGame = new SimpleGame(new RandomPlayer(
+            new ForcedMoveSelector(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 2),
+                new ApproximateMoveSelector()
+            )
+        ));
+
+        System.out.println("\nFirst of all, what is the impact of different implementations on Forced 1 rollout?");
+        System.out.println("\nForced 1 WinLoss vs. Forced 1 Negamax rollout, same amount of time");
+        ComparePlayers.compare(
+            boardSize, games,
+            "forced 1 based on winloss rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced1WinLossRandomGame, defaultTimeMCTS, false),
+            "forced 1 based on negamax rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced1NegamaxRandomGame, defaultTimeMCTS, false)
+        );
+        System.out.println("\nAs expected, negamax implementation seems slower and therefore appears to be weaker.");
+        System.out.println("\nUnfortunately, Forced 2 can be setup only with negamax evaluation.");
+
+        System.out.println("\nForced 1 vs. Forced 2 rollout, same amount of time");
+        ComparePlayers.compare(
+            boardSize, games,
+            "forced 1 winloss rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced1WinLossRandomGame, defaultTimeMCTS, false),
+            "forced 2 negamax rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced2RandomGame, defaultTimeMCTS, false)
+        );
+
+        System.out.println("\nForced 1 vs. Forced 2 rollout, same amount of time, but both get double default time");
+        ComparePlayers.compare(
+            boardSize, games,
+            "forced 1 winloss rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced1WinLossRandomGame, defaultTimeMCTS * 2, false),
+            "forced 2 negamax rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced2RandomGame, defaultTimeMCTS * 2, false)
+        );
+        System.out.println("\nForced 2 seems to be significantly weaker than Forced 1, no matter the amount of time.");
 
     }
 
