@@ -23,6 +23,9 @@ public class Experiments {
 
     public static void main(String[] args) {
 
+        System.out.println("Board size: " + boardSize);
+        System.out.println("Default amount of iterations: " + defaultIterMCTS);
+        System.out.println("Default amount of time: " + defaultIterMCTS);
 
         all_vs_approximate_move_selector();
         mcts_vs_minmax();
@@ -196,6 +199,8 @@ public class Experiments {
             new ForcedMoveSelector(new WinLossEvaluation(), new ApproximateMoveSelector()
         )));
 
+        System.out.println("\n\nAll vs. Approximate rollout\n\n");
+
         System.out.println("\nAll vs. Approximate rollout, same amount of rollouts");
         ComparePlayers.compare(
             boardSize, games,
@@ -214,7 +219,9 @@ public class Experiments {
             new MCTSPlayer(new AllMovesSelector(), approximateRandomGame, defaultTimeMCTS, false)
         );
 
-        System.out.println("\nWeak vs. Strong rollout, same amount of rollouts");
+        System.out.println("\n\nAll vs. Forced 1 rollout\n\n");
+
+        System.out.println("\nAll vs. Forced 1 rollout, same amount of rollouts");
         ComparePlayers.compare(
             boardSize, games,
             "all rollout",
@@ -223,11 +230,31 @@ public class Experiments {
             new MCTSPlayer(new AllMovesSelector(), forced1RandomGame, defaultIterMCTS, true)
         );
 
-        System.out.println("\nWeak vs. Strong rollout, same amount of time");
+        System.out.println("\nAll vs. Forced 1 rollout, same amount of time");
         ComparePlayers.compare(
-            boardSize, 10, // answer seems clear even in 10 games
+            boardSize, games,
             "all rollout",
             new MCTSPlayer(new AllMovesSelector(), allRandomGame, defaultTimeMCTS, false),
+            "forced 1 rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced1RandomGame, defaultTimeMCTS, false)
+        );
+
+        System.out.println("\n\nApproximate vs. Forced 1 rollout\n\n");
+
+        System.out.println("\nApproximate vs. Forced 1 rollout, same amount of rollouts");
+        ComparePlayers.compare(
+            boardSize, games,
+            "approximate rollout",
+            new MCTSPlayer(new AllMovesSelector(), approximateRandomGame, defaultIterMCTS, true),
+            "forced 1 rollout",
+            new MCTSPlayer(new AllMovesSelector(), forced1RandomGame, defaultIterMCTS, true)
+        );
+
+        System.out.println("\nApproximate vs. Forced 1 rollout, same amount of time");
+        ComparePlayers.compare(
+            boardSize, games,
+            "approximate rollout",
+            new MCTSPlayer(new AllMovesSelector(), approximateRandomGame, defaultTimeMCTS, false),
             "forced 1 rollout",
             new MCTSPlayer(new AllMovesSelector(), forced1RandomGame, defaultTimeMCTS, false)
         );
