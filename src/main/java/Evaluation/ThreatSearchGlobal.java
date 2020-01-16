@@ -327,6 +327,9 @@ public class ThreatSearchGlobal implements Evaluation {
         } else if (steps == 4 && openAfter && openBefore) {  //O4
             threat = Threat.Open4;
         }
+        else if (steps == 5) {
+            threat = Threat.All5;
+        }
 
 
         Logger.log(threat + "+" + color);
@@ -356,9 +359,9 @@ public class ThreatSearchGlobal implements Evaluation {
                 case Open3:
                     return 9;
                 case Open4:
-                    return 16;
+                    return 160;
                 case All5:
-                    return 25;
+                    return 250;
             }
         }
         return 0.0;
