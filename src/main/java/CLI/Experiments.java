@@ -48,7 +48,7 @@ public class Experiments {
 
     private static void what_is_significant_strength_difference() {
 
-        System.out.println("\nWhat is significant difference between players?");
+        System.out.println("\nWhat is significant difference in wins between players?");
 
         System.out.println("Differences in wins between equal players in " + games + " games.");
         ArrayList<Integer> differences = new ArrayList<>();

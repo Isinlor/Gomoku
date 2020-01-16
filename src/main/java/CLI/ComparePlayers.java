@@ -24,7 +24,16 @@ public class ComparePlayers {
 
     }
 
-    public static void compare(int boardSize, int games, String name1, Player player1, String name2, Player player2) {
+    public static Results compare(int boardSize, int games, String name1, Player player1, String name2, Player player2) {
+        return compare(boardSize, games, name1, player1, name2, player2, true);
+    }
+
+    public static Results compare(
+        int boardSize, int games,
+        String name1, Player player1,
+        String name2, Player player2,
+        boolean print
+    ) {
 
         TimedPlayer playerA = new TimedPlayer(player1);
         TimedPlayer playerB = new TimedPlayer(player2);
@@ -68,24 +77,29 @@ public class ComparePlayers {
                 }
             }
 
-            System.out.print(
+            if(print) System.out.print(
                 "[" + (i + 1) + "/" + games + "]\t" +
                     name1 + ": " + winA + "\t" + name2 + ": " + winB + "\tD: " + draw + "\r"
             );
 
         }
 
-        System.out.println();
-        System.out.println(String.format("%1$-50s", "Time per move " + name1)
-            + "\t\tavg: " + Utils.formatTime(playerA.getAverageTimePerMove())
-            + "\t\tmax: " + Utils.formatTime(playerA.getMaxTimePerMove())
-            + "\t\tmin: " + Utils.formatTime(playerA.getMinTimePerMove())
-        );
-        System.out.println(String.format("%1$-50s", "Time per move " + name2)
-            + "\t\tavg: " + Utils.formatTime(playerB.getAverageTimePerMove())
-            + "\t\tmax: " + Utils.formatTime(playerB.getMaxTimePerMove())
-            + "\t\tmin: " + Utils.formatTime(playerB.getMinTimePerMove())
-        );
+        if(print) {
+            System.out.println();
+            System.out.println(String.format("%1$-50s", "Time per move " + name1)
+                + "\t\tavg: " + Utils.formatTime(playerA.getAverageTimePerMove())
+                + "\t\tmax: " + Utils.formatTime(playerA.getMaxTimePerMove())
+                + "\t\tmin: " + Utils.formatTime(playerA.getMinTimePerMove())
+            );
+            System.out.println(String.format("%1$-50s", "Time per move " + name2)
+                + "\t\tavg: " + Utils.formatTime(playerB.getAverageTimePerMove())
+                + "\t\tmax: " + Utils.formatTime(playerB.getMaxTimePerMove())
+                + "\t\tmin: " + Utils.formatTime(playerB.getMinTimePerMove())
+            );
+        }
+
+        return new Results(winA, winB, draw, playerA, playerB);
+
     }
 
     private static String selectPlayer() {
@@ -99,4 +113,19 @@ public class ComparePlayers {
         return playerName;
     }
 
+}
+
+class Results {
+    public int winA;
+    public int winB;
+    public int draws;
+    public TimedPlayer playerA;
+    public TimedPlayer playerB;
+    public Results(int winA, int winB, int draws, TimedPlayer playerA, TimedPlayer playerB) {
+        this.winA = winA;
+        this.winB = winB;
+        this.draws = draws;
+        this.playerA = playerA;
+        this.playerB = playerB;
+    }
 }
