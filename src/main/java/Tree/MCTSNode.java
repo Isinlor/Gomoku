@@ -93,16 +93,9 @@ public class MCTSNode {
         return stateWinner;
     }
 
-    public MCTSNode traverse(double c){
+    public MCTSNode traverse(DistributionFactory factory){
         if(!hasUntriedMoves() && stateWinner == null && !children.isEmpty()) {
-            HashMap<MCTSNode,Double> weightedChildren = new LinkedHashMap<>();
-            for(MCTSNode child: children){
-                double weight = child.getWinRatio() + c * Math.sqrt(Math.log(gamesPlayed) / child.getGamesPlayed());
-                weightedChildren.put(child,weight);
-            }
-            DistributionTableMethod<MCTSNode> distributor = new DistributionTableMethod<>(weightedChildren);
-            MCTSNode selectedChild = distributor.sample();
-            return selectedChild.traverse(c);
+            return factory.getDistribution(this).sample().traverse(factory);
         } else {
             return this;
         }

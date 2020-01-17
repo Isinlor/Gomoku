@@ -1,14 +1,15 @@
 package Player;
 
 import Contract.*;
+import Tree.MCTSDistribution;
 import Tree.MCTSNode;
 import Board.SimpleBoard;
 import Board.SimpleGame;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import Tree.*;
 
 public class MCTSPlayer implements Player {
 
@@ -20,7 +21,8 @@ public class MCTSPlayer implements Player {
     private Game game = new SimpleGame(Players.get("random"), Players.get("random"));
     private double parameter;
     private MCTSNode root;
-    private double c = Math.sqrt(2);
+    private DistributionFactory factory = new MCTSDistribution();
+
 
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter){
         this.smartMoveSelector = smartMoveSelector;
@@ -32,7 +34,7 @@ public class MCTSPlayer implements Player {
         this.smartMoveSelector = smartMoveSelector;
         this.parameter = parameter;
         this.useMaxIterations = false;
-        c = cParameter;
+        this.factory = new MCTSDistribution(cParameter);
     }
 
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter, boolean useMaxIterations){
@@ -61,6 +63,15 @@ public class MCTSPlayer implements Player {
         this(moveSelector, moveSelector, rolloutGame, parameter, useMaxIterations);
     }
 
+    public MCTSPlayer(MoveSelector moveSelector, Game rolloutGame, DistributionFactory factory, double parameter, boolean useMaxIterations){
+        this(moveSelector, moveSelector, rolloutGame, factory, parameter, useMaxIterations);
+    }
+
+    public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, Game rolloutGame, DistributionFactory factory, double parameter, boolean useMaxIterations){
+        this(smartMoveSelector, quickMoveSelector, rolloutGame, parameter, useMaxIterations);
+        this.factory = factory;
+    }
+
     public MCTSPlayer(MoveSelector smartMoveSelector, MoveSelector quickMoveSelector, Game rolloutGame, double parameter, boolean useMaxIterations){
         this.smartMoveSelector = smartMoveSelector;
         this.quickMoveSelector = quickMoveSelector;
@@ -87,12 +98,9 @@ public class MCTSPlayer implements Player {
             return root.getUntriedMoves().get(0);
         }
 
-        //
         double startTime = System.currentTimeMillis();
-        int maxDepth = 100;
         double timeSinceStart = 0;
         double allowedTime = 1000*parameter;
-        //double c = Math.sqrt(2); //EXPLORATION PARAMETER sqrt(2)
 
         MoveSelector quickMoveSelector = this.quickMoveSelector;
         if(quickMoveSelector == null) {
@@ -110,7 +118,7 @@ public class MCTSPlayer implements Player {
             From this child (the new leaf) do a rollout
             */
 
-            MCTSNode leaf = root.traverse(c);
+            MCTSNode leaf = root.traverse(factory);
 //            if(leaf.getGamesPlayed()==0&&leaf.getDepth()<maxDepth){
 //                leaf.expandTree(moveSelector);
 //                if(!leaf.getChildren().isEmpty())
