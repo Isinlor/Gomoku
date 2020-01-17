@@ -45,6 +45,8 @@ public class Experiments {
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
 
+        constant_options_mcts();
+
     }
 
     private static void mcts_smart_vs_quick_move_selector() {
@@ -453,6 +455,28 @@ public class Experiments {
                 )
             )
         );
+    }
+
+    private static void constant_options_mcts(){
+        System.out.println("\n\n\n\n\n\nHow do different constants in the UCT formula for MCTS effect the MCTS Strength?");
+        System.out.println("All constants must be bigger than 0. sqrt(2) Optimal according to Kocsis and Szepesv");
+        //L. Kocsis, C. Szepesvari, and J. Willemson. Improved Monte-Carlo search. Univ. Tartu, Estonia, Tech., 2006.
+        ComparePlayers.compare(
+                boardSize, games,
+                "c = 0",
+                new MCTSPlayer(new ApproximateMoveSelector(), defaultTimeMCTS, 0),
+                "c = sqrt(2)",
+                new MCTSPlayer(new ApproximateMoveSelector(), defaultTimeMCTS)
+        );
+        ComparePlayers.compare(
+                boardSize, games,
+                "c = 0.5",
+                new MCTSPlayer(new ApproximateMoveSelector(), defaultTimeMCTS, 0.5),
+                "c = sqrt(2)",
+                new MCTSPlayer(new ApproximateMoveSelector(), defaultTimeMCTS)
+        );
+
+
     }
 
 }

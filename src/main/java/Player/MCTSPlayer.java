@@ -20,11 +20,19 @@ public class MCTSPlayer implements Player {
     private Game game = new SimpleGame(Players.get("random"), Players.get("random"));
     private double parameter;
     private MCTSNode root;
+    private double c = Math.sqrt(2);
 
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter){
         this.smartMoveSelector = smartMoveSelector;
         this.parameter = parameter;
         this.useMaxIterations = false;
+    }
+
+    public MCTSPlayer(MoveSelector smartMoveSelector, double parameter, double cParameter){
+        this.smartMoveSelector = smartMoveSelector;
+        this.parameter = parameter;
+        this.useMaxIterations = false;
+        c = cParameter;
     }
 
     public MCTSPlayer(MoveSelector smartMoveSelector, double parameter, boolean useMaxIterations){
@@ -83,8 +91,8 @@ public class MCTSPlayer implements Player {
         double startTime = System.currentTimeMillis();
         int maxDepth = 100;
         double timeSinceStart = 0;
-        double allowedTime = 1000*parameter; //20 seconds
-        double c = Math.sqrt(2); //EXPLORATION PARAMETER sqrt(2)
+        double allowedTime = 1000*parameter;
+        //double c = Math.sqrt(2); //EXPLORATION PARAMETER sqrt(2)
 
         MoveSelector quickMoveSelector = this.quickMoveSelector;
         if(quickMoveSelector == null) {
@@ -120,6 +128,8 @@ public class MCTSPlayer implements Player {
                 leaf = leaf.expandTree(quickMoveSelector);
                 rollout(leaf, MCTSColor);
             }
+
+
 
             timeSinceStart = System.currentTimeMillis()-startTime;
         }
