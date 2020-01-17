@@ -44,7 +44,15 @@ public class Players {
         for (int i = 1; i <= 7; i++) {
             players.put("random" + i, new RandomPlayer(MoveSelectors.get("forced" + i)));
         }
+        players.put("mcts400",new MCTSPlayer(
+                MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 400, true
+        ));
+        players.put("mcts1600",new MCTSPlayer(
+                MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 1600, true
+        ));
         players.put("cnn", new EvaluationPlayer(new NeuralNetworkCNNEvaluation("model.h5"), MoveSelectors.get("approximate")));
+        players.put("minmax_cnn1", new MinMaxPlayer(new NeuralNetworkCNNEvaluation("model.h5"), MoveSelectors.get("approximate"), 1));
+//        players.put("minmax_cnn1-v2", new MinMaxPlayer(new NeuralNetworkCNNEvaluation("model_mcts400_forced3_all.h5"), MoveSelectors.get("approximate"), 1));
 
     }
 

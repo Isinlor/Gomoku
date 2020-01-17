@@ -28,6 +28,7 @@ public class NeuralNetworkCNNEvaluation implements Evaluation {
         }
         try {
             model = KerasModelImport.importKerasSequentialModelAndWeights(path);
+//            model = KerasModelImport.importKerasModelAndWeights(path);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidKerasConfigurationException e) {

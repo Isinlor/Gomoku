@@ -1,8 +1,10 @@
 package Contract;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-public class Move {
+public class Move implements Serializable {
+
+    private static final long serialVersionUID = 1;
 
     final public int x;
     final public int y;

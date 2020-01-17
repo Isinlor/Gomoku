@@ -13,16 +13,16 @@ public class GenerateGames {
 
     private static List<TrainingGame> games;
     private static int max_training_games = 1000;
-    private static String filePath = "src/main/resources/training_games_mcts_forced3_all.ser";
+    private static String filePath = "src/main/resources/training_games_mcts400_forced3_all.ser";
     private static int save_interval = 10;
 
     public static void main(String[] args) {
 
 //        save games on exit signal
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {save_games();};
-        });
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            @Override
+//            public void run() {save_games();};
+//        });
 
         games = new ArrayList<>();
 
@@ -35,12 +35,12 @@ public class GenerateGames {
     }
 
     private static void generate_games(int number_of_games) {
-        MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("all"), 400, true);
 //        MCTSPlayer player2 = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 400, true);
 //        MCTSPlayer player2 = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), 400, true);
         List<Integer> list = Arrays.asList(new Integer[number_of_games]);
         //parallel loop
         list.parallelStream().forEach(i -> {
+            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("all"), 400, true);
             TrainingGame game = new TrainingGame(player, player,9);
             System.out.println("Game won by: " + game.getWinner());
             System.out.println("Number of turns: " + game.getHistory().size());
@@ -75,7 +75,7 @@ public class GenerateGames {
             File file = new File(filePath);
             FileOutputStream fileOut = new FileOutputStream(file, false);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(games);
+            out.writeObject(new ArrayList(games));
             out.close();
             fileOut.close();
         } catch (IOException e) {
