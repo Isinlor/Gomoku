@@ -38,11 +38,57 @@ public class Experiments {
         // MCTS ablation study
         // See: https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it
         mcts_move_selector();
+        mcts_smart_vs_quick_move_selector();
         mcts_rollouts();
         mcts_forced_rollouts();
 
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
+
+    }
+
+    private static void mcts_smart_vs_quick_move_selector() {
+
+        System.out.println("\n\n\n\n\n\n" +
+            "Is split between smart and quick move selector worthwhile for MCTS?\n"
+        );
+
+        Game allRandomGame = new SimpleGame(new RandomPlayer(new AllMovesSelector()));
+        MoveSelector approximateMoveSelector = new ApproximateMoveSelector();
+        MoveSelector forced1MoveSelector = new ForcedMoveSelector(
+            new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 1),
+            new ApproximateMoveSelector()
+        );
+
+        System.out.println("\nForced 1 vs. Forced 1 + approximate, the same amount of iterations");
+        ComparePlayers.compare(
+            boardSize, games,
+            "forced 1 + forced 1",
+            new MCTSPlayer(
+                forced1MoveSelector, forced1MoveSelector,
+                allRandomGame, defaultIterMCTS, true
+            ),
+            "forced 1 + approximate",
+            new MCTSPlayer(
+                forced1MoveSelector, approximateMoveSelector,
+                allRandomGame, defaultIterMCTS, true
+            )
+        );
+
+        System.out.println("\nForced 1 vs. Forced 1 + approximate, the same amount of time");
+        ComparePlayers.compare(
+            boardSize, games,
+            "forced 1 + forced 1",
+            new MCTSPlayer(
+                forced1MoveSelector, forced1MoveSelector,
+                allRandomGame, defaultTimeMCTS, false
+            ),
+            "forced 1 + approximate",
+            new MCTSPlayer(
+                forced1MoveSelector, approximateMoveSelector,
+                allRandomGame, defaultTimeMCTS, false
+            )
+        );
 
     }
 
@@ -222,6 +268,25 @@ public class Experiments {
             "forced 1",
             new MCTSPlayer(forced1MoveSelector, allRandomGame, defaultTimeMCTS, false)
         );
+
+        System.out.println("\nApproximate vs. Forced 1, the same amount of iterations");
+        ComparePlayers.compare(
+            boardSize, games,
+            "approximate",
+            new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, defaultIterMCTS, true),
+            "forced 1",
+            new MCTSPlayer(forced1MoveSelector, allRandomGame, defaultIterMCTS, true)
+        );
+
+        System.out.println("\nApproximate vs. Forced 1, the same amount of time");
+        ComparePlayers.compare(
+            boardSize, games,
+            "approximate",
+            new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, defaultTimeMCTS, false),
+            "forced 1",
+            new MCTSPlayer(forced1MoveSelector, allRandomGame, defaultTimeMCTS, false)
+        );
+
 
     }
 
