@@ -58,7 +58,7 @@ public class GenerateCNNDataSet {
         DatasetProtos.DataSet.Builder datasetBuilder = DatasetProtos.DataSet.newBuilder();
 
         int gameId = 0;
-        for (TrainingGame game : games.subList(0,1000)) {
+        for (TrainingGame game : games) {
             for (ExtendedBoardState boardState : game.getHistory()) {
                 double gameOutcome;
                 if (game.winner == null) {
@@ -83,7 +83,6 @@ public class GenerateCNNDataSet {
                     dataInstance.addAllState(Doubles.asList(flattenedState));
                     dataInstance.setValue(gameOutcome);
                     datasetBuilder.addData(dataInstance.build());
-                    boardState.rotate90degrees();
 //                }
             }
 

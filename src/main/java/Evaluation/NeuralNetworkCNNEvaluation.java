@@ -38,6 +38,9 @@ public class NeuralNetworkCNNEvaluation implements Evaluation {
         }
     }
     public double evaluate(ReadableBoard board) {
+        if(board.hasWinner()) {
+            return board.getWinner() == board.getCurrentColor() ? Win : Lost;
+        }
         int boardSize = 9;
         int channels = 2;
         double[][][][] multiDimensionalMatrix =  new double[1][channels][boardSize][boardSize];

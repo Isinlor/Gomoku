@@ -52,6 +52,7 @@ public class Players {
         ));
         players.put("cnn", new EvaluationPlayer(new NeuralNetworkCNNEvaluation("model.h5"), MoveSelectors.get("approximate")));
         players.put("minmax_cnn1", new MinMaxPlayer(new NeuralNetworkCNNEvaluation("model.h5"), MoveSelectors.get("approximate"), 1));
+        players.put("minmax_cnn1-v2", new MinMaxPlayer(new NeuralNetworkCNNEvaluation("model_mcts400_forced3_all_2.h5"), MoveSelectors.get("approximate"), 1));
 //        players.put("minmax_cnn1-v2", new MinMaxPlayer(new NeuralNetworkCNNEvaluation("model_mcts400_forced3_all.h5"), MoveSelectors.get("approximate"), 1));
 
     }

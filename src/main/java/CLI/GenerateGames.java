@@ -1,8 +1,14 @@
 package CLI;
 
+import Board.Helpers.ApproximateMoveSelector;
+import Board.Helpers.ForcedMoveSelector;
 import Board.Helpers.MoveSelectors;
+import Board.SimpleGame;
+import Contract.Game;
+import Evaluation.WinLossEvaluation;
 import NeuralNetwork.TrainingGame;
 import Player.MCTSPlayer;
+import Player.RandomPlayer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,7 +19,7 @@ public class GenerateGames {
 
     private static List<TrainingGame> games;
     private static int max_training_games = 1000;
-    private static String filePath = "src/main/resources/training_games_mcts400_forced3_all.ser";
+    private static String filePath = "src/main/resources/training_games_mcts800_forced3_approximate_forced1game.ser";
     private static int save_interval = 10;
 
     public static void main(String[] args) {
@@ -40,7 +46,10 @@ public class GenerateGames {
         List<Integer> list = Arrays.asList(new Integer[number_of_games]);
         //parallel loop
         list.parallelStream().forEach(i -> {
-            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("all"), 400, true);
+            Game forced1RandomGame = new SimpleGame(new RandomPlayer(
+                    new ForcedMoveSelector(new WinLossEvaluation(), new ApproximateMoveSelector()
+                    )));
+            MCTSPlayer player = new MCTSPlayer(MoveSelectors.get("forced3"), MoveSelectors.get("approximate"), forced1RandomGame, 400, true);
             TrainingGame game = new TrainingGame(player, player,9);
             System.out.println("Game won by: " + game.getWinner());
             System.out.println("Number of turns: " + game.getHistory().size());
