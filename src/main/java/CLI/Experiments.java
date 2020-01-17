@@ -6,11 +6,15 @@ import Board.Helpers.ForcedMoveSelector;
 import Board.SimpleGame;
 import Contract.Game;
 import Contract.MoveSelector;
+import Contract.Player;
+import Evaluation.ExtendedWinLossEvaluation;
 import Evaluation.NegamaxEvaluation;
+import Evaluation.ThreatSearchGlobal;
 import Evaluation.WinLossEvaluation;
-import Player.MCTSPlayer;
-import Player.MinMaxPlayer;
-import Player.RandomPlayer;
+import Player.*;
+import Tree.MCTSBest;
+import Tree.MCTSDistribution;
+import UI.Logger;
 
 import java.util.ArrayList;
 
@@ -25,27 +29,111 @@ public class Experiments {
 
     public static void main(String[] args) {
 
+        Logger.enabled = false;
         System.out.println("Board size: " + boardSize);
         System.out.println("Default amount of iterations: " + defaultIterMCTS);
         System.out.println("Default amount of time: " + defaultIterMCTS);
 
         // You may also want to read: https://en.wikipedia.org/wiki/Statistical_significance
-        what_is_significant_strength_difference();
-
-        all_vs_approximate_move_selector();
-        mcts_vs_minmax();
+//        what_is_significant_strength_difference();
+//
+//        all_vs_approximate_move_selector();
+//        evaluations();
+//        mcts_vs_minmax();
 
         // MCTS ablation study
         // See: https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it
-        mcts_move_selector();
-        mcts_smart_vs_quick_move_selector();
-        mcts_rollouts();
-        mcts_forced_rollouts();
+//        mcts_move_selector();
+//        mcts_smart_vs_quick_move_selector();
+//        mcts_rollouts();
+//        mcts_forced_rollouts();
 
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
 
         constant_options_mcts();
+
+    }
+
+    private static void evaluations() {
+
+        System.out.println("\n\n\n\n\n\nApproximate Moves vs. All Moves - What is better?");
+
+        ForcedMoveSelector forced1MoveSelector = new ForcedMoveSelector(
+            new WinLossEvaluation(),
+            new ApproximateMoveSelector()
+        );
+        Player forced1RandomPlayer = new RandomPlayer(forced1MoveSelector);
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "threat search",
+            new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector()),
+            "random",
+            new RandomPlayer(new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "extended 2 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector()),
+            "random",
+            new RandomPlayer(new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "extended 3 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(3), new ApproximateMoveSelector()),
+            "random",
+            new RandomPlayer(new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "extended 4 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(4), new ApproximateMoveSelector()),
+            "random",
+            new RandomPlayer(new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "threat search",
+            new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector()),
+            "extended 1 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(1), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "threat search",
+            new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector()),
+            "extended 2 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "extended 4 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(4), forced1MoveSelector),
+            "forced 1",
+            forced1RandomPlayer
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "extended 4 win loss",
+            new SamplingEvaluationPlayer(
+                new NegamaxEvaluation(new ExtendedWinLossEvaluation(4), new ApproximateMoveSelector(), 2),
+                forced1MoveSelector
+            ),
+            "forced 1",
+            new SamplingEvaluationPlayer(
+                new NegamaxEvaluation(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector(), 2),
+                forced1MoveSelector
+            )
+        );
 
     }
 
@@ -461,6 +549,21 @@ public class Experiments {
         System.out.println("\n\n\n\n\n\nHow do different constants in the UCT formula for MCTS effect the MCTS Strength?");
         System.out.println("All constants must be bigger than 0. sqrt(2) Optimal according to Kocsis and Szepesv");
         //L. Kocsis, C. Szepesvari, and J. Willemson. Improved Monte-Carlo search. Univ. Tartu, Estonia, Tech., 2006.
+        Game allRandomGame = new SimpleGame(new RandomPlayer(new AllMovesSelector()));
+        ComparePlayers.compare(
+            boardSize, games,
+            "traverse pick always best, c = 0",
+            new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSBest(0), defaultTimeMCTS, false),
+            "traverse random sampling, c = 0",
+            new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSDistribution(0), defaultTimeMCTS, false)
+        );
+        ComparePlayers.compare(
+            boardSize, games,
+            "traverse pick always best, c = sqrt(2)",
+            new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSBest(), defaultTimeMCTS, false),
+            "traverse random sampling, c = sqrt(2)",
+            new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSDistribution(), defaultTimeMCTS, false)
+        );
         ComparePlayers.compare(
                 boardSize, games,
                 "c = 0",
