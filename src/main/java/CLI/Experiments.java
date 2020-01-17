@@ -552,16 +552,16 @@ public class Experiments {
         Game allRandomGame = new SimpleGame(new RandomPlayer(new AllMovesSelector()));
         ComparePlayers.compare(
             boardSize, games,
-            "traverse pick always best, c = 0",
+            "pick always best, c = 0",
             new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSBest(0), defaultTimeMCTS, false),
-            "traverse random sampling, c = 0",
+            "random sampling, c = 0",
             new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSDistribution(0), defaultTimeMCTS, false)
         );
         ComparePlayers.compare(
             boardSize, games,
-            "traverse pick always best, c = sqrt(2)",
+            "pick always best, c = sqrt(2)",
             new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSBest(), defaultTimeMCTS, false),
-            "traverse random sampling, c = sqrt(2)",
+            "random sampling, c = sqrt(2)",
             new MCTSPlayer(new ApproximateMoveSelector(), allRandomGame, new MCTSDistribution(), defaultTimeMCTS, false)
         );
         ComparePlayers.compare(
