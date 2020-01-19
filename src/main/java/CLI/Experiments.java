@@ -35,6 +35,7 @@ public class Experiments {
         // You may also want to read: https://en.wikipedia.org/wiki/Statistical_significance
         what_is_significant_strength_difference();
 
+        draws();
         all_vs_approximate_move_selector();
         evaluations();
         mcts_vs_minmax();
@@ -52,6 +53,79 @@ public class Experiments {
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
 
+    }
+
+    private static void draws() {
+        System.out.println("\n\n\n\n\n\nHow likely are draws on different board sizes?");
+
+        System.out.println("\nBoard: 5x5");
+        ComparePlayers.compare(
+            5, games,
+            "negamax 3",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            ),
+            "negamax 3",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
+
+        System.out.println("\nBoard: 7x7");
+        ComparePlayers.compare(
+            7, games,
+            "negamax 3",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            ),
+            "negamax 3",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
+
+        System.out.println("\nBoard: 9x9");
+        ComparePlayers.compare(
+            9, games,
+            "negamax 3",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            ),
+            "negamax 3",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(), new ApproximateMoveSelector(), 3
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
     }
 
     private static void alpha_beta_evaluation() {

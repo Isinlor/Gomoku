@@ -79,7 +79,7 @@ public class ComparePlayers {
 
             if(print) System.out.print(
                 "[" + (i + 1) + "/" + games + "]\t" +
-                    name1 + ": " + winA + "\t" + name2 + ": " + winB + "\tD: " + draw + "\r"
+                    name1 + ": " + winA + "\t\t" + name2 + ": " + winB + "\tD: " + draw + "\r"
             );
 
         }
@@ -96,6 +96,7 @@ public class ComparePlayers {
                 + "\t\tmax: " + Utils.formatTime(playerB.getMaxTimePerMove())
                 + "\t\tmin: " + Utils.formatTime(playerB.getMinTimePerMove())
             );
+            System.out.println();
         }
 
         return new Results(winA, winB, draw, playerA, playerB);
