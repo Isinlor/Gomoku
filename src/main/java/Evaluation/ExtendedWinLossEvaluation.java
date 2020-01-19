@@ -22,15 +22,16 @@ public class ExtendedWinLossEvaluation implements Evaluation {
         int threats = 0;
         int lastMoveIndex = board.getMadeMovesCounter() - 1;
         for (int i = 0; i < evaluateLastMoves; i++) {
-            if(lastMoveIndex - i <= 0) break;
+            if(lastMoveIndex - i < 0) break;
             if(i % 2 == 0) {
                 threats -= countThreats(
                     board, board.getMove(lastMoveIndex - i), board.getCurrentColor()
                 );
             } else {
-                threats += countThreats(
+                int count = countThreats(
                     board, board.getMove(lastMoveIndex - i), board.getCurrentColor().getOpposite()
                 );
+                threats += count > 1 ? count * count : count;
             }
         }
         return threats;
@@ -44,7 +45,7 @@ public class ExtendedWinLossEvaluation implements Evaluation {
                 threats += countThreats(board, color, move.x + i, move.y + j);
             }
         }
-        return threats;
+        return threats > 1 ? threats * threats : threats;
     }
 
     private int countThreats(ReadableBoard board, Color color, int x, int y) {

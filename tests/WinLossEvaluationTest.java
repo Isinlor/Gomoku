@@ -1,7 +1,6 @@
 import Board.SimpleBoard;
 import Contract.BoardCell;
 import Contract.Color;
-import Contract.Evaluation;
 import Contract.Move;
 import Evaluation.ExtendedWinLossEvaluation;
 import Evaluation.WinLossEvaluation;
@@ -11,6 +10,16 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
     public static void main(String[] args) {
 
         System.out.println("\n\nWin Loss Evaluation Test\n");
+        winLossTest();
+
+        System.out.println("\n\nExtended Win Loss Evaluation Test\n");
+        extendedWinLossTest();
+
+    }
+
+
+
+    private static void winLossTest() {
 
         it("gives 0 score to board with no winner and loser", () -> {
             BoardCell[][] boardState = {
@@ -21,8 +30,8 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
                 {E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
-            assertTrue(
-                new WinLossEvaluation().evaluate(board) == 0.0
+            assertEqual(
+                new WinLossEvaluation().evaluate(board), 0.0, 0.1
             );
         });
 
@@ -36,8 +45,8 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             };
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
+            assertEqual(
+                new WinLossEvaluation().evaluate(board), -Double.MAX_VALUE, 0.1
             );
         });
 
@@ -51,8 +60,8 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             };
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
+            assertEqual(
+                new WinLossEvaluation().evaluate(board), -Double.MAX_VALUE, 0.1
             );
         });
 
@@ -66,12 +75,13 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             };
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(board.getCurrentColor() == Color.Black);
-            assertTrue(
-                new WinLossEvaluation().evaluate(board) == -Double.MAX_VALUE
+            assertEqual(
+                new WinLossEvaluation().evaluate(board), -Double.MAX_VALUE, 0.1
             );
         });
+    }
 
-        System.out.println("\n\nQuick Win Loss Evaluation Test\n");
+    private static void extendedWinLossTest() {
 
         it("gives 0 score to board with no winner and loser", () -> {
             BoardCell[][] boardState = {
@@ -82,12 +92,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
                 {E, E, E, E, E},
             };
             SimpleBoard board = new SimpleBoard(boardState);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == 0.0
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), 0.0, 0.1
             );
         });
 
-        it("gives -1 score to the white loser; 4 in row", () -> {
+        it("gives -4 score to the white loser; 4 in row", () -> {
             BoardCell[][] boardState = {
                 {W, E, E, E, E, E, W},
                 {E, E, E, E, E, E, E},
@@ -100,12 +110,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
             );
         });
 
-        it("gives -1 score to the black loser; 4 in row", () -> {
+        it("gives -4 score to the black loser; 4 in row", () -> {
             BoardCell[][] boardState = {
                 {B, E, E, E, E, E, B},
                 {E, E, E, E, E, E, E},
@@ -118,12 +128,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.Black);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
             );
         });
 
-        it("gives 0 score to the white; 4 in row next to edge", () -> {
+        it("gives -1 score to the white; 4 in row next to edge", () -> {
             BoardCell[][] boardState = {
                 {W, E, E, E, E, E, E},
                 {E, E, E, E, E, E, E},
@@ -136,8 +146,8 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == 0
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -1, 0.1
             );
         });
 
@@ -154,8 +164,8 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == 0
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -1, 0.1
             );
         });
 
@@ -172,12 +182,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == 0
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -1, 0.1
             );
         });
 
-        it("gives -1 score to the white; blocked 4 in row + 3 in row", () -> {
+        it("gives -4 score to the white; blocked 4 in row + 3 in row", () -> {
             BoardCell[][] boardState = {
                 {W, E, E, E, E, E, W},
                 {E, E, E, E, E, E, E},
@@ -190,12 +200,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
             );
         });
 
-        it("gives -1 score to the white loser; straight cross", () -> {
+        it("gives -4 score to the white loser; straight cross", () -> {
             BoardCell[][] boardState = {
                 {W, E, E, E, E, E, W},
                 {E, E, E, E, E, E, E},
@@ -208,12 +218,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
             );
         });
 
-        it("gives -1 score to the white loser; straight cross", () -> {
+        it("gives -4 score to the white loser; straight cross", () -> {
             BoardCell[][] boardState = {
                 {E, E, E, E, E, E, E},
                 {E, E, E, E, E, E, E},
@@ -226,12 +236,12 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
             );
         });
 
-        it("gives -1 score to the white loser; slash cross", () -> {
+        it("gives -4 score to the white loser; slash cross", () -> {
             BoardCell[][] boardState = {
                 {E, E, E, W, E, E, E},
                 {E, E, E, E, E, E, E},
@@ -244,11 +254,63 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             SimpleBoard board = new SimpleBoard(boardState);
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
-            assertTrue(
-                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
             );
         });
 
+        it("gives -16 score to the white loser that does not respond; 2 last moves", () -> {
+            BoardCell[][] boardState = {
+                {W, E, E, E, E, E, W},
+                {E, E, E, E, E, E, E},
+                {E, E, E, B, E, E, E},
+                {E, E, B, E, B, E, E},
+                {E, E, E, B, E, E, E},
+                {E, E, E, E, E, E, E},
+                {W, E, E, E, E, E, W},
+            };
+            SimpleBoard board = new SimpleBoard(boardState);
+
+            // finish cross
+            assertTrue(board.getCurrentColor() == Color.Black);
+            board.move(new Move(3, 3));
+
+            // from white perspective
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -4, 0.1
+            );
+            assertEqual(
+                new ExtendedWinLossEvaluation(2).evaluate(board), -4, 0.1
+            );
+
+            // bad response
+            assertTrue(board.getCurrentColor() == Color.White);
+            board.move(new Move(1, 1));
+
+            // from black perspective the game is won
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), 0, 0.1
+            );
+            assertEqual(
+                new ExtendedWinLossEvaluation(2).evaluate(board), 16, 0.1
+            );
+
+            // progress to finish
+            assertTrue(board.getCurrentColor() == Color.Black);
+            board.move(new Move(3, 1));
+
+            // from white perspective
+            assertEqual(
+                new ExtendedWinLossEvaluation(1).evaluate(board), -1, 0.1
+            );
+            assertEqual(
+                new ExtendedWinLossEvaluation(2).evaluate(board), -1, 0.1
+            );
+            assertEqual(
+                new ExtendedWinLossEvaluation(3).evaluate(board), -10, 0.1
+            );
+
+        });
     }
 
 }

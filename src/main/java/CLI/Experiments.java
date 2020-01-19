@@ -35,29 +35,28 @@ public class Experiments {
         System.out.println("Default amount of time: " + defaultIterMCTS);
 
         // You may also want to read: https://en.wikipedia.org/wiki/Statistical_significance
-//        what_is_significant_strength_difference();
-//
-//        all_vs_approximate_move_selector();
-//        evaluations();
-//        mcts_vs_minmax();
+        what_is_significant_strength_difference();
+
+        all_vs_approximate_move_selector();
+        evaluations();
+        mcts_vs_minmax();
 
         // MCTS ablation study
         // See: https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it
-//        mcts_move_selector();
-//        mcts_smart_vs_quick_move_selector();
-//        mcts_rollouts();
-//        mcts_forced_rollouts();
+        mcts_move_selector();
+        mcts_smart_vs_quick_move_selector();
+        mcts_rollouts();
+        mcts_forced_rollouts();
+        constant_options_mcts();
 
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
-
-        constant_options_mcts();
 
     }
 
     private static void evaluations() {
 
-        System.out.println("\n\n\n\n\n\nApproximate Moves vs. All Moves - What is better?");
+        System.out.println("\n\n\n\n\n\nDifferent evaluation functions - What is better?");
 
         ForcedMoveSelector forced1MoveSelector = new ForcedMoveSelector(
             new WinLossEvaluation(),
@@ -65,34 +64,44 @@ public class Experiments {
         );
         Player forced1RandomPlayer = new RandomPlayer(forced1MoveSelector);
 
+        System.out.println("\n\nWin Loss Evaluation");
+        ComparePlayers.compare(
+            boardSize, games,
+            "win loss",
+            new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()),
+            "random",
+            new RandomPlayer(new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "win loss",
+            new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()),
+            "extended 1 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(1), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "win loss",
+            new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()),
+            "extended 2 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "win loss",
+            new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()),
+            "threat search",
+            new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector())
+        );
+
+        System.out.println("\n\nThreat Search Evaluation");
         ComparePlayers.compare(
             boardSize, games,
             "threat search",
             new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector()),
-            "random",
-            new RandomPlayer(new ApproximateMoveSelector())
-        );
-
-        ComparePlayers.compare(
-            boardSize, games,
-            "extended 2 win loss",
-            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector()),
-            "random",
-            new RandomPlayer(new ApproximateMoveSelector())
-        );
-
-        ComparePlayers.compare(
-            boardSize, games,
-            "extended 3 win loss",
-            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(3), new ApproximateMoveSelector()),
-            "random",
-            new RandomPlayer(new ApproximateMoveSelector())
-        );
-
-        ComparePlayers.compare(
-            boardSize, games,
-            "extended 4 win loss",
-            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(4), new ApproximateMoveSelector()),
             "random",
             new RandomPlayer(new ApproximateMoveSelector())
         );
@@ -105,34 +114,20 @@ public class Experiments {
             new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(1), new ApproximateMoveSelector())
         );
 
+        System.out.println("\n\nExtended Win Loss Evaluation");
         ComparePlayers.compare(
             boardSize, games,
-            "threat search",
-            new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector()),
+            "extended 1 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(1), new ApproximateMoveSelector()),
             "extended 2 win loss",
             new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector())
         );
-
         ComparePlayers.compare(
             boardSize, games,
-            "extended 4 win loss",
-            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(4), forced1MoveSelector),
-            "forced 1",
-            forced1RandomPlayer
-        );
-
-        ComparePlayers.compare(
-            boardSize, games,
-            "extended 4 win loss",
-            new SamplingEvaluationPlayer(
-                new NegamaxEvaluation(new ExtendedWinLossEvaluation(4), new ApproximateMoveSelector(), 2),
-                forced1MoveSelector
-            ),
-            "forced 1",
-            new SamplingEvaluationPlayer(
-                new NegamaxEvaluation(new ExtendedWinLossEvaluation(2), new ApproximateMoveSelector(), 2),
-                forced1MoveSelector
-            )
+            "extended 1 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(1), new ApproximateMoveSelector()),
+            "extended 3 win loss",
+            new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(3), new ApproximateMoveSelector())
         );
 
     }
