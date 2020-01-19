@@ -38,6 +38,8 @@ public class Experiments {
         evaluations();
         mcts_vs_minmax();
 
+        alpha_beta_evaluation();
+
         // MCTS ablation study
         // See: https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it
         mcts_move_selector();
@@ -48,6 +50,83 @@ public class Experiments {
 
         // This is a tricky test. Requires code changes to run.
         // global_vs_local_approximate_move_selector();
+
+    }
+
+    private static void alpha_beta_evaluation() {
+
+        System.out.println("\n\n\n\n\n\nWhat are the effects of evaluations on AlphaBeta pruning?");
+        System.out.println("\nEspecially how does it affect speed?\n\n");
+
+        alpha_beta_count_evaluation(2);
+        alpha_beta_count_evaluation(3);
+
+    }
+
+    private static void alpha_beta_count_evaluation(int depth) {
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "minmax " + depth + " count, no sort",
+            new MinMaxPlayer(
+                new CountEvaluation(),
+                new ApproximateMoveSelector(),
+                depth
+            ),
+            "forced " + depth + " win loss",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(),
+                        new ApproximateMoveSelector(),
+                        depth
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "minmax " + depth + " count, sort",
+            new MinMaxPlayer(
+                new CountEvaluation(),
+                new SortedMoveSelector(new ApproximateMoveSelector(), new CountEvaluation()),
+                depth
+            ),
+            "forced " + depth + " win loss",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(),
+                        new ApproximateMoveSelector(),
+                        depth
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "minmax " + depth + " win loss, sort",
+            new MinMaxPlayer(
+                new WinLossEvaluation(),
+                new SortedMoveSelector(new ApproximateMoveSelector(), new CountEvaluation()),
+                depth
+            ),
+            "forced " + depth + " win loss",
+            new RandomPlayer(
+                new ForcedMoveSelector(
+                    new NegamaxEvaluation(
+                        new WinLossEvaluation(),
+                        new ApproximateMoveSelector(),
+                        depth
+                    ),
+                    new ApproximateMoveSelector()
+                )
+            )
+        );
 
     }
 
