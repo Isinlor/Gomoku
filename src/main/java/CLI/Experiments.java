@@ -7,10 +7,7 @@ import Board.SimpleGame;
 import Contract.Game;
 import Contract.MoveSelector;
 import Contract.Player;
-import Evaluation.ExtendedWinLossEvaluation;
-import Evaluation.NegamaxEvaluation;
-import Evaluation.ThreatSearchGlobal;
-import Evaluation.WinLossEvaluation;
+import Evaluation.*;
 import Player.*;
 import Tree.MCTSBest;
 import Tree.MCTSDistribution;
@@ -95,6 +92,73 @@ public class Experiments {
             new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()),
             "threat search",
             new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "win loss",
+            new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector()),
+            "negamax 2 win loss",
+            new EvaluationPlayer(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 2),
+                new ApproximateMoveSelector()
+            )
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "negamax 2 win loss sampling",
+            new SamplingEvaluationPlayer(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 2),
+                new ApproximateMoveSelector()
+            ),
+            "negamax 2 win loss the best",
+            new EvaluationPlayer(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 2),
+                new ApproximateMoveSelector()
+            )
+        );
+
+        System.out.println("\n\nCount Evaluation");
+        ComparePlayers.compare(
+            boardSize, games,
+            "count",
+            new SamplingEvaluationPlayer(new CountEvaluation(), new ApproximateMoveSelector()),
+            "win loss",
+            new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "count",
+            new SamplingEvaluationPlayer(new CountEvaluation(), new ApproximateMoveSelector()),
+            "threat",
+            new SamplingEvaluationPlayer(new ThreatSearchGlobal(), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "count",
+            new SamplingEvaluationPlayer(new CountEvaluation(), new ApproximateMoveSelector()),
+            "negamax 1 win loss",
+            new SamplingEvaluationPlayer(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 1),
+                new ApproximateMoveSelector()
+            )
+        );
+
+        ComparePlayers.compare(
+            boardSize, games,
+            "negamax 1 count",
+            new SamplingEvaluationPlayer(
+                new NegamaxEvaluation(new CountEvaluation(), new ApproximateMoveSelector(), 1),
+                new ApproximateMoveSelector()
+            ),
+            "negamax 1 win loss",
+            new SamplingEvaluationPlayer(
+                new NegamaxEvaluation(new WinLossEvaluation(), new ApproximateMoveSelector(), 1),
+                new ApproximateMoveSelector()
+            )
         );
 
         System.out.println("\n\nThreat Search Evaluation");

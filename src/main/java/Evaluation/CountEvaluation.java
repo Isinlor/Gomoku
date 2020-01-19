@@ -19,7 +19,7 @@ public class CountEvaluation implements Evaluation {
                 count -= count(board, board.getCurrentColor().getOpposite(), x, y);
             }
         }
-        return count;
+        return count * count * (count > 0 ? 1 : -1);
     }
 
     private BoardCell E = BoardCell.Empty;

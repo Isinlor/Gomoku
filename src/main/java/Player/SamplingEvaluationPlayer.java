@@ -26,18 +26,20 @@ public class SamplingEvaluationPlayer implements Player {
         Map<Move, Double> weightedMoves = new LinkedHashMap<>();
         SimpleBoard boardCopy = new SimpleBoard(board);
         Collection<Move> moves = moveSelector.getMoves(board);
+        if(moves.size() == 1) return moves.iterator().next();
         for (Move move: moves) {
 
             boardCopy.move(move);
-            double moveEvaluation = evaluation.evaluate(boardCopy);
+            double moveEvaluation = -evaluation.evaluate(boardCopy);
+            Logger.log(move + " " + moveEvaluation);
             boardCopy.revertLastMove();
 
             if(moveEvaluation == Evaluation.Win) {
-                continue;
+                return move;
             }
 
             if(moveEvaluation == Evaluation.Lost) {
-                return move;
+                continue;
             }
 
             weightedMoves.put(move, moveEvaluation);
@@ -47,15 +49,20 @@ public class SamplingEvaluationPlayer implements Player {
 
         if(weightedMoves.isEmpty()) return moves.iterator().next();
 
+        Move selectedMove;
         if(minWeight < 0) {
             Map<Move, Double> positivelyWeightedMoves = new LinkedHashMap<>();
             for (Move move: weightedMoves.keySet()) {
                 positivelyWeightedMoves.put(move, weightedMoves.get(move) - minWeight);
             }
-            return new DistributionTableMethod<Move>(positivelyWeightedMoves).sample();
+            selectedMove = new DistributionTableMethod<Move>(positivelyWeightedMoves).sample();
+        } else {
+            selectedMove = new DistributionTableMethod<Move>(weightedMoves).sample();
         }
 
-        return new DistributionTableMethod<Move>(weightedMoves).sample();
+        Logger.log("-> " + selectedMove + " " + weightedMoves.get(selectedMove));
+
+        return selectedMove;
 
     }
 
