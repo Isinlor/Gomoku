@@ -83,7 +83,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             };
             SimpleBoard board = new SimpleBoard(boardState);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == 0.0
+                new ExtendedWinLossEvaluation(1).evaluate(board) == 0.0
             );
         });
 
@@ -101,7 +101,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == -1
+                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
             );
         });
 
@@ -119,7 +119,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.Black);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == -1
+                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
             );
         });
 
@@ -137,7 +137,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == 0
+                new ExtendedWinLossEvaluation(1).evaluate(board) == 0
             );
         });
 
@@ -155,7 +155,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == 0
+                new ExtendedWinLossEvaluation(1).evaluate(board) == 0
             );
         });
 
@@ -173,7 +173,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == 0
+                new ExtendedWinLossEvaluation(1).evaluate(board) == 0
             );
         });
 
@@ -191,7 +191,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == -1
+                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
             );
         });
 
@@ -209,7 +209,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == -1
+                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
             );
         });
 
@@ -227,7 +227,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == -1
+                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
             );
         });
 
@@ -245,7 +245,7 @@ public class WinLossEvaluationTest extends SimpleUnitTest {
             board.move(new Move(3, 3));
             assertTrue(board.getCurrentColor() == Color.White);
             assertTrue(
-                new ExtendedWinLossEvaluation().evaluate(board) == -1
+                new ExtendedWinLossEvaluation(1).evaluate(board) == -1
             );
         });
 
