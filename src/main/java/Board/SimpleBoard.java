@@ -39,7 +39,7 @@ public class SimpleBoard implements Board {
 
         moveHistory = new Move[boardSize * boardSize];
         for (int i = 0; i < board.getMadeMovesCounter(); i++) {
-            moveHistory[i] = board.getMove(i);
+            appendMoveHistory(board.getMove(i));
         }
 
 //        if(!isEmpty()) {

@@ -3,28 +3,53 @@ package Evaluation;
 import Contract.*;
 
 public class ExtendedWinLossEvaluation implements Evaluation {
+
     private BoardCell E = BoardCell.Empty;
+    private int evaluateLastMoves;
+
+    public ExtendedWinLossEvaluation(int evaluateLastMoves) {
+        this.evaluateLastMoves = evaluateLastMoves;
+    }
+
     public double evaluate(ReadableBoard board) {
         if(board.hasWinner()) {
             return board.getWinner() == board.getCurrentColor() ? Win : Lost;
         }
-        if(isLosing(board)) return -1;
-        return 0;
+        return countThreatsFromLastMoves(board);
     }
-    private boolean isLosing(ReadableBoard board) {
-        Move last = board.getLastMove();
-        if(last == null) return false;
+
+    private int countThreatsFromLastMoves(ReadableBoard board) {
+        int threats = 0;
+        int lastMoveIndex = board.getMadeMovesCounter() - 1;
+        for (int i = 0; i < evaluateLastMoves; i++) {
+            if(lastMoveIndex - i < 0) break;
+            if(i % 2 == 0) {
+                threats -= countThreats(
+                    board, board.getMove(lastMoveIndex - i), board.getCurrentColor()
+                );
+            } else {
+                int count = countThreats(
+                    board, board.getMove(lastMoveIndex - i), board.getCurrentColor().getOpposite()
+                );
+                threats += count > 1 ? count * count : count;
+            }
+        }
+        return threats;
+    }
+
+    private int countThreats(ReadableBoard board, Move move, Color color) {
+        if(move == null) return 0;
         int threats = 0;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                threats += countThreats(board, last.x + i, last.y + j);
-                if(threats >= 2) return true;
+                threats += countThreats(board, color, move.x + i, move.y + j);
             }
         }
-        return false;
+        return threats > 1 ? threats * threats : threats;
     }
-    private int countThreats(ReadableBoard board, int x, int y) {
-        Color opposite = board.getCurrentColor().getOpposite();
+
+    private int countThreats(ReadableBoard board, Color color, int x, int y) {
+        Color opposite = color.getOpposite();
         BoardCell O = opposite == Color.White ? BoardCell.White : BoardCell.Black;
         if(!board.isOnBoard(x) || !board.isOnBoard(y) || board.getCell(x, y) != O) return 0;
         for (int x2 = -2; x2 <= 2; x2 += 4) {
@@ -55,4 +80,5 @@ public class ExtendedWinLossEvaluation implements Evaluation {
         if(forwardslash) threats++;
         return threats;
     }
+
 }

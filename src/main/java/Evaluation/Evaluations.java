@@ -13,7 +13,7 @@ public class Evaluations {
 
     static {
         evaluations.put("winLoss", new WinLossEvaluation());
-        evaluations.put("winLoss+", new ExtendedWinLossEvaluation());
+        evaluations.put("winLoss+", new ExtendedWinLossEvaluation(1));
         for (int i = 1; i <= 7 ; i++) {
             evaluations.put("negamax" + i, new NegamaxEvaluation(
                 get("winLoss"), new ApproximateMoveSelector(), i)

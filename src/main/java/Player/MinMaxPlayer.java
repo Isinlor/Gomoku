@@ -2,6 +2,7 @@ package Player;
 
 import Contract.*;
 import Board.SimpleBoard;
+import UI.Logger;
 
 public class MinMaxPlayer implements Player {
 
@@ -28,6 +29,7 @@ public class MinMaxPlayer implements Player {
         for (Move move: moveSelector.getMoves(board)) {
 
             double moveEvaluation = min(board, move, depth, alpha, beta);
+            Logger.log(move + " " + moveEvaluation);
             if(bestMove == null || moveEvaluation > bestEvaluation) {
                 bestMove = move;
                 bestEvaluation = moveEvaluation;

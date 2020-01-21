@@ -35,7 +35,7 @@ public class DistributionTableMethod<T> implements Distribution {
     public T sample() {
 
         double prob = rand.nextDouble() * weightSum;
-        if(prob == 0) return events.get(0);
+        if(prob == 0) return events.get(rand.nextInt(events.size()));
 
         int i;
         for(i = 0; prob > 0; i++) {
