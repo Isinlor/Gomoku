@@ -348,6 +348,24 @@ public class Experiments {
             new SamplingEvaluationPlayer(new ExtendedWinLossEvaluation(3), new ApproximateMoveSelector())
         );
 
+
+        System.out.println("\n\nCNN Evaluation");
+        ComparePlayers.compare(
+                boardSize, games,
+                "CNN",
+                new SamplingEvaluationPlayer(new NeuralNetworkCNNEvaluation("model_mcts400_forced3_all_converged.h5"), new ApproximateMoveSelector()),
+                "win loss",
+                new SamplingEvaluationPlayer(new WinLossEvaluation(), new ApproximateMoveSelector())
+        );
+
+        ComparePlayers.compare(
+                boardSize, games,
+                "CNN",
+                new SamplingEvaluationPlayer(new NeuralNetworkCNNEvaluation("model_mcts400_forced3_all_converged.h5"), new ApproximateMoveSelector()),
+                "count",
+                new SamplingEvaluationPlayer(new CountEvaluation(), new ApproximateMoveSelector())
+        );
+
     }
 
     private static void mcts_smart_vs_quick_move_selector() {
