@@ -137,6 +137,43 @@ public class PlayerTest extends SimpleUnitTest {
 
     }
 
+    private static void randomPlayerTest() {
+
+        it("allows to play out a whole game", () -> {
+
+            Player player = Players.get("negamax3");
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(player, player);
+
+            game.play(board);
+
+            assertTrue(board.isGameFinished());
+
+        });
+
+        it("allows to reset board and play out a whole game again", () -> {
+
+            Player player = Players.get("random");
+
+            SimpleBoard board = new SimpleBoard(5);
+
+            Game game = new SimpleGame(player, player);
+
+            game.play(board);
+            assertTrue(board.isGameFinished());
+
+            board.resetBoard();
+            assertTrue(!board.isGameFinished());
+
+            game.play(board);
+            assertTrue(board.isGameFinished());
+            
+        });
+
+    }
+
     private static void negamaxPlayerTest() {
 
         it("allows to play out a whole game", () -> {

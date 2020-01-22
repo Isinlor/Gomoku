@@ -37,7 +37,7 @@ public class SimpleBoard implements Board {
             }
         }
 
-        moveHistory = new Move[boardSize * boardSize];
+        resetMoveHistory();
         for (int i = 0; i < board.getMadeMovesCounter(); i++) {
             appendMoveHistory(board.getMove(i));
         }
@@ -78,7 +78,7 @@ public class SimpleBoard implements Board {
         int white = 0;
         int black = 0;
         boardSize = boardState.length;
-        moveHistory = new Move[boardSize * boardSize];
+        resetMoveHistory();
         this.boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             if(boardState[x].length != boardSize) {
@@ -121,7 +121,6 @@ public class SimpleBoard implements Board {
 
     public SimpleBoard(int boardSize) {
         this.boardSize = boardSize;
-        moveHistory = new Move[boardSize * boardSize];
         boardState = new BoardCell[boardSize][boardSize];
         for (int x = 0; x < boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
@@ -129,11 +128,12 @@ public class SimpleBoard implements Board {
                 validMoves.add(new Move(x, y));
             }
         }
+        resetMoveHistory();
     }
 
     public void resetBoard(){
         validMoves = new HashSet<>();
-        moveHistory = new Move[boardSize * boardSize];
+        resetMoveHistory();
         approximateValidMoves = new LinkedHashSet<>();
         for (int x = 0; x <boardSize; x++) {
             for (int y = 0; y < boardSize; y++) {
@@ -143,6 +143,11 @@ public class SimpleBoard implements Board {
         }
         currentTurn = Color.Black;
         winner = null;
+    }
+
+    private void resetMoveHistory() {
+        madeMovesCounter = 0;
+        moveHistory = new Move[boardSize * boardSize];
     }
 
     public BoardCell getCell(int x, int y) {
