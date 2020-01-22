@@ -68,7 +68,7 @@ public class NeuralNetworkTest extends SimpleUnitTest {
             assertEqual(model.score(dataset), 0, 0.001);
         });
 
-        it("overfits simple games", () -> {
+        xit("overfits simple games", () -> {
 
             int size = 7;
             RandomPlayer.random = new Random(123);
