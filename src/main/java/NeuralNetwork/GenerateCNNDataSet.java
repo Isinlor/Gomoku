@@ -12,7 +12,7 @@ public class GenerateCNNDataSet {
 
     public static void main(String[] args) throws IOException {
         String resourcePath = "src/main/resources/";
-        String filePathIn = resourcePath + "training_games.ser";
+        String filePathIn = resourcePath + "training_games_mcts400_forced3_all.ser";
         if (args.length > 0) {
             filePathIn = args[0];
         }
@@ -21,7 +21,7 @@ public class GenerateCNNDataSet {
         FileOutputStream output = null;
 
         try {
-            output = new FileOutputStream("src/main/resources/dataset.bin");
+            output = new FileOutputStream("src/main/resources/dataset_mcts400_forced3_all.small.bin");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -37,11 +37,11 @@ public class GenerateCNNDataSet {
             File file = new File(filePath);
             FileInputStream fi = new FileInputStream(file);
             ObjectInputStream oi = new ObjectInputStream(fi);
-            Queue<TrainingGame> games = (Queue<TrainingGame>) oi.readObject();
+            ArrayList<TrainingGame> games = (ArrayList<TrainingGame>) oi.readObject();
             oi.close();
             fi.close();
             System.out.println("Loaded games: " + games.size());
-            return new ArrayList(games);
+            return games;
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -57,8 +57,8 @@ public class GenerateCNNDataSet {
     private static DatasetProtos.DataSet generateDataset(List<TrainingGame> games) {
         DatasetProtos.DataSet.Builder datasetBuilder = DatasetProtos.DataSet.newBuilder();
 
-        int row = 0;
-        for (TrainingGame game : games.subList(0,1000)) {
+        int gameId = 0;
+        for (TrainingGame game : games) {
             for (ExtendedBoardState boardState : game.getHistory()) {
                 double gameOutcome;
                 if (game.winner == null) {
@@ -66,7 +66,7 @@ public class GenerateCNNDataSet {
                 } else {
                     gameOutcome = game.winner == boardState.getCurrentPlayer() ? 1 : -1;
                 }
-                for (int r = 0; r < 4; r++) {
+//                for (int r = 0; r < 4; r++) {
                     double[][][] boardStateMatrix = boardState.toMultiDimensionalMatrix();
                     DatasetProtos.DataInstance.Builder dataInstance = DatasetProtos.DataInstance.newBuilder();
 
@@ -78,15 +78,15 @@ public class GenerateCNNDataSet {
                             .flatMap(Arrays::stream)
                             .flatMapToDouble(Arrays::stream)
                             .toArray();
-
+                    dataInstance.setGameId(gameId);
                     dataInstance.addAllPolicy(Doubles.asList(policy));
                     dataInstance.addAllState(Doubles.asList(flattenedState));
                     dataInstance.setValue(gameOutcome);
                     datasetBuilder.addData(dataInstance.build());
-                    boardState.rotate90degrees();
-                    row++;
-                }
+//                }
             }
+
+            gameId++;
         }
 
         return datasetBuilder.build();
