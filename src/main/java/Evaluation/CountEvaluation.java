@@ -25,53 +25,58 @@ public class CountEvaluation implements Evaluation {
         BoardCell O = color == Color.White ? BoardCell.White : BoardCell.Black;
         if(board.getCell(x, y) != O) return 0;
         int count = 0;
-        BoardCell L2 = board.getCell(x - 2, y);
+
+        if(board.getCell(x - 1, y) == O && board.getCell(x + 1, y) == O) {
+            BoardCell L2 = board.getCell(x - 2, y);
 //        BoardCell L3 = board.isOnBoard(x - 3) ? board.getCell(x - 3, y) : null;
-        BoardCell R2 = board.getCell(x + 2, y);
+            BoardCell R2 = board.getCell(x + 2, y);
 //        BoardCell R3 = board.isOnBoard(x + 3) ? board.getCell(x + 3, y) : null;
-        boolean horizontal =
-            (
-                ((L2 == E || L2 == O) && (R2 == E || R2 == O)) ||
-                ((L2 != E && R2 == O) || (L2 == O && R2 != E))
-            ) &&
-            board.getCell(x - 1, y) == O && board.getCell(x + 1, y) == O;
-        if(horizontal && ((L2 == O && R2 == E) || (R2 == O && L2 == E))) count++;
-        if(horizontal) count++;
+            boolean horizontal =
+                (
+                    ((L2 == E || L2 == O) && (R2 == E || R2 == O)) ||
+                    ((L2 != E && R2 == O) || (L2 == O && R2 != E))
+                );
+            if(horizontal && ((L2 == O && R2 == E) || (R2 == O && L2 == E))) count++;
+            if(horizontal) count++;
+        }
 
-        BoardCell T2 = board.getCell(x, y - 2);
+        if(board.getCell(x, y - 1) == O && board.getCell(x, y + 1) == O) {
+            BoardCell T2 = board.getCell(x, y - 2);
 //        BoardCell T3 = board.isOnBoard(y - 3) ? board.getCell(x, y - 3) : null;
-        BoardCell B2 = board.getCell(x, y + 2);
+            BoardCell B2 = board.getCell(x, y + 2);
 //        BoardCell B3 = board.isOnBoard(y + 3) ? board.getCell(x, y + 3) : null;
-        boolean vertical =
-            (
-                ((T2 == E || T2 == O) && (B2 == E || B2 == O)) || // (e|0)ooo(e/o)
-                ((T2 != E && B2 == O) || (T2 == O && B2 != E))    // (x|e)oooo|oooo(x|e)
-            ) &&
-            board.getCell(x, y - 1) == O && board.getCell(x, y + 1) == O; // ooo
-        if(vertical && ((T2 == O && B2 == E) || (B2 == O && T2 == E))) count++; // ooooe
-        if(vertical) count++;
+            boolean vertical =
+                (
+                    ((T2 == E || T2 == O) && (B2 == E || B2 == O)) || // (e|0)ooo(e/o)
+                    ((T2 != E && B2 == O) || (T2 == O && B2 != E))    // (x|e)oooo|oooo(x|e)
+                ); // ooo
+            if(vertical && ((T2 == O && B2 == E) || (B2 == O && T2 == E))) count++; // ooooe
+            if(vertical) count++;
+        }
 
-        BoardCell RB = board.getCell(x + 2, y - 2);
-        BoardCell LT = board.getCell(x - 2, y + 2);
-        boolean backslash =
-            (
-                ((RB == E || RB == O) && (LT == E || LT == O)) ||
-                ((RB != E && LT == O) || (RB == O && LT != E))
-            ) &&
-            board.getCell(x + 1, y - 1) == O && board.getCell(x - 1, y + 1) == O;
-        if(backslash && ((RB == O && LT == E) || (LT == O && RB == E))) count++;
-        if(backslash) count++;
+        if(board.getCell(x + 1, y - 1) == O && board.getCell(x - 1, y + 1) == O) {
+            BoardCell RB = board.getCell(x + 2, y - 2);
+            BoardCell LT = board.getCell(x - 2, y + 2);
+            boolean backslash =
+                (
+                    ((RB == E || RB == O) && (LT == E || LT == O)) ||
+                    ((RB != E && LT == O) || (RB == O && LT != E))
+                );
+            if(backslash && ((RB == O && LT == E) || (LT == O && RB == E))) count++;
+            if(backslash) count++;
+        }
 
-        BoardCell LB = board.getCell(x - 2, y - 2);
-        BoardCell RT = board.getCell(x + 2, y + 2);
-        boolean forwardslash =
-            (
-                ((LB == E || LB == O) && (RT == E || RT == O)) ||
-                ((LB != E && RT == O) || (LB == O && RT != E))
-            ) &&
-            board.getCell(x - 1, y - 1) == O && board.getCell(x + 1, y + 1) == O;
-        if(forwardslash && ((LB == O && RT == E) || (RT == O && LB == E))) count++;
-        if(forwardslash) count++;
+        if(board.getCell(x - 1, y - 1) == O && board.getCell(x + 1, y + 1) == O) {
+            BoardCell LB = board.getCell(x - 2, y - 2);
+            BoardCell RT = board.getCell(x + 2, y + 2);
+            boolean forwardslash =
+                (
+                    ((LB == E || LB == O) && (RT == E || RT == O)) ||
+                    ((LB != E && RT == O) || (LB == O && RT != E))
+                );
+            if(forwardslash && ((LB == O && RT == E) || (RT == O && LB == E))) count++;
+            if(forwardslash) count++;
+        }
 
         return count;
 
